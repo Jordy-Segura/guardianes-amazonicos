@@ -22,3 +22,8 @@ El proyecto usa una ilustración original de la Amazonía en `Assets/Art` y la l
 - `Assets/Scripts`: lógica de bienvenida, audio y persistencia local.
 - `Assets/Editor`: herramienta para regenerar la escena desde el menú Guardianes.
 - `Assets/Art` y `Assets/Audio`: recursos locales para uso sin conexión.
+## Unity Hub
+
+Si abres el proyecto en una instalación distinta de Unity 6, verifica que `ProjectSettings/ProjectSettings.asset` habilite la entrada antigua o ambas entradas. El EventSystem de la escena usa `StandaloneInputModule` y funciona con `Input Manager (Old)` o `Both`.
+
+Los recursos esenciales de TextMeshPro se importan automáticamente desde la instalación local de Unity al salir del modo Play. Si la instalación no expone el paquete, usa `Window > TextMesh Pro > Import TMP Essential Resources` una vez.
