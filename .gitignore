@@ -30,3 +30,9 @@ unity-import.log
 unity-*.log
 
 unity-redesign.log
+
+*.slnx
+.vsconfig
+.vscode/*
+!.vscode/extensions.json
+*.log

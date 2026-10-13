@@ -1,6 +1,7 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace GuardianesAmazonicos.Nivel1
@@ -185,17 +186,27 @@ namespace GuardianesAmazonicos.Nivel1
         private void ComenzarAventura()
         {
             if (_aventuraIniciada)
+            {
+                if (Application.CanStreamedLevelBeLoaded("MonoNivel1"))
+                {
+                    _reproductor.Stop();
+                    CancelInvoke(nameof(IndicarFinAudio));
+                    SceneManager.LoadScene("MonoNivel1");
+                }
+                else
+                    _estadoAudio.text = "El reto del mono todavía no está disponible.";
                 return;
+            }
 
             _aventuraIniciada = true;
             PlayerPrefs.SetInt(ClaveInicio, 1);
-            PlayerPrefs.SetInt(ClaveProgreso, 1);
+            PlayerPrefs.SetInt(ClaveProgreso, Mathf.Max(1, PlayerPrefs.GetInt(ClaveProgreso, 0)));
             PlayerPrefs.Save();
 
             _mensaje.text = "¡Muy bien, explorador! Ya diste tu primer paso. El Guardián te acompaña por la selva.";
-            _botonComenzar.interactable = false;
-            _botonComenzarTexto.text = "¡NIVEL INICIADO!";
-            _progreso.text = "1 de 12";
+            _botonComenzar.interactable = true;
+            _botonComenzarTexto.text = "CONTINUAR";
+            _progreso.text = $"{PlayerPrefs.GetInt(ClaveProgreso)} de {TotalRetos}";
             _estadoAudio.text = "¡Tu aventura ha comenzado!";
         }
 
@@ -209,8 +220,8 @@ namespace GuardianesAmazonicos.Nivel1
                 return;
 
             _mensaje.text = "¡Hola de nuevo, explorador! Tu aventura por la selva continúa.";
-            _botonComenzar.interactable = false;
-            _botonComenzarTexto.text = "¡NIVEL INICIADO!";
+            _botonComenzar.interactable = true;
+            _botonComenzarTexto.text = "CONTINUAR";
         }
 
         private void MostrarAyuda()
@@ -428,6 +439,3 @@ namespace GuardianesAmazonicos.Nivel1
         }
     }
 }
-
-
-

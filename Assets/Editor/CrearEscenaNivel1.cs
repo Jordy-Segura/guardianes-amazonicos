@@ -1,4 +1,5 @@
 using System.IO;
+using System.Linq;
 using GuardianesAmazonicos.Nivel1;
 using UnityEditor;
 using UnityEditor.SceneManagement;
@@ -27,7 +28,9 @@ public static class CrearEscenaNivel1
         tipo.GetField("_fondoSelva", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic).SetValue(controlador, fondo);
         tipo.GetField("_audioBienvenida", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic).SetValue(controlador, audio);
         EditorSceneManager.SaveScene(escena, "Assets/Scenes/BienvenidaNivel1.unity");
-        EditorBuildSettings.scenes = new[] { new EditorBuildSettingsScene("Assets/Scenes/BienvenidaNivel1.unity", true) };
+        var escenas = EditorBuildSettings.scenes.Where(item => item.path != "Assets/Scenes/BienvenidaNivel1.unity").ToList();
+        escenas.Insert(0, new EditorBuildSettingsScene("Assets/Scenes/BienvenidaNivel1.unity", true));
+        EditorBuildSettings.scenes = escenas.ToArray();
         AssetDatabase.SaveAssets();
         Debug.Log("Escena de bienvenida del Nivel 1 creada y añadida a Build Settings.");
     }
@@ -37,6 +40,7 @@ public static class CrearEscenaNivel1
     {
         PlayerPrefs.DeleteKey("guardianes.nivel1.iniciado");
         PlayerPrefs.DeleteKey("guardianes.nivel1.progreso");
+        PlayerPrefs.DeleteKey("guardianes.nivel1.hu02.completada");
         PlayerPrefs.Save();
         Debug.Log("Progreso local del Nivel 1 reiniciado.");
     }

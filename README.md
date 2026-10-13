@@ -8,6 +8,12 @@ Como estudiante quiero comenzar la aventura de la selva, escuchar la bienvenida 
 
 La escena inicial presenta al Guardián de la Selva, la locución de bienvenida y botones grandes `AUDIO` y `COMENZAR`. Al iniciar, registra localmente el comienzo del nivel y muestra el primer punto de progreso (`1 de 12`). El estado se conserva mediante `PlayerPrefs`.
 
+## Historia HU-02
+
+El botón `CONTINUAR` de la bienvenida abre `MonoNivel1`: el estudiante reconoce al mono entre imágenes de mono, guacamayo y tortuga. Incluye audio local repetible, pistas, reintentos sin penalización, guardado del acierto, teclado, lectura ampliada y reproductor contextual LSEC. Los videos LSEC validados y la conexión con la siguiente historia están pendientes. Ver [HU-02](Docs/HU-02.md).
+
+Para compilar las dos escenas en Windows: **Guardianes > HU-02 > Compilar Windows**. El juego inicia en la bienvenida y continúa al reto del mono.
+
 ## Abrir y ejecutar
 
 1. Abrir esta carpeta desde Unity Hub con Unity 6000.6.5f1.

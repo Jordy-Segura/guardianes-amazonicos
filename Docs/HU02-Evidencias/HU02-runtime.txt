@@ -1,0 +1,268 @@
+PASS Inicio en bienvenida de Jordy
+PASS Control disponible: Botón AUDIO
+PASS Audio original HU-01 disponible
+PASS Control disponible: Botón COMENZAR
+PASS HU-01 registra inicio y primer paso
+PASS Control disponible: Botón COMENZAR
+PASS Escena HU-02 carga
+PASS intro-1366: texto completo TitlePlaque/TitleText
+PASS intro-1366: texto completo Reading/Label
+PASS intro-1366: texto completo Brand/Subtitle
+PASS intro-1366: texto completo Help/Label
+PASS intro-1366: texto completo Introduction/Instruction
+PASS intro-1366: texto completo ShowAnswers/Label
+PASS intro-1366: texto completo Brand/Title
+PASS intro-1366: texto completo Pace/PaceLabel
+PASS intro-1366: texto completo Signs/Label
+PASS intro-1366: texto completo Level/LevelTitle
+PASS intro-1366: texto completo ListenInstruction/Label
+PASS intro-1366: texto completo AudioStatusPanel/AudioStatus
+PASS intro-1366: texto completo Scene/SceneCounter
+PASS intro-1366: control visible Signs
+PASS intro-1366: tamaño mínimo Signs
+PASS intro-1366: control visible ListenInstruction
+PASS intro-1366: tamaño mínimo ListenInstruction
+PASS intro-1366: control visible Help
+PASS intro-1366: tamaño mínimo Help
+PASS intro-1366: control visible ShowAnswers
+PASS intro-1366: tamaño mínimo ShowAnswers
+PASS intro-1366: control visible Reading
+PASS intro-1366: tamaño mínimo Reading
+PASS intro-1920: texto completo AudioStatusPanel/AudioStatus
+PASS intro-1920: texto completo Introduction/Instruction
+PASS intro-1920: texto completo Signs/Label
+PASS intro-1920: texto completo Brand/Subtitle
+PASS intro-1920: texto completo Scene/SceneCounter
+PASS intro-1920: texto completo Reading/Label
+PASS intro-1920: texto completo ShowAnswers/Label
+PASS intro-1920: texto completo Brand/Title
+PASS intro-1920: texto completo Pace/PaceLabel
+PASS intro-1920: texto completo Help/Label
+PASS intro-1920: texto completo Level/LevelTitle
+PASS intro-1920: texto completo ListenInstruction/Label
+PASS intro-1920: texto completo TitlePlaque/TitleText
+PASS intro-1920: control visible ShowAnswers
+PASS intro-1920: tamaño mínimo ShowAnswers
+PASS intro-1920: control visible Reading
+PASS intro-1920: tamaño mínimo Reading
+PASS intro-1920: control visible Help
+PASS intro-1920: tamaño mínimo Help
+PASS intro-1920: control visible Signs
+PASS intro-1920: tamaño mínimo Signs
+PASS intro-1920: control visible ListenInstruction
+PASS intro-1920: tamaño mínimo ListenInstruction
+PASS intro-1536: texto completo Introduction/Instruction
+PASS intro-1536: texto completo ListenInstruction/Label
+PASS intro-1536: texto completo ShowAnswers/Label
+PASS intro-1536: texto completo Help/Label
+PASS intro-1536: texto completo Scene/SceneCounter
+PASS intro-1536: texto completo Brand/Title
+PASS intro-1536: texto completo Reading/Label
+PASS intro-1536: texto completo Level/LevelTitle
+PASS intro-1536: texto completo AudioStatusPanel/AudioStatus
+PASS intro-1536: texto completo Signs/Label
+PASS intro-1536: texto completo Brand/Subtitle
+PASS intro-1536: texto completo TitlePlaque/TitleText
+PASS intro-1536: texto completo Pace/PaceLabel
+PASS intro-1536: control visible ShowAnswers
+PASS intro-1536: tamaño mínimo ShowAnswers
+PASS intro-1536: control visible Signs
+PASS intro-1536: tamaño mínimo Signs
+PASS intro-1536: control visible ListenInstruction
+PASS intro-1536: tamaño mínimo ListenInstruction
+PASS intro-1536: control visible Reading
+PASS intro-1536: tamaño mínimo Reading
+PASS intro-1536: control visible Help
+PASS intro-1536: tamaño mínimo Help
+PASS Control disponible: ListenInstruction
+PASS Instrucción tiene AudioClip local
+PASS Control disponible: ShowAnswers
+PASS Ver respuestas muestra opciones
+PASS Control disponible: RepeatWord
+PASS Repetición usa la palabra mono
+PASS Control disponible: RepeatWord
+PASS Repetición reinicia sin voces superpuestas
+PASS respuestas: texto completo Question/QuestionText
+PASS respuestas: texto completo ChooseTortuga/Label
+PASS respuestas: texto completo Help/Label
+PASS respuestas: texto completo Signs/Label
+PASS respuestas: texto completo Reading/Label
+PASS respuestas: texto completo ChooseMono/Label
+PASS respuestas: texto completo AudioStatusPanel/AudioStatus
+PASS respuestas: texto completo RepeatWord/Label
+PASS respuestas: texto completo Scene/SceneCounter
+PASS respuestas: texto completo Pace/PaceLabel
+PASS respuestas: texto completo ChooseGuacamayo/Label
+PASS respuestas: texto completo Brand/Subtitle
+PASS respuestas: texto completo Level/LevelTitle
+PASS respuestas: texto completo ChooseTortuga/AnimalName
+PASS respuestas: texto completo ChooseMono/AnimalName
+PASS respuestas: texto completo Brand/Title
+PASS respuestas: texto completo SelectPrompt/SelectText
+PASS respuestas: texto completo ChooseGuacamayo/AnimalName
+PASS respuestas: control visible Signs
+PASS respuestas: tamaño mínimo Signs
+PASS respuestas: control visible Help
+PASS respuestas: tamaño mínimo Help
+PASS respuestas: control visible RepeatWord
+PASS respuestas: tamaño mínimo RepeatWord
+PASS respuestas: control visible Reading
+PASS respuestas: tamaño mínimo Reading
+PASS respuestas: control visible ChooseTortuga
+PASS respuestas: tamaño mínimo ChooseTortuga
+PASS respuestas: control visible ChooseGuacamayo
+PASS respuestas: tamaño mínimo ChooseGuacamayo
+PASS respuestas: control visible ChooseMono
+PASS respuestas: tamaño mínimo ChooseMono
+PASS Control disponible: ChooseGuacamayo
+PASS Error abre pista y conserva el reto
+PASS Error no guarda acierto
+PASS pista: texto completo Question/QuestionText
+PASS pista: texto completo ChooseTortuga/Label
+PASS pista: texto completo Help/Label
+PASS pista: texto completo ModalPanel/HintTitle
+PASS pista: texto completo Signs/Label
+PASS pista: texto completo Reading/Label
+PASS pista: texto completo ChooseMono/Label
+PASS pista: texto completo AudioStatusPanel/AudioStatus
+PASS pista: texto completo Retry/Label
+PASS pista: texto completo RepeatWord/Label
+PASS pista: texto completo Scene/SceneCounter
+PASS pista: texto completo Pace/PaceLabel
+PASS pista: texto completo ChooseGuacamayo/Label
+PASS pista: texto completo Brand/Subtitle
+PASS pista: texto completo ModalPanel/HintText
+PASS pista: texto completo Close/Label
+PASS pista: texto completo ListenHint/Label
+PASS pista: texto completo Level/LevelTitle
+PASS pista: texto completo ChooseTortuga/AnimalName
+PASS pista: texto completo HintSigns/Label
+PASS pista: texto completo ChooseMono/AnimalName
+PASS pista: texto completo Brand/Title
+PASS pista: texto completo SelectPrompt/SelectText
+PASS pista: texto completo ChooseGuacamayo/AnimalName
+PASS pista: control visible Close
+PASS pista: tamaño mínimo Close
+PASS pista: control visible Retry
+PASS pista: tamaño mínimo Retry
+PASS pista: control visible ListenHint
+PASS pista: tamaño mínimo ListenHint
+PASS pista: control visible HintSigns
+PASS pista: tamaño mínimo HintSigns
+PASS Modal impide responder a la actividad del fondo
+PASS Control disponible: Retry
+PASS Reintento devuelve el foco
+PASS Control disponible: ChooseTortuga
+PASS Control disponible: Retry
+PASS Control disponible: Signs
+PASS LSEC sin video muestra pendiente y bloquea reproducción
+PASS LSEC: texto completo Question/QuestionText
+PASS LSEC: texto completo ChooseTortuga/Label
+PASS LSEC: texto completo Help/Label
+PASS LSEC: texto completo Close/Label
+PASS LSEC: texto completo ModalPanel/SignTranscript
+PASS LSEC: texto completo Signs/Label
+PASS LSEC: texto completo ModalPanel/SignsContext
+PASS LSEC: texto completo Reading/Label
+PASS LSEC: texto completo RepeatSigns/Label
+PASS LSEC: texto completo ChooseMono/Label
+PASS LSEC: texto completo ExpandSigns/Label
+PASS LSEC: texto completo AudioStatusPanel/AudioStatus
+PASS LSEC: texto completo ModalPanel/SignsTitle
+PASS LSEC: texto completo RepeatWord/Label
+PASS LSEC: texto completo Scene/SceneCounter
+PASS LSEC: texto completo Pace/PaceLabel
+PASS LSEC: texto completo ChooseGuacamayo/Label
+PASS LSEC: texto completo Brand/Subtitle
+PASS LSEC: texto completo VideoArea/PendingVideo
+PASS LSEC: texto completo Level/LevelTitle
+PASS LSEC: texto completo VideoArea/PendingDetail
+PASS LSEC: texto completo ChooseTortuga/AnimalName
+PASS LSEC: texto completo ChooseMono/AnimalName
+PASS LSEC: texto completo BackFromSigns/Label
+PASS LSEC: texto completo PlaySigns/Label
+PASS LSEC: texto completo Brand/Title
+PASS LSEC: texto completo SelectPrompt/SelectText
+PASS LSEC: texto completo ChooseGuacamayo/AnimalName
+PASS LSEC: control visible Close
+PASS LSEC: tamaño mínimo Close
+PASS LSEC: control visible ExpandSigns
+PASS LSEC: tamaño mínimo ExpandSigns
+PASS LSEC: control visible BackFromSigns
+PASS LSEC: tamaño mínimo BackFromSigns
+PASS Control disponible: ExpandSigns
+PASS LSEC-ampliado: texto completo VideoArea/PendingDetail
+PASS LSEC-ampliado: texto completo Question/QuestionText
+PASS LSEC-ampliado: texto completo ChooseTortuga/Label
+PASS LSEC-ampliado: texto completo Help/Label
+PASS LSEC-ampliado: texto completo ModalPanel/SignTranscript
+PASS LSEC-ampliado: texto completo Signs/Label
+PASS LSEC-ampliado: texto completo PlaySigns/Label
+PASS LSEC-ampliado: texto completo ModalPanel/SignsContext
+PASS LSEC-ampliado: texto completo Reading/Label
+PASS LSEC-ampliado: texto completo ChooseMono/Label
+PASS LSEC-ampliado: texto completo AudioStatusPanel/AudioStatus
+PASS LSEC-ampliado: texto completo RepeatWord/Label
+PASS LSEC-ampliado: texto completo Scene/SceneCounter
+PASS LSEC-ampliado: texto completo VideoArea/PendingVideo
+PASS LSEC-ampliado: texto completo Pace/PaceLabel
+PASS LSEC-ampliado: texto completo ChooseGuacamayo/Label
+PASS LSEC-ampliado: texto completo ExpandSigns/Label
+PASS LSEC-ampliado: texto completo Brand/Subtitle
+PASS LSEC-ampliado: texto completo RepeatSigns/Label
+PASS LSEC-ampliado: texto completo Level/LevelTitle
+PASS LSEC-ampliado: texto completo ChooseTortuga/AnimalName
+PASS LSEC-ampliado: texto completo ChooseMono/AnimalName
+PASS LSEC-ampliado: texto completo Close/Label
+PASS LSEC-ampliado: texto completo Brand/Title
+PASS LSEC-ampliado: texto completo ModalPanel/SignsTitle
+PASS LSEC-ampliado: texto completo SelectPrompt/SelectText
+PASS LSEC-ampliado: texto completo ChooseGuacamayo/AnimalName
+PASS LSEC-ampliado: texto completo BackFromSigns/Label
+PASS LSEC-ampliado: control visible ExpandSigns
+PASS LSEC-ampliado: tamaño mínimo ExpandSigns
+PASS LSEC-ampliado: control visible BackFromSigns
+PASS LSEC-ampliado: tamaño mínimo BackFromSigns
+PASS LSEC-ampliado: control visible Close
+PASS LSEC-ampliado: tamaño mínimo Close
+PASS Control disponible: BackFromSigns
+PASS Control disponible: Reading
+PASS Control disponible: ReadingSize
+PASS Lectura se amplía al 200 por ciento
+PASS Control disponible: BackFromReading
+PASS Control disponible: ChooseMono
+PASS Acierto felicita, guarda y habilita continuar
+PASS Progreso previo 1 avanza a 2
+PASS Doble selección no suma progreso
+PASS acierto: texto completo Reading/Label
+PASS acierto: texto completo Level/LevelTitle
+PASS acierto: texto completo Signs/Label
+PASS acierto: texto completo Pace/PaceLabel
+PASS acierto: texto completo Scene/SceneCounter
+PASS acierto: texto completo Help/Label
+PASS acierto: texto completo Success/SuccessText
+PASS acierto: texto completo AudioStatusPanel/AudioStatus
+PASS acierto: texto completo ListenSuccess/Label
+PASS acierto: texto completo Brand/Subtitle
+PASS acierto: texto completo Continue/Label
+PASS acierto: texto completo SavedProgress/SavedLabel
+PASS acierto: texto completo Success/SuccessTitle
+PASS acierto: texto completo Brand/Title
+PASS acierto: control visible Continue
+PASS acierto: tamaño mínimo Continue
+PASS acierto: control visible Reading
+PASS acierto: tamaño mínimo Reading
+PASS acierto: control visible Help
+PASS acierto: tamaño mínimo Help
+PASS acierto: control visible ListenSuccess
+PASS acierto: tamaño mínimo ListenSuccess
+PASS acierto: control visible Signs
+PASS acierto: tamaño mínimo Signs
+PASS Control disponible: Continue
+PASS Continuar llega al cierre cuando HU-03 aún no está integrada
+PASS Lectura de persistencia conserva acierto
+PASS Control disponible: ReturnHome
+PASS Volver al inicio carga la bienvenida
+PASS Volver al inicio conserva los dos pasos
+PASS Control disponible: Botón COMENZAR
+PASS Reingresar a HU-02 conserva el acierto

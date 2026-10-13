@@ -1,0 +1,1 @@
+PASS: estados, 2 distractores, acierto, doble clic, avance, progreso idempotente, 6 audios, 4 sprites y HU-01.
