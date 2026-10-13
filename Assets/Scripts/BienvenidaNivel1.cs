@@ -1,8 +1,7 @@
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.EventSystems;
-using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 namespace GuardianesAmazonicos.Nivel1
 {
@@ -15,31 +14,39 @@ namespace GuardianesAmazonicos.Nivel1
 
         [SerializeField] private Sprite fondoSelva;
         [SerializeField] private AudioClip audioBienvenida;
+
         private AudioSource reproductor;
-        private TMP_Text progreso;
         private TMP_Text mensaje;
+        private TMP_Text progreso;
         private TMP_Text estadoAudio;
-        private TMP_Text botonAudioTexto;
+        private TMP_Text botonComenzarTexto;
         private Button botonComenzar;
         private bool aventuraIniciada;
+        private GameObject modalActual;
 
         private void Start()
         {
-            ConfigurarAccesibilidad();
+            CargarRecursosLocales();
+            ConfigurarAudio();
+            CrearCamaraSiHaceFalta();
             CrearInterfaz();
-            ActualizarProgreso();
+            RestaurarProgreso();
         }
 
-        private void ConfigurarAccesibilidad()
+        private void CargarRecursosLocales()
+        {
+            var ilustracion = Resources.Load<Sprite>("BienvenidaNivel1_Pantalla");
+            if (ilustracion != null)
+                fondoSelva = ilustracion;
+        }
+
+        private void ConfigurarAudio()
         {
             reproductor = gameObject.AddComponent<AudioSource>();
             reproductor.playOnAwake = false;
             reproductor.spatialBlend = 0f;
             reproductor.clip = audioBienvenida;
-            CrearCamaraSiHaceFalta();
-            aventuraIniciada = PlayerPrefs.GetInt(ClaveInicio, 0) == 1;
         }
-
 
         private static void CrearCamaraSiHaceFalta()
         {
@@ -59,59 +66,82 @@ namespace GuardianesAmazonicos.Nivel1
             if (camara.GetComponent<AudioListener>() == null)
                 camara.gameObject.AddComponent<AudioListener>();
         }
+
         private void CrearInterfaz()
         {
             var canvasObjeto = new GameObject("InterfazNivel1", typeof(Canvas), typeof(CanvasScaler), typeof(GraphicRaycaster));
             var canvas = canvasObjeto.GetComponent<Canvas>();
             canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-            var scaler = canvasObjeto.GetComponent<CanvasScaler>();
-            scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
-            scaler.referenceResolution = new Vector2(1536, 1024);
-            scaler.matchWidthOrHeight = 0.5f;
+
+            var escalador = canvasObjeto.GetComponent<CanvasScaler>();
+            escalador.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+            escalador.referenceResolution = new Vector2(1536f, 1024f);
+            escalador.matchWidthOrHeight = 0.5f;
 
             if (FindAnyObjectByType<EventSystem>() == null)
                 new GameObject("EventSystem", typeof(EventSystem), typeof(StandaloneInputModule));
 
-            var fondo = CrearImagen("Fondo amazónico", canvas.transform, new Color(0.08f, 0.29f, 0.19f), Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
+            var fondo = CrearImagen("Arte de bienvenida", canvas.transform, Vector2.zero, Vector2.one, Color.white);
             fondo.sprite = fondoSelva;
             fondo.preserveAspect = false;
+            fondo.raycastTarget = false;
 
-            CrearPanel(canvas.transform);
+            CrearMarcaYProgreso(canvas.transform);
+            CrearPanelBienvenida(canvas.transform);
+            CrearNavegacionInferior(canvas.transform);
+            CrearSelloInferior(canvas.transform);
         }
 
-        private void CrearPanel(Transform padre)
+        private void CrearMarcaYProgreso(Transform padre)
         {
-            var panel = CrearImagen("Panel de bienvenida", padre, new Color(1f, 0.96f, 0.82f), new Vector2(0.48f, 0.12f), new Vector2(0.96f, 0.91f), Vector2.zero, Vector2.zero);
-            var borde = panel.gameObject.AddComponent<Outline>();
-            borde.effectColor = new Color(0.85f, 0.57f, 0.16f);
-            borde.effectDistance = new Vector2(5, -5);
-            var p = panel.transform;
+            CrearEtiqueta("Marca principal", padre, "GUARDIANES", 31f, new Color(1f, 0.95f, 0.76f), new Vector2(0.025f, 0.916f), new Vector2(0.29f, 0.977f), TextAlignmentOptions.Center, true);
+            CrearEtiqueta("Subtítulo de marca", padre, "DE LA AMAZONÍA LECTORA", 17f, new Color(0.72f, 0.97f, 0.37f), new Vector2(0.025f, 0.891f), new Vector2(0.29f, 0.925f), TextAlignmentOptions.Center, true);
+            CrearEtiqueta("Nombre del nivel", padre, "NIVEL 1  ·  CONOZCO LA SELVA", 29f, new Color(0.08f, 0.18f, 0.12f), new Vector2(0.37f, 0.912f), new Vector2(0.69f, 0.974f), TextAlignmentOptions.Center, true);
 
-            CrearEtiqueta("Marca", p, "GUARDIANES DE LA AMAZONÍA LECTORA", 22, new Color(0.16f, 0.34f, 0.13f), new Vector2(0.05f, 0.89f), new Vector2(0.95f, 0.98f), TextAlignmentOptions.Center);
-            CrearEtiqueta("Nivel", p, "NIVEL 1  ·  CONOZCO LA SELVA", 35, new Color(0.11f, 0.28f, 0.17f), new Vector2(0.06f, 0.78f), new Vector2(0.94f, 0.88f), TextAlignmentOptions.Center);
-            CrearEtiqueta("Guardián", p, "El Guardián de la Selva", 29, new Color(0.38f, 0.22f, 0.08f), new Vector2(0.06f, 0.67f), new Vector2(0.94f, 0.77f), TextAlignmentOptions.Center);
-            mensaje = CrearEtiqueta("Mensaje de bienvenida", p, TextoBienvenida, 32, new Color(0.09f, 0.18f, 0.13f), new Vector2(0.08f, 0.39f), new Vector2(0.92f, 0.65f), TextAlignmentOptions.Center);
+            progreso = CrearEtiqueta("Progreso del nivel", padre, "0 de 12", 34f, new Color(1f, 0.9f, 0.3f), new Vector2(0.835f, 0.914f), new Vector2(0.987f, 0.98f), TextAlignmentOptions.Center, true);
+        }
+
+        private void CrearPanelBienvenida(Transform padre)
+        {
+            CrearEtiqueta("Título de bienvenida", padre, "Bienvenido a la selva", 43f, Color.white, new Vector2(0.42f, 0.765f), new Vector2(0.9f, 0.845f), TextAlignmentOptions.Center, true);
+
+            mensaje = CrearEtiqueta("Mensaje del Guardián", padre, TextoBienvenida, 45f, new Color(0.08f, 0.2f, 0.14f), new Vector2(0.405f, 0.43f), new Vector2(0.925f, 0.70f), TextAlignmentOptions.Center, true);
             mensaje.enableAutoSizing = true;
-            mensaje.fontSizeMin = 24;
-            mensaje.fontSizeMax = 34;
+            mensaje.fontSizeMin = 30f;
+            mensaje.fontSizeMax = 45f;
+            mensaje.textWrappingMode = TextWrappingModes.Normal;
 
-            var audioBoton = CrearBoton("Botón AUDIO", p, "AUDIO  ·  ESCUCHAR", new Color(0.24f, 0.72f, 0.91f), new Vector2(0.24f, 0.27f), new Vector2(0.76f, 0.37f), 29, ReproducirBienvenida);
-            botonAudioTexto = audioBoton.GetComponentInChildren<TMP_Text>();
-            estadoAudio = CrearEtiqueta("Estado del audio", p, audioBienvenida == null ? "Audio de bienvenida no disponible" : "Escucha la bienvenida del Guardián", 16, new Color(0.27f, 0.33f, 0.29f), new Vector2(0.1f, 0.21f), new Vector2(0.9f, 0.26f), TextAlignmentOptions.Center);
+            var botonAudio = CrearBotonTransparente("Botón AUDIO", padre, new Vector2(0.407f, 0.315f), new Vector2(0.63f, 0.41f), "AUDIO  ·  ESCUCHAR", 34f, ReproducirBienvenida);
+            botonAudio.interactable = audioBienvenida != null;
+            estadoAudio = CrearEtiqueta("Estado del audio", padre, "Escucha la bienvenida del Guardián", 17f, new Color(0.24f, 0.28f, 0.2f), new Vector2(0.405f, 0.275f), new Vector2(0.63f, 0.31f), TextAlignmentOptions.Center, false);
 
-            botonComenzar = CrearBoton("Botón COMENZAR", p, "COMENZAR  ▶", new Color(0.97f, 0.68f, 0.08f), new Vector2(0.18f, 0.07f), new Vector2(0.82f, 0.19f), 36, ComenzarAventura);
-            progreso = CrearEtiqueta("Progreso del nivel", p, "PROGRESO   0 DE 12", 24, new Color(0.1f, 0.32f, 0.2f), new Vector2(0.05f, 0.005f), new Vector2(0.95f, 0.06f), TextAlignmentOptions.Center);
-            progreso.gameObject.SetActive(false);
+            botonComenzar = CrearBotonTransparente("Botón COMENZAR", padre, new Vector2(0.655f, 0.315f), new Vector2(0.901f, 0.41f), "COMENZAR", 36f, ComenzarAventura);
+            botonComenzarTexto = botonComenzar.GetComponentInChildren<TMP_Text>();
+        }
+
+        private void CrearNavegacionInferior(Transform padre)
+        {
+            CrearBotonTransparente("Botón AYUDA", padre, new Vector2(0.647f, 0.008f), new Vector2(0.746f, 0.09f), "Ayuda", 30f, MostrarAyuda);
+            CrearBotonTransparente("Botón SEÑAS", padre, new Vector2(0.75f, 0.008f), new Vector2(0.865f, 0.09f), "Señas", 30f, MostrarSenias);
+            CrearBotonTransparente("Botón LECTURA", padre, new Vector2(0.87f, 0.008f), new Vector2(0.981f, 0.09f), "Lectura", 30f, MostrarLectura);
+        }
+
+        private static void CrearSelloInferior(Transform padre)
+        {
+            CrearEtiqueta("Lema de aprendizaje", padre, "Aprende a tu ritmo", 20f, new Color(1f, 0.96f, 0.82f), new Vector2(0.025f, 0.026f), new Vector2(0.23f, 0.08f), TextAlignmentOptions.Center, true);
         }
 
         private void ReproducirBienvenida()
         {
             if (audioBienvenida == null)
             {
-                estadoAudio.text = "La locución aún no está configurada.";
+                estadoAudio.text = "La locución no está disponible.";
                 return;
             }
-            if (reproductor.isPlaying) reproductor.Stop();
+
+            if (reproductor.isPlaying)
+                reproductor.Stop();
+
             reproductor.Play();
             estadoAudio.text = "Reproduciendo la bienvenida…";
             CancelInvoke(nameof(IndicarFinAudio));
@@ -120,92 +150,196 @@ namespace GuardianesAmazonicos.Nivel1
 
         private void IndicarFinAudio()
         {
-            if (estadoAudio != null) estadoAudio.text = "Puedes volver a escuchar la bienvenida.";
+            if (estadoAudio != null)
+                estadoAudio.text = "Puedes escucharla otra vez cuando quieras.";
         }
 
         private void ComenzarAventura()
         {
-            if (aventuraIniciada) return;
+            if (aventuraIniciada)
+                return;
+
             aventuraIniciada = true;
             PlayerPrefs.SetInt(ClaveInicio, 1);
             PlayerPrefs.SetInt(ClaveProgreso, 1);
             PlayerPrefs.Save();
-            mensaje.text = "¡Qué alegría, explorador! La aventura comienza. Tu primer paso por la selva ya está registrado.";
+
+            mensaje.text = "¡Muy bien, explorador! Ya diste tu primer paso. El Guardián te acompaña por la selva.";
             botonComenzar.interactable = false;
-            botonComenzar.GetComponentInChildren<TMP_Text>().text = "¡AVENTURA INICIADA!";
-            progreso.gameObject.SetActive(true);
-            estadoAudio.text = "¡Muy bien! El Guardián te acompaña en esta aventura.";
-            ActualizarProgreso();
+            botonComenzarTexto.text = "¡AVENTURA INICIADA!";
+            progreso.text = "1 de 12";
+            estadoAudio.text = "¡Tu aventura ha comenzado!";
         }
 
-        private void ActualizarProgreso()
+        private void RestaurarProgreso()
         {
-            if (progreso == null) return;
-            var puntos = PlayerPrefs.GetInt(ClaveProgreso, 0);
-            progreso.text = $"PROGRESO   {puntos} DE {TotalRetos}";
-            if (aventuraIniciada)
-            {
-                progreso.gameObject.SetActive(true);
-                mensaje.text = "¡Hola de nuevo, explorador! Tu aventura por la selva continúa.";
-                botonComenzar.interactable = false;
-                botonComenzar.GetComponentInChildren<TMP_Text>().text = "¡AVENTURA INICIADA!";
-            }
+            var cantidad = Mathf.Clamp(PlayerPrefs.GetInt(ClaveProgreso, 0), 0, TotalRetos);
+            aventuraIniciada = PlayerPrefs.GetInt(ClaveInicio, 0) == 1;
+            progreso.text = $"{cantidad} de {TotalRetos}";
+
+            if (!aventuraIniciada)
+                return;
+
+            mensaje.text = "¡Hola de nuevo, explorador! Tu aventura por la selva continúa.";
+            botonComenzar.interactable = false;
+            botonComenzarTexto.text = "¡AVENTURA INICIADA!";
         }
 
-        private static Image CrearImagen(string nombre, Transform padre, Color color, Vector2 anclaMin, Vector2 anclaMax, Vector2 desplazamientoMin, Vector2 desplazamientoMax)
+        private void MostrarAyuda()
+        {
+            MostrarModal("UNA PISTA", "Observa la selva, escucha al Guardián y presiona COMENZAR cuando estés listo para explorar.", false);
+        }
+
+        private void MostrarSenias()
+        {
+            CerrarModal();
+            var canvas = FindAnyObjectByType<Canvas>();
+            if (canvas == null)
+                return;
+
+            modalActual = new GameObject("Ventana Lengua de señas", typeof(RectTransform));
+            modalActual.transform.SetParent(canvas.transform, false);
+            var oscurecedor = modalActual.AddComponent<Image>();
+            oscurecedor.color = new Color(0.02f, 0.11f, 0.1f, 0.78f);
+            Estirar(modalActual.GetComponent<RectTransform>());
+
+            var panel = new GameObject("Tarjeta de lengua de señas", typeof(RectTransform), typeof(Image), typeof(Outline));
+            panel.transform.SetParent(modalActual.transform, false);
+            var rect = panel.GetComponent<RectTransform>();
+            rect.anchorMin = new Vector2(0.19f, 0.16f);
+            rect.anchorMax = new Vector2(0.81f, 0.84f);
+            rect.offsetMin = Vector2.zero;
+            rect.offsetMax = Vector2.zero;
+            panel.GetComponent<Image>().color = new Color(1f, 0.96f, 0.84f);
+            panel.GetComponent<Outline>().effectColor = new Color(0.86f, 0.57f, 0.15f);
+            panel.GetComponent<Outline>().effectDistance = new Vector2(5f, -5f);
+
+            CrearEtiqueta("Título LSEC", panel.transform, "LENGUA DE SEÑAS", 42f, new Color(0.09f, 0.28f, 0.14f), new Vector2(0.08f, 0.82f), new Vector2(0.92f, 0.97f), TextAlignmentOptions.Center, true);
+            CrearEtiqueta("Iconos de señas", panel.transform, "🖐️     👋", 72f, Color.white, new Vector2(0.16f, 0.53f), new Vector2(0.84f, 0.81f), TextAlignmentOptions.Center, false);
+            CrearEtiqueta("Frase de bienvenida en señas", panel.transform, "¡Hola, explorador!\\nBienvenido a la selva.", 34f, new Color(0.08f, 0.17f, 0.13f), new Vector2(0.1f, 0.31f), new Vector2(0.9f, 0.53f), TextAlignmentOptions.Center, true);
+            CrearEtiqueta("Nota del recurso LSEC", panel.transform, "Apoyo visual para acompañar la bienvenida", 21f, new Color(0.28f, 0.32f, 0.27f), new Vector2(0.1f, 0.23f), new Vector2(0.9f, 0.32f), TextAlignmentOptions.Center, false);
+            CrearBotonModal("Cerrar señas", panel.transform, "VOLVER A LA SELVA", new Vector2(0.22f, 0.06f), new Vector2(0.78f, 0.2f), CerrarModal);
+        }
+        private void MostrarLectura()
+        {
+            MostrarModal("LECTURA", TextoBienvenida, true);
+        }
+
+        private void MostrarModal(string titulo, string texto, bool incluirAudio)
+        {
+            CerrarModal();
+            var canvas = FindAnyObjectByType<Canvas>();
+            if (canvas == null)
+                return;
+
+            modalActual = new GameObject("Ventana " + titulo, typeof(RectTransform));
+            modalActual.transform.SetParent(canvas.transform, false);
+            var fondoOscuro = modalActual.AddComponent<Image>();
+            fondoOscuro.color = new Color(0.02f, 0.11f, 0.1f, 0.78f);
+            Estirar(modalActual.GetComponent<RectTransform>());
+
+            var panel = new GameObject("Tarjeta del mensaje", typeof(RectTransform), typeof(Image), typeof(Outline));
+            panel.transform.SetParent(modalActual.transform, false);
+            var rectPanel = panel.GetComponent<RectTransform>();
+            rectPanel.anchorMin = new Vector2(0.2f, 0.19f);
+            rectPanel.anchorMax = new Vector2(0.8f, 0.81f);
+            rectPanel.offsetMin = Vector2.zero;
+            rectPanel.offsetMax = Vector2.zero;
+            panel.GetComponent<Image>().color = new Color(1f, 0.96f, 0.84f);
+            panel.GetComponent<Outline>().effectColor = new Color(0.86f, 0.57f, 0.15f);
+            panel.GetComponent<Outline>().effectDistance = new Vector2(5f, -5f);
+
+            CrearEtiqueta("Título de ayuda", panel.transform, titulo, 40f, new Color(0.09f, 0.28f, 0.14f), new Vector2(0.08f, 0.72f), new Vector2(0.92f, 0.93f), TextAlignmentOptions.Center, true);
+            var cuerpo = CrearEtiqueta("Texto de ayuda", panel.transform, texto, 32f, new Color(0.08f, 0.17f, 0.13f), new Vector2(0.09f, 0.35f), new Vector2(0.91f, 0.72f), TextAlignmentOptions.Center, true);
+            cuerpo.enableAutoSizing = true;
+            cuerpo.fontSizeMin = 24f;
+            cuerpo.fontSizeMax = 34f;
+            cuerpo.textWrappingMode = TextWrappingModes.Normal;
+
+            CrearBotonModal("Cerrar ayuda", panel.transform, "VOLVER A LA SELVA", new Vector2(0.22f, 0.08f), new Vector2(0.78f, 0.23f), CerrarModal);
+            if (incluirAudio)
+                CrearBotonModal("Escuchar lectura", panel.transform, "AUDIO  ·  ESCUCHAR", new Vector2(0.28f, 0.25f), new Vector2(0.72f, 0.36f), ReproducirBienvenida);
+        }
+
+        private void CerrarModal()
+        {
+            if (modalActual != null)
+                Destroy(modalActual);
+            modalActual = null;
+        }
+
+        private Button CrearBotonModal(string nombre, Transform padre, string texto, Vector2 anclaMin, Vector2 anclaMax, UnityEngine.Events.UnityAction accion)
+        {
+            var fondo = CrearImagen(nombre, padre, anclaMin, anclaMax, new Color(0.98f, 0.68f, 0.08f));
+            var boton = fondo.gameObject.AddComponent<Button>();
+            boton.onClick.AddListener(accion);
+            var etiqueta = CrearEtiqueta("Texto " + nombre, fondo.transform, texto, 25f, new Color(0.1f, 0.17f, 0.1f), Vector2.zero, Vector2.one, TextAlignmentOptions.Center, true);
+            etiqueta.raycastTarget = false;
+            return boton;
+        }
+
+        private Button CrearBotonTransparente(string nombre, Transform padre, Vector2 anclaMin, Vector2 anclaMax, string texto, float tamano, UnityEngine.Events.UnityAction accion)
+        {
+            var imagen = CrearImagen(nombre, padre, anclaMin, anclaMax, new Color(1f, 1f, 1f, 0f));
+            var boton = imagen.gameObject.AddComponent<Button>();
+            boton.transition = Selectable.Transition.ColorTint;
+            ColorBlock colores = boton.colors;
+            colores.normalColor = new Color(1f, 1f, 1f, 0f);
+            colores.highlightedColor = new Color(1f, 1f, 1f, 0.14f);
+            colores.pressedColor = new Color(1f, 1f, 1f, 0.24f);
+            colores.selectedColor = new Color(1f, 1f, 1f, 0.08f);
+            colores.fadeDuration = 0.12f;
+            boton.colors = colores;
+            boton.onClick.AddListener(accion);
+            var etiqueta = CrearEtiqueta("Texto " + nombre, imagen.transform, texto, tamano, new Color(0.07f, 0.15f, 0.1f), Vector2.zero, Vector2.one, TextAlignmentOptions.Center, true);
+            etiqueta.raycastTarget = false;
+            return boton;
+        }
+
+        private static Image CrearImagen(string nombre, Transform padre, Vector2 anclaMin, Vector2 anclaMax, Color color)
         {
             var objeto = new GameObject(nombre, typeof(RectTransform), typeof(Image));
             objeto.transform.SetParent(padre, false);
             var rect = objeto.GetComponent<RectTransform>();
             rect.anchorMin = anclaMin;
             rect.anchorMax = anclaMax;
-            rect.offsetMin = desplazamientoMin;
-            rect.offsetMax = desplazamientoMax;
+            rect.offsetMin = Vector2.zero;
+            rect.offsetMax = Vector2.zero;
             var imagen = objeto.GetComponent<Image>();
             imagen.color = color;
             return imagen;
         }
 
-        private static TMP_Text CrearEtiqueta(string nombre, Transform padre, string texto, float tamano, Color color, Vector2 anclaMin, Vector2 anclaMax, TextAlignmentOptions alineacion)
+        private static TMP_Text CrearEtiqueta(string nombre, Transform padre, string texto, float tamano, Color color, Vector2 anclaMin, Vector2 anclaMax, TextAlignmentOptions alineacion, bool negrita)
         {
             var objeto = new GameObject(nombre, typeof(RectTransform), typeof(TextMeshProUGUI));
             objeto.transform.SetParent(padre, false);
             var rect = objeto.GetComponent<RectTransform>();
             rect.anchorMin = anclaMin;
             rect.anchorMax = anclaMax;
-            rect.offsetMin = new Vector2(8, 4);
-            rect.offsetMax = new Vector2(-8, -4);
+            rect.offsetMin = new Vector2(7f, 3f);
+            rect.offsetMax = new Vector2(-7f, -3f);
             var etiqueta = objeto.GetComponent<TextMeshProUGUI>();
             etiqueta.text = texto;
+            etiqueta.font = TMP_Settings.defaultFontAsset;
             etiqueta.fontSize = tamano;
             etiqueta.color = color;
             etiqueta.alignment = alineacion;
             etiqueta.textWrappingMode = TextWrappingModes.Normal;
-            etiqueta.font = TMP_Settings.defaultFontAsset;
+            if (negrita)
+                etiqueta.fontStyle = FontStyles.Bold;
             return etiqueta;
         }
 
-        private static Button CrearBoton(string nombre, Transform padre, string texto, Color color, Vector2 anclaMin, Vector2 anclaMax, float tamano, UnityEngine.Events.UnityAction accion)
+        private static void Estirar(RectTransform rect)
         {
-            var imagen = CrearImagen(nombre, padre, color, anclaMin, anclaMax, Vector2.zero, Vector2.zero);
-            var boton = imagen.gameObject.AddComponent<Button>();
-            var colores = boton.colors;
-            colores.highlightedColor = Color.Lerp(color, Color.white, 0.22f);
-            colores.pressedColor = Color.Lerp(color, Color.black, 0.15f);
-            colores.disabledColor = new Color(0.58f, 0.63f, 0.53f);
-            boton.colors = colores;
-            boton.onClick.AddListener(accion);
-            var borde = imagen.gameObject.AddComponent<Outline>();
-            borde.effectColor = new Color(0.35f, 0.26f, 0.08f, 0.5f);
-            borde.effectDistance = new Vector2(2, -2);
-            var etiqueta = CrearEtiqueta("Texto " + nombre, imagen.transform, texto, tamano, new Color(0.07f, 0.15f, 0.1f), Vector2.zero, Vector2.one, TextAlignmentOptions.Center);
-            etiqueta.fontStyle = FontStyles.Bold;
-            return boton;
+            rect.anchorMin = Vector2.zero;
+            rect.anchorMax = Vector2.one;
+            rect.offsetMin = Vector2.zero;
+            rect.offsetMax = Vector2.zero;
         }
     }
 }
-
-
 
 
 

@@ -26,3 +26,7 @@ Recordings/
 # Unity-generated state
 sysinfo.txt
 unity-import.log
+
+unity-*.log
+
+unity-redesign.log

@@ -27,3 +27,5 @@ El proyecto usa una ilustración original de la Amazonía en `Assets/Art` y la l
 Si abres el proyecto en una instalación distinta de Unity 6, verifica que `ProjectSettings/ProjectSettings.asset` habilite la entrada antigua o ambas entradas. El EventSystem de la escena usa `StandaloneInputModule` y funciona con `Input Manager (Old)` o `Both`.
 
 Los recursos esenciales de TextMeshPro se importan automáticamente desde la instalación local de Unity al salir del modo Play. Si la instalación no expone el paquete, usa `Window > TextMesh Pro > Import TMP Essential Resources` una vez.
+
+Para volver a mostrar la pantalla inicial en el Editor, usa `Guardianes > Reiniciar progreso local del Nivel 1`. La escena conserva el avance del estudiante entre sesiones.
