@@ -34,10 +34,31 @@ namespace GuardianesAmazonicos.Nivel1
         {
             reproductor = gameObject.AddComponent<AudioSource>();
             reproductor.playOnAwake = false;
+            reproductor.spatialBlend = 0f;
             reproductor.clip = audioBienvenida;
+            CrearCamaraSiHaceFalta();
             aventuraIniciada = PlayerPrefs.GetInt(ClaveInicio, 0) == 1;
         }
 
+
+        private static void CrearCamaraSiHaceFalta()
+        {
+            var camara = Camera.main;
+            if (camara == null)
+            {
+                var objetoCamara = new GameObject("Main Camera");
+                objetoCamara.tag = "MainCamera";
+                objetoCamara.transform.position = new Vector3(0f, 0f, -10f);
+                camara = objetoCamara.AddComponent<Camera>();
+                camara.orthographic = true;
+                camara.clearFlags = CameraClearFlags.SolidColor;
+                camara.backgroundColor = new Color(0.08f, 0.29f, 0.19f);
+                camara.cullingMask = 0;
+            }
+
+            if (camara.GetComponent<AudioListener>() == null)
+                camara.gameObject.AddComponent<AudioListener>();
+        }
         private void CrearInterfaz()
         {
             var canvasObjeto = new GameObject("InterfazNivel1", typeof(Canvas), typeof(CanvasScaler), typeof(GraphicRaycaster));
@@ -183,5 +204,8 @@ namespace GuardianesAmazonicos.Nivel1
         }
     }
 }
+
+
+
 
 
