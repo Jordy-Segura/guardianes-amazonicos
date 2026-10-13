@@ -1,0 +1,14 @@
+HU-03 — Verificación interactiva de teclado
+Fecha: 2026-10-13
+Entorno: Windows, Unity 6000.6.5f1, ejecutable de distribución.
+
+PASS Tab: mueve el foco al siguiente control y completa el ciclo.
+PASS Mayús+Tab: desde Escuchar vuelve a Lectura; dentro de Lectura pasa de Cerrar a Volver a la actividad.
+PASS Enter: abre Lectura desde el control seleccionado.
+PASS Espacio: activa una sola vez; cierra Lectura con Volver a la actividad y devuelve el foco a Lectura.
+PASS Foco visible: contorno oscuro y halo claro en el control seleccionado.
+PASS Escape: en la prueba del flujo de respuestas cierra la pista y devuelve el foco a Mono.
+
+En el flujo de respuestas se verificó además abrir Ver respuestas con Espacio, seleccionar Mono con Tab y abrir su pista con Espacio.
+La validación automatizada de la entrega registra 257 PASS y 0 FAIL/ERROR en HU03-runtime.txt.
+Las pruebas no certifican accesibilidad ni sustituyen la validación de contenido por usuarios y especialistas en LSEC.

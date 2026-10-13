@@ -8,5 +8,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/BienvenidaNivel1.unity
     guid: 0c58e86ad2fcd0e488282fdfbb54080b
+  - enabled: 1
+    path: Assets/Scenes/GuacamayoNivel1.unity
+    guid: a8ef6f1af27778c4e9ebb3b9ed99e7d4
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
