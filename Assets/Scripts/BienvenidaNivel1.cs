@@ -81,49 +81,63 @@ namespace GuardianesAmazonicos.Nivel1
             if (FindAnyObjectByType<EventSystem>() == null)
                 new GameObject("EventSystem", typeof(EventSystem), typeof(StandaloneInputModule));
 
-            var fondo = CrearImagen("Arte de bienvenida", canvas.transform, Vector2.zero, Vector2.one, Color.white);
-            fondo.sprite = fondoSelva;
-            fondo.preserveAspect = false;
-            fondo.raycastTarget = false;
+            var fondoCompleto = CrearImagen("Fondo de selva", canvas.transform, Vector2.zero, Vector2.one, new Color(0.3f, 0.48f, 0.31f, 1f));
+            fondoCompleto.sprite = fondoSelva;
+            fondoCompleto.preserveAspect = false;
+            fondoCompleto.raycastTarget = false;
 
-            CrearMarcaYProgreso(canvas.transform);
-            CrearPanelBienvenida(canvas.transform);
-            CrearNavegacionInferior(canvas.transform);
-            CrearSelloInferior(canvas.transform);
+            var marco = new GameObject("Marco de diseño 3 a 2", typeof(RectTransform));
+            marco.transform.SetParent(canvas.transform, false);
+            var rectMarco = marco.GetComponent<RectTransform>();
+            rectMarco.anchorMin = new Vector2(0.5f, 0.5f);
+            rectMarco.anchorMax = new Vector2(0.5f, 0.5f);
+            rectMarco.pivot = new Vector2(0.5f, 0.5f);
+            rectMarco.sizeDelta = new Vector2(1536f, 1024f);
+            rectMarco.anchoredPosition = Vector2.zero;
+
+            var arte = CrearImagen("Arte de bienvenida", marco.transform, Vector2.zero, Vector2.one, Color.white);
+            arte.sprite = fondoSelva;
+            arte.preserveAspect = true;
+            arte.raycastTarget = false;
+
+            CrearMarcaYProgreso(marco.transform);
+            CrearPanelBienvenida(marco.transform);
+            CrearNavegacionInferior(marco.transform);
+            CrearSelloInferior(marco.transform);
         }
 
         private void CrearMarcaYProgreso(Transform padre)
         {
-            CrearEtiqueta("Marca principal", padre, "GUARDIANES", 31f, new Color(1f, 0.95f, 0.76f), new Vector2(0.025f, 0.916f), new Vector2(0.29f, 0.977f), TextAlignmentOptions.Center, true);
-            CrearEtiqueta("Subtítulo de marca", padre, "DE LA AMAZONÍA LECTORA", 17f, new Color(0.72f, 0.97f, 0.37f), new Vector2(0.025f, 0.891f), new Vector2(0.29f, 0.925f), TextAlignmentOptions.Center, true);
-            CrearEtiqueta("Nombre del nivel", padre, "NIVEL 1  ·  CONOZCO LA SELVA", 29f, new Color(0.08f, 0.18f, 0.12f), new Vector2(0.37f, 0.912f), new Vector2(0.69f, 0.974f), TextAlignmentOptions.Center, true);
+            CrearEtiqueta("Marca principal", padre, "GUARDIANES", 27f, new Color(1f, 0.95f, 0.76f), new Vector2(0.025f, 0.916f), new Vector2(0.29f, 0.977f), TextAlignmentOptions.Center, true);
+            CrearEtiqueta("Subtítulo de marca", padre, "DE LA AMAZONÍA LECTORA", 14f, new Color(0.72f, 0.97f, 0.37f), new Vector2(0.025f, 0.891f), new Vector2(0.29f, 0.925f), TextAlignmentOptions.Center, true);
+            CrearEtiqueta("Nombre del nivel", padre, "NIVEL 1  ·  CONOZCO LA SELVA", 22f, new Color(0.08f, 0.18f, 0.12f), new Vector2(0.37f, 0.912f), new Vector2(0.69f, 0.974f), TextAlignmentOptions.Center, true);
 
-            progreso = CrearEtiqueta("Progreso del nivel", padre, "0 de 12", 34f, new Color(1f, 0.9f, 0.3f), new Vector2(0.835f, 0.914f), new Vector2(0.987f, 0.98f), TextAlignmentOptions.Center, true);
+            progreso = CrearEtiqueta("Progreso del nivel", padre, "0 de 12", 27f, new Color(1f, 0.9f, 0.3f), new Vector2(0.835f, 0.914f), new Vector2(0.987f, 0.98f), TextAlignmentOptions.Center, true);
         }
 
         private void CrearPanelBienvenida(Transform padre)
         {
-            CrearEtiqueta("Título de bienvenida", padre, "Bienvenido a la selva", 43f, Color.white, new Vector2(0.42f, 0.765f), new Vector2(0.9f, 0.845f), TextAlignmentOptions.Center, true);
+            CrearEtiqueta("Título de bienvenida", padre, "Bienvenido a la selva", 31f, Color.white, new Vector2(0.42f, 0.765f), new Vector2(0.9f, 0.845f), TextAlignmentOptions.Center, true);
 
-            mensaje = CrearEtiqueta("Mensaje del Guardián", padre, TextoBienvenida, 45f, new Color(0.08f, 0.2f, 0.14f), new Vector2(0.405f, 0.43f), new Vector2(0.925f, 0.70f), TextAlignmentOptions.Center, true);
+            mensaje = CrearEtiqueta("Mensaje del Guardián", padre, TextoBienvenida, 31f, new Color(0.08f, 0.2f, 0.14f), new Vector2(0.405f, 0.43f), new Vector2(0.925f, 0.70f), TextAlignmentOptions.Center, true);
             mensaje.enableAutoSizing = true;
-            mensaje.fontSizeMin = 30f;
-            mensaje.fontSizeMax = 45f;
+            mensaje.fontSizeMin = 25f;
+            mensaje.fontSizeMax = 31f;
             mensaje.textWrappingMode = TextWrappingModes.Normal;
 
-            var botonAudio = CrearBotonTransparente("Botón AUDIO", padre, new Vector2(0.407f, 0.315f), new Vector2(0.63f, 0.41f), "AUDIO  ·  ESCUCHAR", 34f, ReproducirBienvenida);
+            var botonAudio = CrearBotonTransparente("Botón AUDIO", padre, new Vector2(0.407f, 0.315f), new Vector2(0.63f, 0.41f), "AUDIO  ·  ESCUCHAR", 25f, ReproducirBienvenida);
             botonAudio.interactable = audioBienvenida != null;
             estadoAudio = CrearEtiqueta("Estado del audio", padre, "Escucha la bienvenida del Guardián", 17f, new Color(0.24f, 0.28f, 0.2f), new Vector2(0.405f, 0.275f), new Vector2(0.63f, 0.31f), TextAlignmentOptions.Center, false);
 
-            botonComenzar = CrearBotonTransparente("Botón COMENZAR", padre, new Vector2(0.655f, 0.315f), new Vector2(0.901f, 0.41f), "COMENZAR", 36f, ComenzarAventura);
+            botonComenzar = CrearBotonTransparente("Botón COMENZAR", padre, new Vector2(0.655f, 0.315f), new Vector2(0.901f, 0.41f), "COMENZAR", 29f, ComenzarAventura);
             botonComenzarTexto = botonComenzar.GetComponentInChildren<TMP_Text>();
         }
 
         private void CrearNavegacionInferior(Transform padre)
         {
-            CrearBotonTransparente("Botón AYUDA", padre, new Vector2(0.647f, 0.008f), new Vector2(0.746f, 0.09f), "Ayuda", 30f, MostrarAyuda);
-            CrearBotonTransparente("Botón SEÑAS", padre, new Vector2(0.75f, 0.008f), new Vector2(0.865f, 0.09f), "Señas", 30f, MostrarSenias);
-            CrearBotonTransparente("Botón LECTURA", padre, new Vector2(0.87f, 0.008f), new Vector2(0.981f, 0.09f), "Lectura", 30f, MostrarLectura);
+            CrearBotonTransparente("Botón AYUDA", padre, new Vector2(0.647f, 0.008f), new Vector2(0.746f, 0.09f), "Ayuda", 22f, MostrarAyuda);
+            CrearBotonTransparente("Botón SEÑAS", padre, new Vector2(0.75f, 0.008f), new Vector2(0.865f, 0.09f), "Señas", 22f, MostrarSenias);
+            CrearBotonTransparente("Botón LECTURA", padre, new Vector2(0.87f, 0.008f), new Vector2(0.981f, 0.09f), "Lectura", 22f, MostrarLectura);
         }
 
         private static void CrearSelloInferior(Transform padre)
@@ -166,7 +180,7 @@ namespace GuardianesAmazonicos.Nivel1
 
             mensaje.text = "¡Muy bien, explorador! Ya diste tu primer paso. El Guardián te acompaña por la selva.";
             botonComenzar.interactable = false;
-            botonComenzarTexto.text = "¡AVENTURA INICIADA!";
+            botonComenzarTexto.text = "¡NIVEL INICIADO!";
             progreso.text = "1 de 12";
             estadoAudio.text = "¡Tu aventura ha comenzado!";
         }
@@ -182,7 +196,7 @@ namespace GuardianesAmazonicos.Nivel1
 
             mensaje.text = "¡Hola de nuevo, explorador! Tu aventura por la selva continúa.";
             botonComenzar.interactable = false;
-            botonComenzarTexto.text = "¡AVENTURA INICIADA!";
+            botonComenzarTexto.text = "¡NIVEL INICIADO!";
         }
 
         private void MostrarAyuda()
@@ -292,6 +306,11 @@ namespace GuardianesAmazonicos.Nivel1
             boton.colors = colores;
             boton.onClick.AddListener(accion);
             var etiqueta = CrearEtiqueta("Texto " + nombre, imagen.transform, texto, tamano, new Color(0.07f, 0.15f, 0.1f), Vector2.zero, Vector2.one, TextAlignmentOptions.Center, true);
+            etiqueta.enableAutoSizing = true;
+            etiqueta.fontSizeMin = Mathf.Max(16f, tamano * 0.72f);
+            etiqueta.fontSizeMax = tamano;
+            etiqueta.textWrappingMode = TextWrappingModes.NoWrap;
+            etiqueta.overflowMode = TextOverflowModes.Ellipsis;
             etiqueta.raycastTarget = false;
             return boton;
         }
@@ -325,6 +344,8 @@ namespace GuardianesAmazonicos.Nivel1
             etiqueta.fontSize = tamano;
             etiqueta.color = color;
             etiqueta.alignment = alineacion;
+            etiqueta.characterSpacing = 0f;
+            etiqueta.wordSpacing = 0f;
             etiqueta.textWrappingMode = TextWrappingModes.Normal;
             if (negrita)
                 etiqueta.fontStyle = FontStyles.Bold;
