@@ -119,7 +119,7 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &167760099
+--- !u!1 &1227620823
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -127,8 +127,8 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 167760101}
-  - component: {fileID: 167760100}
+  - component: {fileID: 1227620825}
+  - component: {fileID: 1227620824}
   m_Layer: 0
   m_Name: Controlador de bienvenida
   m_TagString: Untagged
@@ -136,27 +136,27 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &167760100
+--- !u!114 &1227620824
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 167760099}
+  m_GameObject: {fileID: 1227620823}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a0c34583c9a4a5b4faf7d1b855a16cd1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GuardianesAmazonicos.Nivel1.BienvenidaNivel1
-  fondoSelva: {fileID: 21300000, guid: 21728b14e2a269d4ba1807164290b471, type: 3}
-  audioBienvenida: {fileID: 8300000, guid: e58dd61e2e935b84e9e3f704e82610f4, type: 3}
---- !u!4 &167760101
+  _fondoSelva: {fileID: 21300000, guid: 21728b14e2a269d4ba1807164290b471, type: 3}
+  _audioBienvenida: {fileID: 8300000, guid: e58dd61e2e935b84e9e3f704e82610f4, type: 3}
+--- !u!4 &1227620825
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 167760099}
+  m_GameObject: {fileID: 1227620823}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
@@ -169,4 +169,4 @@ Transform:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 167760101}
+  - {fileID: 1227620825}
