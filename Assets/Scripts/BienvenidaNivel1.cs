@@ -1,6 +1,9 @@
+using System;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.Networking;
 using UnityEngine.UI;
 
 namespace GuardianesAmazonicos.Nivel1
@@ -12,10 +15,16 @@ namespace GuardianesAmazonicos.Nivel1
         private const string ClaveProgreso = "guardianes.nivel1.progreso";
         private const int TotalRetos = 12;
         private const string TextoPista = "Observa la selva, escucha al Guardián y presiona COMENZAR cuando estés listo para explorar.";
+        private const string FrasePruebaApi = "hello explorer welcome to the jungle";
+        private const string UrlApiSenias = "https://three.ws/api/sign?text=";
         private static TMP_FontAsset _tipografiaCompartida;
+        private static Sprite _spriteTarjetaRedondeada;
 
         [SerializeField] private Sprite _fondoSelva;
         [SerializeField] private AudioClip _audioBienvenida;
+        private AudioClip _audioInicio;
+        private AudioClip _audioPista;
+        private AudioClip _audioContinuacion;
 
         private AudioSource _reproductor;
         private TMP_Text _mensaje;
@@ -23,6 +32,7 @@ namespace GuardianesAmazonicos.Nivel1
         private TMP_Text _estadoAudio;
         private TMP_Text _botonComenzarTexto;
         private Button _botonComenzar;
+        private Button _botonAudio;
         private bool _aventuraIniciada;
         private GameObject _modalActual;
         private RectTransform _panelSeniasRect;
@@ -30,6 +40,12 @@ namespace GuardianesAmazonicos.Nivel1
         private string _textoSeniasActual = TextoBienvenida;
         private string _tituloSeniasActual = "Bienvenida del Guardián";
         private bool _visorLsecAmpliado;
+        private AudioClip _audioModalActual;
+        private TMP_Text _estadoApiSenias;
+        private TMP_Text _detalleApiSenias;
+        private Button _botonAvatarApi;
+        private string _urlAvatarApi;
+        private Coroutine _solicitudApiSenias;
 
         private void Start()
         {
@@ -49,6 +65,10 @@ namespace GuardianesAmazonicos.Nivel1
             _tipografiaCompartida = Resources.Load<TMP_FontAsset>("NunitoBoldSDF");
             if (_tipografiaCompartida == null)
                 _tipografiaCompartida = TMP_Settings.defaultFontAsset;
+
+            _audioInicio = Resources.Load<AudioClip>("Audio/Nivel1Inicio");
+            _audioPista = Resources.Load<AudioClip>("Audio/PistaNivel1");
+            _audioContinuacion = Resources.Load<AudioClip>("Audio/ContinuacionNivel1");
         }
 
         private void ConfigurarAudio()
@@ -92,13 +112,7 @@ namespace GuardianesAmazonicos.Nivel1
             if (FindAnyObjectByType<EventSystem>() == null)
                 new GameObject("EventSystem", typeof(EventSystem), typeof(StandaloneInputModule));
 
-            var fondoCompleto = CrearImagen("Fondo de selva", canvas.transform, Vector2.zero, Vector2.one, new Color(0.3f, 0.48f, 0.31f, 1f));
-            fondoCompleto.sprite = _fondoSelva;
-            fondoCompleto.preserveAspect = true;
-            fondoCompleto.raycastTarget = false;
-            var ajusteFondo = fondoCompleto.gameObject.AddComponent<AspectRatioFitter>();
-            ajusteFondo.aspectMode = AspectRatioFitter.AspectMode.EnvelopeParent;
-            ajusteFondo.aspectRatio = 1536f / 1024f;
+            CrearImagen("Fondo para formato panorámico", canvas.transform, Vector2.zero, Vector2.one, new Color(0.035f, 0.16f, 0.105f, 1f)).raycastTarget = false;
 
             var marco = new GameObject("Marco de diseño 3 a 2", typeof(RectTransform));
             marco.transform.SetParent(canvas.transform, false);
@@ -139,8 +153,8 @@ namespace GuardianesAmazonicos.Nivel1
             _mensaje.fontSizeMax = 40f;
             _mensaje.textWrappingMode = TextWrappingModes.Normal;
 
-            var botonAudio = CrearBotonTransparente("Botón AUDIO", padre, new Vector2(0.407f, 0.315f), new Vector2(0.63f, 0.41f), "AUDIO  ·  ESCUCHAR", 32f, ReproducirBienvenida);
-            botonAudio.interactable = _audioBienvenida != null;
+            _botonAudio = CrearBotonTransparente("Botón AUDIO", padre, new Vector2(0.407f, 0.315f), new Vector2(0.63f, 0.41f), "AUDIO  ·  ESCUCHAR", 32f, ReproducirMensajeActual);
+            _botonAudio.interactable = _audioBienvenida != null;
             _estadoAudio = CrearEtiqueta("Estado del audio", padre, "Escucha la bienvenida del Guardián", 17f, new Color(0.24f, 0.28f, 0.2f), new Vector2(0.405f, 0.275f), new Vector2(0.63f, 0.31f), TextAlignmentOptions.Center, false);
 
             _botonComenzar = CrearBotonTransparente("Botón COMENZAR", padre, new Vector2(0.655f, 0.315f), new Vector2(0.901f, 0.41f), "COMENZAR", 34f, ComenzarAventura);
@@ -159,27 +173,43 @@ namespace GuardianesAmazonicos.Nivel1
             CrearEtiqueta("Lema de aprendizaje", padre, "Aprende a tu ritmo", 24f, new Color(1f, 0.96f, 0.82f), new Vector2(0.025f, 0.026f), new Vector2(0.23f, 0.08f), TextAlignmentOptions.Center, true);
         }
 
-        private void ReproducirBienvenida()
+        private void ReproducirMensajeActual()
         {
-            if (_audioBienvenida == null)
+            ReproducirClip(ObtenerAudioMensajeActual(), "El audio de este mensaje no está disponible.");
+        }
+
+        private AudioClip ObtenerAudioMensajeActual()
+        {
+            if (!_aventuraIniciada)
+                return _audioBienvenida;
+
+            return _audioContinuacion != null ? _audioContinuacion : _audioInicio;
+        }
+
+        private void ReproducirClip(AudioClip clip, string mensajeSinAudio)
+        {
+            if (clip == null)
             {
-                _estadoAudio.text = "La locución no está disponible.";
+                if (_estadoAudio != null)
+                    _estadoAudio.text = mensajeSinAudio;
                 return;
             }
 
             if (_reproductor.isPlaying)
                 _reproductor.Stop();
 
+            _reproductor.clip = clip;
             _reproductor.Play();
-            _estadoAudio.text = "Reproduciendo la bienvenida…";
+            if (_estadoAudio != null)
+                _estadoAudio.text = "Reproduciendo el mensaje…";
             CancelInvoke(nameof(IndicarFinAudio));
-            Invoke(nameof(IndicarFinAudio), _audioBienvenida.length);
+            Invoke(nameof(IndicarFinAudio), clip.length);
         }
 
         private void IndicarFinAudio()
         {
             if (_estadoAudio != null)
-                _estadoAudio.text = "Puedes escucharla otra vez cuando quieras.";
+                _estadoAudio.text = "Puedes volver a escuchar el mensaje cuando quieras.";
         }
 
         private void ComenzarAventura()
@@ -196,7 +226,8 @@ namespace GuardianesAmazonicos.Nivel1
             _botonComenzar.interactable = false;
             _botonComenzarTexto.text = "¡NIVEL INICIADO!";
             _progreso.text = "1 de 12";
-            _estadoAudio.text = "¡Tu aventura ha comenzado!";
+            _estadoAudio.text = "Presiona AUDIO para escuchar el nuevo mensaje.";
+            _botonAudio.interactable = ObtenerAudioMensajeActual() != null;
         }
 
         private void RestaurarProgreso()
@@ -211,6 +242,7 @@ namespace GuardianesAmazonicos.Nivel1
             _mensaje.text = "¡Hola de nuevo, explorador! Tu aventura por la selva continúa.";
             _botonComenzar.interactable = false;
             _botonComenzarTexto.text = "¡NIVEL INICIADO!";
+            _botonAudio.interactable = ObtenerAudioMensajeActual() != null;
         }
 
         private void MostrarAyuda()
@@ -220,7 +252,7 @@ namespace GuardianesAmazonicos.Nivel1
 
         private void MostrarSenias()
         {
-            MostrarSenias(TextoBienvenida, "Bienvenida del Guardián");
+            MostrarSenias(_mensaje.text, "Mensaje del Guardián");
         }
 
         private void MostrarSenias(string texto, string titulo)
@@ -238,43 +270,108 @@ namespace GuardianesAmazonicos.Nivel1
             oscurecedor.color = new Color(0.02f, 0.11f, 0.1f, 0.78f);
             Estirar(_modalActual.GetComponent<RectTransform>());
 
-            var panel = new GameObject("Tarjeta de lengua de señas", typeof(RectTransform), typeof(Image), typeof(Outline));
+            var panel = new GameObject("Tarjeta de lengua de señas", typeof(RectTransform), typeof(Image));
             panel.transform.SetParent(_modalActual.transform, false);
             var rect = panel.GetComponent<RectTransform>();
             rect.anchorMin = new Vector2(0.15f, 0.1f);
             rect.anchorMax = new Vector2(0.85f, 0.9f);
             rect.offsetMin = Vector2.zero;
             rect.offsetMax = Vector2.zero;
-            panel.GetComponent<Image>().color = new Color(1f, 0.96f, 0.84f);
-            panel.GetComponent<Outline>().effectColor = new Color(0.86f, 0.57f, 0.15f);
-            panel.GetComponent<Outline>().effectDistance = new Vector2(5f, -5f);
+            AplicarTarjetaRedondeada(panel.GetComponent<Image>(), new Color(1f, 0.97f, 0.88f));
+            panel.GetComponent<Image>().raycastTarget = false;
 
-            CrearEtiqueta("Título LSEC", panel.transform, "LENGUA DE SEÑAS ECUATORIANA", 34f, new Color(0.09f, 0.28f, 0.14f), new Vector2(0.06f, 0.88f), new Vector2(0.94f, 0.98f), TextAlignmentOptions.Center, true);
-            CrearEtiqueta("Contenido actual en señas", panel.transform, _tituloSeniasActual, 21f, new Color(0.28f, 0.32f, 0.27f), new Vector2(0.08f, 0.82f), new Vector2(0.92f, 0.89f), TextAlignmentOptions.Center, false);
+            CrearEtiqueta("Título LSEC", panel.transform, "LENGUA DE SEÑAS ECUATORIANA", 34f, new Color(0.09f, 0.28f, 0.14f), new Vector2(0.06f, 0.90f), new Vector2(0.94f, 0.98f), TextAlignmentOptions.Center, true);
+            CrearEtiqueta("Alcance de prueba de señas", panel.transform, "ASL en inglés · Demo no validada · No es LSEC", 19f, new Color(0.34f, 0.35f, 0.3f), new Vector2(0.06f, 0.84f), new Vector2(0.94f, 0.90f), TextAlignmentOptions.Center, false);
 
-            var visor = CrearImagen("Visor LSEC 16 a 9", panel.transform, new Vector2(0.12f, 0.34f), new Vector2(0.88f, 0.81f), new Color(0.82f, 0.75f, 0.98f));
-            var relacionVisor = visor.gameObject.AddComponent<AspectRatioFitter>();
-            relacionVisor.aspectMode = AspectRatioFitter.AspectMode.FitInParent;
-            relacionVisor.aspectRatio = 16f / 9f;
-            var fondoVisor = visor.gameObject.AddComponent<Outline>();
-            fondoVisor.effectColor = new Color(0.55f, 0.39f, 0.83f);
-            fondoVisor.effectDistance = new Vector2(2f, -2f);
-            CrearEtiqueta("Estado del video LSEC", visor.transform, "Video en preparación", 31f, new Color(0.24f, 0.12f, 0.46f), new Vector2(0.04f, 0.25f), new Vector2(0.96f, 0.75f), TextAlignmentOptions.Center, true);
+            var visor = CrearImagen("Respuesta del servicio de señas", panel.transform, new Vector2(0.08f, 0.49f), new Vector2(0.92f, 0.81f), new Color(0.91f, 0.88f, 0.98f));
+            AplicarTarjetaRedondeada(visor, new Color(0.91f, 0.88f, 0.98f));
+            _estadoApiSenias = CrearEtiqueta("Estado de la API de señas", visor.transform, "Consulta de prueba: hello explorer welcome to the jungle", 22f, new Color(0.24f, 0.12f, 0.46f), new Vector2(0.05f, 0.57f), new Vector2(0.95f, 0.94f), TextAlignmentOptions.Center, true);
+            _detalleApiSenias = CrearEtiqueta("Resultado de la API de señas", visor.transform, "El servicio separará las palabras con seña de las que deletrea.", 18f, new Color(0.22f, 0.23f, 0.3f), new Vector2(0.07f, 0.1f), new Vector2(0.93f, 0.60f), TextAlignmentOptions.Center, false);
 
-            CrearEtiqueta("Texto equivalente LSEC", panel.transform, _textoSeniasActual, 24f, new Color(0.08f, 0.17f, 0.13f), new Vector2(0.08f, 0.25f), new Vector2(0.92f, 0.33f), TextAlignmentOptions.Center, true);
+            CrearEtiqueta("Texto en español para consulta", panel.transform, _textoSeniasActual, 22f, new Color(0.08f, 0.17f, 0.13f), new Vector2(0.08f, 0.39f), new Vector2(0.92f, 0.47f), TextAlignmentOptions.Center, true);
 
-            CrearBotonLsec(panel.transform, "Reproducir", new Vector2(0.09f, 0.14f), new Vector2(0.31f, 0.23f), "REPRODUCIR", new Color(0.53f, 0.85f, 1f), false, null);
-            CrearBotonLsec(panel.transform, "Repetir", new Vector2(0.34f, 0.14f), new Vector2(0.56f, 0.23f), "REPETIR", new Color(0.53f, 0.85f, 1f), false, null);
-            var botonAmpliar = CrearBotonLsec(panel.transform, "Ampliar", new Vector2(0.59f, 0.14f), new Vector2(0.91f, 0.23f), "AMPLIAR VISOR", new Color(0.95f, 0.93f, 0.85f), true, AmpliarVisorLsec);
+            CrearBotonLsec(panel.transform, "Consultar API", new Vector2(0.07f, 0.23f), new Vector2(0.35f, 0.33f), "CONSULTAR API", new Color(0.55f, 0.82f, 0.98f), true, ConsultarApiSenias);
+            _botonAvatarApi = CrearBotonLsec(panel.transform, "Abrir avatar API", new Vector2(0.37f, 0.23f), new Vector2(0.65f, 0.33f), "VER AVATAR", new Color(0.77f, 0.91f, 0.69f), false, AbrirAvatarApi);
+            var botonAmpliar = CrearBotonLsec(panel.transform, "Ampliar", new Vector2(0.67f, 0.23f), new Vector2(0.93f, 0.33f), "AMPLIAR", new Color(0.97f, 0.82f, 0.38f), true, AmpliarVisorLsec);
             _etiquetaAmpliarLsec = botonAmpliar.GetComponentInChildren<TMP_Text>();
             _panelSeniasRect = rect;
             _visorLsecAmpliado = false;
-            CrearBotonModal("Cerrar señas", panel.transform, "VOLVER A LA ACTIVIDAD", new Vector2(0.25f, 0.035f), new Vector2(0.75f, 0.125f), CerrarModal);
+            CrearBotonModal("Cerrar señas", panel.transform, "VOLVER A LA ACTIVIDAD", new Vector2(0.25f, 0.07f), new Vector2(0.75f, 0.17f), CerrarModal);
+        }
+
+        [Serializable]
+        private sealed class RespuestaApiSenias
+        {
+            public float duration;
+            public string[] signed;
+            public string[] spelled;
+            public string viewer;
+        }
+
+        private void ConsultarApiSenias()
+        {
+            if (_solicitudApiSenias != null)
+                return;
+
+            _estadoApiSenias.text = "Conectando con el servicio de señas…";
+            _detalleApiSenias.text = "Enviando únicamente una frase genérica de prueba.";
+            _botonAvatarApi.interactable = false;
+            _solicitudApiSenias = StartCoroutine(ConsultarServicioSenias());
+        }
+
+        private IEnumerator ConsultarServicioSenias()
+        {
+            var url = UrlApiSenias + UnityWebRequest.EscapeURL(FrasePruebaApi);
+            using (var solicitud = UnityWebRequest.Get(url))
+            {
+                solicitud.timeout = 20;
+                solicitud.SetRequestHeader("Accept", "application/json");
+                yield return solicitud.SendWebRequest();
+
+                if (_estadoApiSenias == null)
+                    yield break;
+
+                if (solicitud.result != UnityWebRequest.Result.Success)
+                {
+                    _estadoApiSenias.text = "No se pudo consultar el servicio.";
+                    _detalleApiSenias.text = "Comprueba la conexión e inténtalo de nuevo. El prototipo no envía datos del estudiante.";
+                    _solicitudApiSenias = null;
+                    yield break;
+                }
+
+                var respuesta = JsonUtility.FromJson<RespuestaApiSenias>(solicitud.downloadHandler.text);
+                if (respuesta == null)
+                {
+                    _estadoApiSenias.text = "La respuesta no tiene un formato válido.";
+                    _solicitudApiSenias = null;
+                    yield break;
+                }
+
+                var palabrasConSena = respuesta.signed ?? Array.Empty<string>();
+                var palabrasDeletreadas = respuesta.spelled ?? Array.Empty<string>();
+                _estadoApiSenias.text = $"API conectada · duración {respuesta.duration:0.0} s";
+                _detalleApiSenias.text = $"Con seña ASL: {TextoLista(palabrasConSena)}\nDeletreadas: {TextoLista(palabrasDeletreadas)}\nEl avatar animado se abre en el navegador.";
+                _urlAvatarApi = respuesta.viewer;
+                _botonAvatarApi.interactable = !string.IsNullOrWhiteSpace(_urlAvatarApi);
+                _solicitudApiSenias = null;
+            }
+        }
+
+        private static string TextoLista(string[] palabras)
+        {
+            return palabras.Length == 0 ? "ninguna" : string.Join(", ", palabras);
+        }
+
+        private void AbrirAvatarApi()
+        {
+            if (Uri.IsWellFormedUriString(_urlAvatarApi, UriKind.Absolute) && _urlAvatarApi.StartsWith("https://three.ws/", StringComparison.OrdinalIgnoreCase))
+                Application.OpenURL(_urlAvatarApi);
         }
 
         private Button CrearBotonLsec(Transform padre, string nombre, Vector2 anclaMin, Vector2 anclaMax, string texto, Color color, bool activo, UnityEngine.Events.UnityAction accion)
         {
             var imagen = CrearImagen(nombre, padre, anclaMin, anclaMax, color);
+            AplicarTarjetaRedondeada(imagen, color);
             var boton = imagen.gameObject.AddComponent<Button>();
             boton.interactable = activo;
             if (accion != null)
@@ -301,11 +398,13 @@ namespace GuardianesAmazonicos.Nivel1
         }
         private void MostrarLectura()
         {
-            MostrarModal("LECTURA", TextoBienvenida, true);
+            MostrarModal("LECTURA", _mensaje.text, true);
         }
 
         private void MostrarModal(string titulo, string texto, bool incluirAudio)
         {
+            _audioModalActual = titulo == "LECTURA" ? ObtenerAudioMensajeActual() :
+                titulo == "UNA PISTA" ? _audioPista : _audioBienvenida;
             CerrarModal();
             var canvas = FindAnyObjectByType<Canvas>();
             if (canvas == null)
@@ -317,41 +416,53 @@ namespace GuardianesAmazonicos.Nivel1
             fondoOscuro.color = new Color(0.02f, 0.11f, 0.1f, 0.78f);
             Estirar(_modalActual.GetComponent<RectTransform>());
 
-            var panel = new GameObject("Tarjeta del mensaje", typeof(RectTransform), typeof(Image), typeof(Outline));
+            var panel = new GameObject("Tarjeta del mensaje", typeof(RectTransform), typeof(Image));
             panel.transform.SetParent(_modalActual.transform, false);
             var rectPanel = panel.GetComponent<RectTransform>();
             rectPanel.anchorMin = new Vector2(0.2f, 0.19f);
             rectPanel.anchorMax = new Vector2(0.8f, 0.81f);
             rectPanel.offsetMin = Vector2.zero;
             rectPanel.offsetMax = Vector2.zero;
-            panel.GetComponent<Image>().color = new Color(1f, 0.96f, 0.84f);
-            panel.GetComponent<Outline>().effectColor = new Color(0.86f, 0.57f, 0.15f);
-            panel.GetComponent<Outline>().effectDistance = new Vector2(5f, -5f);
+            AplicarTarjetaRedondeada(panel.GetComponent<Image>(), new Color(1f, 0.97f, 0.88f));
 
-            CrearEtiqueta("Título de ayuda", panel.transform, titulo, 40f, new Color(0.09f, 0.28f, 0.14f), new Vector2(0.08f, 0.72f), new Vector2(0.92f, 0.93f), TextAlignmentOptions.Center, true);
-            var cuerpo = CrearEtiqueta("Texto de ayuda", panel.transform, texto, 32f, new Color(0.08f, 0.17f, 0.13f), new Vector2(0.09f, 0.35f), new Vector2(0.91f, 0.72f), TextAlignmentOptions.Center, true);
+            CrearEtiqueta("Título de ayuda", panel.transform, titulo, 40f, new Color(0.09f, 0.28f, 0.14f), new Vector2(0.08f, 0.79f), new Vector2(0.92f, 0.94f), TextAlignmentOptions.Center, true);
+            var cuerpo = CrearEtiqueta("Texto de ayuda", panel.transform, texto, 32f, new Color(0.08f, 0.17f, 0.13f), new Vector2(0.09f, 0.40f), new Vector2(0.91f, 0.76f), TextAlignmentOptions.Center, true);
             cuerpo.enableAutoSizing = true;
             cuerpo.fontSizeMin = 24f;
             cuerpo.fontSizeMax = 34f;
             cuerpo.textWrappingMode = TextWrappingModes.Normal;
 
-            CrearBotonModal("Cerrar ayuda", panel.transform, "VOLVER A LA SELVA", new Vector2(0.22f, 0.08f), new Vector2(0.78f, 0.23f), CerrarModal);
+            CrearBotonModal("Cerrar ayuda", panel.transform, "VOLVER A LA SELVA", new Vector2(0.22f, 0.08f), new Vector2(0.78f, 0.21f), CerrarModal);
             if (incluirAudio)
-                CrearBotonModal("Escuchar lectura", panel.transform, "AUDIO  ·  ESCUCHAR", new Vector2(0.28f, 0.25f), new Vector2(0.72f, 0.36f), ReproducirBienvenida);
+                CrearBotonModal("Escuchar lectura", panel.transform, "AUDIO  ·  ESCUCHAR", new Vector2(0.28f, 0.25f), new Vector2(0.72f, 0.36f), () => ReproducirClip(_audioModalActual, "El audio de la lectura no está disponible."));
             else if (titulo == "UNA PISTA")
-                CrearBotonModal("Señas de la pista", panel.transform, "VER PISTA EN SEÑAS", new Vector2(0.28f, 0.25f), new Vector2(0.72f, 0.36f), () => MostrarSenias(TextoPista, "Pista de la actividad"));
+            {
+                CrearBotonModal("Escuchar pista", panel.transform, "ESCUCHAR PISTA", new Vector2(0.08f, 0.25f), new Vector2(0.47f, 0.36f), () => ReproducirClip(_audioModalActual, "El audio de la pista no está disponible."));
+                CrearBotonModal("Señas de la pista", panel.transform, "VER DEMO DE SEÑAS", new Vector2(0.53f, 0.25f), new Vector2(0.92f, 0.36f), () => MostrarSenias(TextoPista, "Pista de la actividad"));
+            }
         }
 
         private void CerrarModal()
         {
+            if (_solicitudApiSenias != null)
+            {
+                StopCoroutine(_solicitudApiSenias);
+                _solicitudApiSenias = null;
+            }
+
             if (_modalActual != null)
                 Destroy(_modalActual);
             _modalActual = null;
+            _estadoApiSenias = null;
+            _detalleApiSenias = null;
+            _botonAvatarApi = null;
+            _panelSeniasRect = null;
         }
 
         private Button CrearBotonModal(string nombre, Transform padre, string texto, Vector2 anclaMin, Vector2 anclaMax, UnityEngine.Events.UnityAction accion)
         {
             var fondo = CrearImagen(nombre, padre, anclaMin, anclaMax, new Color(0.98f, 0.68f, 0.08f));
+            AplicarTarjetaRedondeada(fondo, new Color(0.98f, 0.68f, 0.08f));
             var boton = fondo.gameObject.AddComponent<Button>();
             boton.onClick.AddListener(accion);
             var etiqueta = CrearEtiqueta("Texto " + nombre, fondo.transform, texto, 25f, new Color(0.1f, 0.17f, 0.1f), Vector2.zero, Vector2.one, TextAlignmentOptions.Center, true);
@@ -414,9 +525,57 @@ namespace GuardianesAmazonicos.Nivel1
             etiqueta.characterSpacing = 0f;
             etiqueta.wordSpacing = 0f;
             etiqueta.textWrappingMode = TextWrappingModes.Normal;
+            etiqueta.enableAutoSizing = true;
+            etiqueta.fontSizeMin = Mathf.Max(12f, tamano * 0.68f);
+            etiqueta.fontSizeMax = tamano;
+            etiqueta.overflowMode = TextOverflowModes.Ellipsis;
             if (negrita)
                 etiqueta.fontStyle = FontStyles.Bold;
             return etiqueta;
+        }
+
+        private static void AplicarTarjetaRedondeada(Image imagen, Color tinte)
+        {
+            if (_spriteTarjetaRedondeada == null)
+            {
+                const int size = 96;
+                const float radius = 23f;
+                const float border = 5f;
+                var textura = new Texture2D(size, size, TextureFormat.RGBA32, false);
+                textura.name = "Sprite 9-slice adaptable";
+                textura.filterMode = FilterMode.Bilinear;
+                textura.wrapMode = TextureWrapMode.Clamp;
+
+                for (var y = 0; y < size; y++)
+                for (var x = 0; x < size; x++)
+                {
+                    var px = x + 0.5f;
+                    var py = y + 0.5f;
+                    var dentroExterior = DentroRectanguloRedondeado(px, py, 0f, radius, size);
+                    var dentroInterior = DentroRectanguloRedondeado(px, py, border, radius - border, size);
+                    textura.SetPixel(x, y, !dentroExterior ? new Color(0f, 0f, 0f, 0f) :
+                        dentroInterior ? new Color(1f, 0.985f, 0.91f, 1f) : new Color(0.84f, 0.52f, 0.16f, 1f));
+                }
+
+                textura.Apply(false, true);
+                _spriteTarjetaRedondeada = Sprite.Create(textura, new Rect(0f, 0f, size, size), new Vector2(0.5f, 0.5f), 100f, 0u, SpriteMeshType.FullRect, new Vector4(27f, 27f, 27f, 27f));
+                _spriteTarjetaRedondeada.name = "Marco redondeado escalable 9-slice";
+            }
+
+            imagen.sprite = _spriteTarjetaRedondeada;
+            imagen.type = Image.Type.Sliced;
+            imagen.color = tinte;
+        }
+
+        private static bool DentroRectanguloRedondeado(float x, float y, float inset, float radius, float size)
+        {
+            var centro = size * 0.5f;
+            var mitad = centro - inset;
+            var qx = Mathf.Abs(x - centro) - (mitad - radius);
+            var qy = Mathf.Abs(y - centro) - (mitad - radius);
+            var exterior = new Vector2(Mathf.Max(qx, 0f), Mathf.Max(qy, 0f)).magnitude;
+            var distancia = exterior + Mathf.Min(Mathf.Max(qx, qy), 0f) - radius;
+            return distancia <= 0f;
         }
 
         private static void Estirar(RectTransform rect)

@@ -14,7 +14,13 @@ La escena inicial presenta al Guardián de la Selva, la locución de bienvenida 
 2. Abrir `Assets/Scenes/BienvenidaNivel1.unity`.
 3. Ejecutar Play.
 
-El proyecto usa una ilustración original de la Amazonía en `Assets/Art` y la locución en español en `Assets/Audio`. La interfaz se construye con componentes uGUI/TextMeshPro para adaptarse a distintas resoluciones.
+El proyecto usa una ilustración original de la Amazonía en `Assets/Art` y locuciones distintas en español para bienvenida, inicio, continuación y pista. La interfaz se construye con uGUI/TextMeshPro: los textos se ajustan al espacio disponible y las tarjetas usan marcos 9-slice para conservar sus esquinas al cambiar de tamaño. La ilustración permanece como imagen para conservar su detalle.
+
+### Prueba de servicio de señas
+
+En Play, abre **Señas**, pulsa **Consultar API** y después **Ver avatar**. La escena consulta `https://three.ws/api/sign` con una frase genérica de prueba y muestra las palabras con seña, las deletreadas y la duración. El avatar se abre en el navegador.
+
+Esta integración solo demuestra el consumo de un servicio externo: la API usa ASL en inglés, tiene vocabulario limitado y no ha sido validada como LSEC. No debe presentarse como traducción ecuatoriana ni sustituye una interpretación revisada por personas sordas. La consulta no envía texto del estudiante.
 
 ## Estructura
 
