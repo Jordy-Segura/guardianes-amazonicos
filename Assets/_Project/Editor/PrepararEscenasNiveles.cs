@@ -103,6 +103,7 @@ public static class PrepararEscenasNiveles
 
         var escena = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
         escena.name = "IdentificarAlJaguar";
+        CrearCamaraPrincipal();
         var objetoControlador = new GameObject("ControladorRetoJaguar");
         var controlador = objetoControlador.AddComponent<ControladorRetoJaguar>();
         var tipo = typeof(ControladorRetoJaguar);
@@ -116,6 +117,18 @@ public static class PrepararEscenasNiveles
             .SetValue(controlador, audioConsigna);
 
         EditorSceneManager.SaveScene(escena, RutaEscenaReto);
+    }
+
+    private static void CrearCamaraPrincipal()
+    {
+        var objetoCamara = new GameObject("Main Camera");
+        objetoCamara.tag = "MainCamera";
+        objetoCamara.transform.position = new Vector3(0f, 0f, -10f);
+        var camara = objetoCamara.AddComponent<Camera>();
+        camara.orthographic = true;
+        camara.clearFlags = CameraClearFlags.SolidColor;
+        camara.backgroundColor = new Color(0.08f, 0.29f, 0.19f);
+        objetoCamara.AddComponent<AudioListener>();
     }
 
     private static void ConfigurarEscenasDeCompilacion()

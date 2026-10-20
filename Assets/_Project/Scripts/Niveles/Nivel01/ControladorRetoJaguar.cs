@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -39,8 +40,40 @@ namespace GuardianesAmazonicos.Niveles.Nivel01
                 return;
 
             _fuenteCompartida = _tipografia != null ? _tipografia : TMP_Settings.defaultFontAsset;
+            _fuenteCompartida?.TryAddCharacters("…");
+            AgregarRespaldoTipografico(_fuenteCompartida);
+            CrearCamaraSiHaceFalta();
             CrearInterfaz();
             RestaurarProgreso();
+        }
+
+        private static void CrearCamaraSiHaceFalta()
+        {
+            var camara = Camera.main;
+            if (camara == null)
+            {
+                var objetoCamara = new GameObject("Main Camera");
+                objetoCamara.tag = "MainCamera";
+                objetoCamara.transform.position = new Vector3(0f, 0f, -10f);
+                camara = objetoCamara.AddComponent<Camera>();
+                camara.orthographic = true;
+                camara.clearFlags = CameraClearFlags.SolidColor;
+                camara.backgroundColor = new Color(0.08f, 0.29f, 0.19f);
+            }
+
+            if (camara.GetComponent<AudioListener>() == null)
+                camara.gameObject.AddComponent<AudioListener>();
+        }
+
+        private static void AgregarRespaldoTipografico(TMP_FontAsset fuente)
+        {
+            var respaldo = TMP_Settings.defaultFontAsset;
+            if (fuente == null || respaldo == null || fuente == respaldo)
+                return;
+
+            fuente.fallbackFontAssetTable ??= new List<TMP_FontAsset>();
+            if (!fuente.fallbackFontAssetTable.Contains(respaldo))
+                fuente.fallbackFontAssetTable.Add(respaldo);
         }
 
         private bool ValidarRecursos()
@@ -311,6 +344,7 @@ namespace GuardianesAmazonicos.Niveles.Nivel01
             rect.offsetMin = new Vector2(8f, 4f);
             rect.offsetMax = new Vector2(-8f, -4f);
             var etiqueta = objeto.GetComponent<TextMeshProUGUI>();
+            etiqueta.overflowMode = TextOverflowModes.Truncate;
             etiqueta.text = texto;
             etiqueta.font = _fuenteCompartida != null ? _fuenteCompartida : TMP_Settings.defaultFontAsset;
             etiqueta.fontSize = tamano;
@@ -318,7 +352,7 @@ namespace GuardianesAmazonicos.Niveles.Nivel01
             etiqueta.fontSizeMax = tamano;
             etiqueta.enableAutoSizing = true;
             etiqueta.textWrappingMode = TextWrappingModes.Normal;
-            etiqueta.overflowMode = TextOverflowModes.Ellipsis;
+            etiqueta.overflowMode = TextOverflowModes.Truncate;
             etiqueta.color = color;
             etiqueta.alignment = alineacion;
             etiqueta.raycastTarget = false;

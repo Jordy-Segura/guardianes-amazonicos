@@ -21,6 +21,7 @@ public static class CrearEscenaBienvenida
         ConfigurarTipografia();
         var escena = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
         escena.name = "Nivel01_ConozcoLaSelva";
+        CrearCamaraPrincipal();
         var objeto = new GameObject("Controlador de bienvenida");
         var controlador = objeto.AddComponent<ControladorNivel>();
         var fondo = AssetDatabase.LoadAssetAtPath<Sprite>(RutaArte);
@@ -40,6 +41,18 @@ public static class CrearEscenaBienvenida
         EditorBuildSettings.scenes = new[] { new EditorBuildSettingsScene(RutaEscena, true) };
         AssetDatabase.SaveAssets();
         Debug.Log("Escena de bienvenida creada y añadida a Build Settings.");
+    }
+
+    private static void CrearCamaraPrincipal()
+    {
+        var objetoCamara = new GameObject("Main Camera");
+        objetoCamara.tag = "MainCamera";
+        objetoCamara.transform.position = new Vector3(0f, 0f, -10f);
+        var camara = objetoCamara.AddComponent<Camera>();
+        camara.orthographic = true;
+        camara.clearFlags = CameraClearFlags.SolidColor;
+        camara.backgroundColor = new Color(0.08f, 0.29f, 0.19f);
+        objetoCamara.AddComponent<AudioListener>();
     }
 
     [MenuItem("Guardianes/Reiniciar progreso local")]
@@ -88,7 +101,7 @@ public static class CrearEscenaBienvenida
         foreach (var atlas in fuenteTmp.atlasTextures)
             AssetDatabase.AddObjectToAsset(atlas, fuenteTmp);
         AssetDatabase.AddObjectToAsset(fuenteTmp.material, fuenteTmp);
-        fuenteTmp.TryAddCharacters("¡Hola, explorador! Bienvenido a la selva. Hoy vamos a conocer algunos de sus tesoros. ¿Quieres comenzar? NIVEL 1 CONOZCO progreso ayuda señas lectura AUDIO ESCUCHAR COMENZAR PISTA LENGUA DE SEÑAS ECUATORIANA Video en preparación REPRODUCIR REPETIR AMPLIAR VISOR VOLVER A LA ACTIVIDAD Aprende a tu ritmo");
+        fuenteTmp.TryAddCharacters("¡Hola, explorador! Bienvenido a la selva. Hoy vamos a conocer algunos de sus tesoros. ¿Quieres comenzar? NIVEL 1 CONOZCO progreso ayuda señas lectura AUDIO ESCUCHAR COMENZAR PISTA LENGUA DE SEÑAS ECUATORIANA Video en preparación REPRODUCIR REPETIR AMPLIAR VISOR VOLVER A LA ACTIVIDAD Aprende a tu ritmo …");
         EditorUtility.SetDirty(fuenteTmp);
         AssetDatabase.SaveAssets();
     }

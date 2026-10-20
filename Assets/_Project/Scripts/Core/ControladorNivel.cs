@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -65,6 +66,19 @@ namespace GuardianesAmazonicos.Core
             _tipografiaCompartida = _tipografia;
             if (_tipografiaCompartida == null)
                 _tipografiaCompartida = TMP_Settings.defaultFontAsset;
+            _tipografiaCompartida?.TryAddCharacters("…");
+            AgregarRespaldoTipografico(_tipografiaCompartida);
+        }
+
+        private static void AgregarRespaldoTipografico(TMP_FontAsset fuente)
+        {
+            var respaldo = TMP_Settings.defaultFontAsset;
+            if (fuente == null || respaldo == null || fuente == respaldo)
+                return;
+
+            fuente.fallbackFontAssetTable ??= new List<TMP_FontAsset>();
+            if (!fuente.fallbackFontAssetTable.Contains(respaldo))
+                fuente.fallbackFontAssetTable.Add(respaldo);
         }
 
         private void ConfigurarAudio()
@@ -87,7 +101,6 @@ namespace GuardianesAmazonicos.Core
                 camara.orthographic = true;
                 camara.clearFlags = CameraClearFlags.SolidColor;
                 camara.backgroundColor = new Color(0.08f, 0.29f, 0.19f);
-                camara.cullingMask = 0;
             }
 
             if (camara.GetComponent<AudioListener>() == null)
@@ -511,7 +524,7 @@ namespace GuardianesAmazonicos.Core
             etiqueta.fontSizeMin = Mathf.Max(16f, tamano * 0.72f);
             etiqueta.fontSizeMax = tamano;
             etiqueta.textWrappingMode = TextWrappingModes.NoWrap;
-            etiqueta.overflowMode = TextOverflowModes.Ellipsis;
+            etiqueta.overflowMode = TextOverflowModes.Truncate;
             etiqueta.raycastTarget = false;
             return boton;
         }
@@ -540,6 +553,7 @@ namespace GuardianesAmazonicos.Core
             rect.offsetMin = new Vector2(7f, 3f);
             rect.offsetMax = new Vector2(-7f, -3f);
             var etiqueta = objeto.GetComponent<TextMeshProUGUI>();
+            etiqueta.overflowMode = TextOverflowModes.Truncate;
             etiqueta.text = texto;
             etiqueta.font = _tipografiaCompartida != null ? _tipografiaCompartida : TMP_Settings.defaultFontAsset;
             etiqueta.fontSize = tamano;
@@ -551,7 +565,7 @@ namespace GuardianesAmazonicos.Core
             etiqueta.enableAutoSizing = true;
             etiqueta.fontSizeMin = Mathf.Max(12f, tamano * 0.68f);
             etiqueta.fontSizeMax = tamano;
-            etiqueta.overflowMode = TextOverflowModes.Ellipsis;
+            etiqueta.overflowMode = TextOverflowModes.Truncate;
             if (negrita)
                 etiqueta.fontStyle = FontStyles.Bold;
             return etiqueta;
