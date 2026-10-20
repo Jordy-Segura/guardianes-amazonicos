@@ -9,8 +9,8 @@ using GuardianesAmazonicos.Data;
 
 public static class CrearEscenaBienvenida
 {
-    private const string RutaEscena = "Assets/_Project/Scenes/Nivel01_ConozcoLaSelva.unity";
-    public const string RutaArte = "Assets/Sprites/BienvenidaNivel1_Pantalla.png";
+    private const string RutaEscena = "Assets/_Project/Scenes/Nivel01/Nivel01_ConozcoLaSelva.unity";
+    public const string RutaArte = "Assets/Sprites/BienvenidaSelva.png";
     private const string RutaFuente = "Assets/Fonts/NunitoBold.ttf";
     private const string RutaFuenteTMP = "Assets/Fonts/NunitoBoldSDF.asset";
 

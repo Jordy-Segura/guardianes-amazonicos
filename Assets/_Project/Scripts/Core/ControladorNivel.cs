@@ -102,7 +102,7 @@ namespace GuardianesAmazonicos.Core
 
             var escalador = canvasObjeto.GetComponent<CanvasScaler>();
             escalador.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
-            escalador.referenceResolution = new Vector2(1536f, 1024f);
+            escalador.referenceResolution = new Vector2(1366f, 768f);
             escalador.matchWidthOrHeight = 1f;
 
             if (FindAnyObjectByType<EventSystem>() == null)
@@ -110,18 +110,18 @@ namespace GuardianesAmazonicos.Core
 
             CrearImagen("Fondo para formato panorámico", canvas.transform, Vector2.zero, Vector2.one, new Color(0.035f, 0.16f, 0.105f, 1f)).raycastTarget = false;
 
-            var marco = new GameObject("Marco de diseño 3 a 2", typeof(RectTransform));
+            var marco = new GameObject("Marco de diseño 16 a 9", typeof(RectTransform));
             marco.transform.SetParent(canvas.transform, false);
             var rectMarco = marco.GetComponent<RectTransform>();
-            rectMarco.anchorMin = new Vector2(0.5f, 0.5f);
-            rectMarco.anchorMax = new Vector2(0.5f, 0.5f);
+            rectMarco.anchorMin = Vector2.zero;
+            rectMarco.anchorMax = Vector2.one;
             rectMarco.pivot = new Vector2(0.5f, 0.5f);
-            rectMarco.sizeDelta = new Vector2(1536f, 1024f);
+            rectMarco.sizeDelta = Vector2.zero;
             rectMarco.anchoredPosition = Vector2.zero;
 
             var arte = CrearImagen("Arte de bienvenida", marco.transform, Vector2.zero, Vector2.one, Color.white);
             arte.sprite = _fondoSelva;
-            arte.preserveAspect = true;
+            arte.preserveAspect = false;
             arte.raycastTarget = false;
 
             CrearMarcaYProgreso(marco.transform);
@@ -132,8 +132,11 @@ namespace GuardianesAmazonicos.Core
 
         private void CrearMarcaYProgreso(Transform padre)
         {
-            CrearEtiqueta("Marca principal", padre, "GUARDIANES", 32f, new Color(1f, 0.95f, 0.76f), new Vector2(0.025f, 0.916f), new Vector2(0.29f, 0.977f), TextAlignmentOptions.Center, true);
-            CrearEtiqueta("Subtítulo de marca", padre, "DE LA AMAZONÍA LECTORA", 24f, new Color(0.72f, 0.97f, 0.37f), new Vector2(0.025f, 0.891f), new Vector2(0.29f, 0.925f), TextAlignmentOptions.Center, true);
+            CrearPanelMarco("Placa de identidad", padre, new Vector2(0.02f, 0.9f), new Vector2(0.30f, 0.99f), new Color32(141, 90, 43, 245));
+            CrearPanelMarco("Placa del nivel", padre, new Vector2(0.35f, 0.9f), new Vector2(0.69f, 0.99f), new Color32(255, 248, 232, 245));
+            CrearPanelMarco("Placa de progreso", padre, new Vector2(0.83f, 0.9f), new Vector2(0.98f, 0.99f), new Color32(46, 125, 50, 245));
+            CrearEtiqueta("Marca principal", padre, "GUARDIANES", 28f, new Color(1f, 0.95f, 0.76f), new Vector2(0.025f, 0.945f), new Vector2(0.29f, 0.982f), TextAlignmentOptions.Center, true);
+            CrearEtiqueta("Subtítulo de marca", padre, "DE LA AMAZONÍA LECTORA", 19f, new Color(0.72f, 0.97f, 0.37f), new Vector2(0.025f, 0.904f), new Vector2(0.29f, 0.945f), TextAlignmentOptions.Center, true);
             CrearEtiqueta("Nombre del nivel", padre, "NIVEL 1  ·  CONOZCO LA SELVA", 28f, new Color(0.08f, 0.18f, 0.12f), new Vector2(0.37f, 0.912f), new Vector2(0.69f, 0.974f), TextAlignmentOptions.Center, true);
 
             _progreso = CrearEtiqueta("Progreso del nivel", padre, "0 de 12", 32f, new Color(1f, 0.9f, 0.3f), new Vector2(0.835f, 0.914f), new Vector2(0.987f, 0.98f), TextAlignmentOptions.Center, true);
@@ -141,19 +144,22 @@ namespace GuardianesAmazonicos.Core
 
         private void CrearPanelBienvenida(Transform padre)
         {
-            CrearEtiqueta("Título de bienvenida", padre, "Bienvenido a la selva", 40f, Color.white, new Vector2(0.42f, 0.765f), new Vector2(0.9f, 0.845f), TextAlignmentOptions.Center, true);
+            var panel = CrearImagen("Panel de bienvenida", padre, new Vector2(0.39f, 0.19f), new Vector2(0.96f, 0.84f), new Color32(255, 248, 232, 250));
+            AplicarTarjetaRedondeada(panel, new Color32(255, 248, 232, 250));
+            panel.raycastTarget = false;
+            CrearEtiqueta("Título de bienvenida", panel.transform, "Bienvenido a la selva", 36f, new Color(0.09f, 0.28f, 0.14f), new Vector2(0.07f, 0.82f), new Vector2(0.93f, 0.96f), TextAlignmentOptions.Center, true);
 
-            _mensaje = CrearEtiqueta("Mensaje del Guardián", padre, TextoBienvenida, 40f, new Color(0.08f, 0.2f, 0.14f), new Vector2(0.405f, 0.43f), new Vector2(0.925f, 0.70f), TextAlignmentOptions.Center, true);
+            _mensaje = CrearEtiqueta("Mensaje del Guardián", panel.transform, TextoBienvenida, 31f, new Color(0.08f, 0.2f, 0.14f), new Vector2(0.08f, 0.43f), new Vector2(0.92f, 0.79f), TextAlignmentOptions.Center, true);
             _mensaje.enableAutoSizing = true;
-            _mensaje.fontSizeMin = 32f;
-            _mensaje.fontSizeMax = 40f;
+            _mensaje.fontSizeMin = 25f;
+            _mensaje.fontSizeMax = 34f;
             _mensaje.textWrappingMode = TextWrappingModes.Normal;
 
-            _botonAudio = CrearBotonTransparente("Botón AUDIO", padre, new Vector2(0.407f, 0.315f), new Vector2(0.63f, 0.41f), "AUDIO  ·  ESCUCHAR", 32f, ReproducirMensajeActual);
+            _botonAudio = CrearBotonTransparente("Botón AUDIO", panel.transform, new Vector2(0.07f, 0.16f), new Vector2(0.48f, 0.32f), "AUDIO  ·  ESCUCHAR", 24f, ReproducirMensajeActual);
             _botonAudio.interactable = _audioBienvenida != null;
-            _estadoAudio = CrearEtiqueta("Estado del audio", padre, "Escucha la bienvenida del Guardián", 17f, new Color(0.24f, 0.28f, 0.2f), new Vector2(0.405f, 0.275f), new Vector2(0.63f, 0.31f), TextAlignmentOptions.Center, false);
+            _estadoAudio = CrearEtiqueta("Estado del audio", panel.transform, "Escucha la bienvenida del Guardián", 16f, new Color(0.24f, 0.28f, 0.2f), new Vector2(0.07f, 0.08f), new Vector2(0.48f, 0.15f), TextAlignmentOptions.Center, false);
 
-            _botonComenzar = CrearBotonTransparente("Botón COMENZAR", padre, new Vector2(0.655f, 0.315f), new Vector2(0.901f, 0.41f), "COMENZAR", 34f, ComenzarAventura);
+            _botonComenzar = CrearBotonTransparente("Botón COMENZAR", panel.transform, new Vector2(0.53f, 0.16f), new Vector2(0.93f, 0.32f), "COMENZAR", 27f, ComenzarAventura);
             _botonComenzarTexto = _botonComenzar.GetComponentInChildren<TMP_Text>();
         }
 
@@ -166,7 +172,15 @@ namespace GuardianesAmazonicos.Core
 
         private static void CrearSelloInferior(Transform padre)
         {
+            CrearPanelMarco("Placa de aprendizaje", padre, new Vector2(0.02f, 0.018f), new Vector2(0.24f, 0.09f), new Color32(104, 63, 29, 240));
             CrearEtiqueta("Lema de aprendizaje", padre, "Aprende a tu ritmo", 24f, new Color(1f, 0.96f, 0.82f), new Vector2(0.025f, 0.026f), new Vector2(0.23f, 0.08f), TextAlignmentOptions.Center, true);
+        }
+
+        private static void CrearPanelMarco(string nombre, Transform padre, Vector2 anclaMin, Vector2 anclaMax, Color color)
+        {
+            var panel = CrearImagen(nombre, padre, anclaMin, anclaMax, color);
+            AplicarTarjetaRedondeada(panel, color);
+            panel.raycastTarget = false;
         }
 
         private void ReproducirMensajeActual()
@@ -213,14 +227,17 @@ namespace GuardianesAmazonicos.Core
         private void ComenzarAventura()
         {
             if (_aventuraIniciada)
+            {
+                NavegacionEscenas.Cargar("IdentificarAlJaguar");
                 return;
+            }
 
             _aventuraIniciada = true;
             _controladorProgreso.Iniciar(TotalRetos);
 
             _mensaje.text = "¡Muy bien, explorador! Ya diste tu primer paso. El Guardián te acompaña por la selva.";
-            _botonComenzar.interactable = false;
-            _botonComenzarTexto.text = "¡NIVEL INICIADO!";
+            _botonComenzar.interactable = true;
+            _botonComenzarTexto.text = "IR A LA MISIÓN";
             _progreso.text = "1 de 12";
             _estadoAudio.text = "Presiona AUDIO para escuchar el nuevo mensaje.";
             _botonAudio.interactable = ObtenerAudioMensajeActual() != null;
@@ -240,8 +257,8 @@ namespace GuardianesAmazonicos.Core
                 return;
 
             _mensaje.text = "¡Hola de nuevo, explorador! Tu aventura por la selva continúa.";
-            _botonComenzar.interactable = false;
-            _botonComenzarTexto.text = "¡NIVEL INICIADO!";
+            _botonComenzar.interactable = true;
+            _botonComenzarTexto.text = "IR A LA MISIÓN";
             _botonAudio.interactable = ObtenerAudioMensajeActual() != null;
         }
 
@@ -471,14 +488,21 @@ namespace GuardianesAmazonicos.Core
 
         private Button CrearBotonTransparente(string nombre, Transform padre, Vector2 anclaMin, Vector2 anclaMax, string texto, float tamano, UnityEngine.Events.UnityAction accion)
         {
-            var imagen = CrearImagen(nombre, padre, anclaMin, anclaMax, new Color(1f, 1f, 1f, 0f));
+            var colorFondo = nombre.Contains("AUDIO") ? new Color32(167, 221, 247, 255) :
+                nombre.Contains("SEÑAS") ? new Color32(179, 136, 255, 255) :
+                nombre.Contains("LECTURA") ? new Color32(167, 221, 247, 255) :
+                nombre.Contains("AYUDA") ? new Color32(255, 248, 232, 255) :
+                new Color32(246, 196, 69, 255);
+            var imagen = CrearImagen(nombre, padre, anclaMin, anclaMax, colorFondo);
+            AplicarTarjetaRedondeada(imagen, colorFondo);
             var boton = imagen.gameObject.AddComponent<Button>();
             boton.transition = Selectable.Transition.ColorTint;
+            boton.targetGraphic = imagen;
             ColorBlock colores = boton.colors;
-            colores.normalColor = new Color(1f, 1f, 1f, 0f);
-            colores.highlightedColor = new Color(1f, 1f, 1f, 0.14f);
-            colores.pressedColor = new Color(1f, 1f, 1f, 0.24f);
-            colores.selectedColor = new Color(1f, 1f, 1f, 0.08f);
+            colores.normalColor = Color.white;
+            colores.highlightedColor = new Color32(232, 255, 220, 255);
+            colores.pressedColor = new Color32(211, 235, 197, 255);
+            colores.selectedColor = colores.highlightedColor;
             colores.fadeDuration = 0.12f;
             boton.colors = colores;
             ControladorBotonAccesible.Configurar(boton, nombre, accion);

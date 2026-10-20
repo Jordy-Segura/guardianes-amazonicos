@@ -21,6 +21,13 @@ namespace GuardianesAmazonicos.Data
             PlayerPrefs.Save();
         }
 
+        public static void RegistrarRetoCompleto(int retosCompletados)
+        {
+            var progresoActual = Mathf.Max(PlayerPrefs.GetInt(ClaveProgreso, 0), retosCompletados);
+            PlayerPrefs.SetInt(ClaveProgreso, progresoActual);
+            PlayerPrefs.Save();
+        }
+
         public static void Reiniciar()
         {
             PlayerPrefs.DeleteKey(ClaveInicio);

@@ -5,24 +5,28 @@ Aplicación educativa interactiva ambientada en la Amazonía. Está desarrollada
 ## Abrir y ejecutar
 
 1. Abrir la carpeta del repositorio desde Unity Hub con Unity `6000.6.5f1`.
-2. Abrir la escena principal disponible en `Assets/_Project/Scenes`.
+2. Abrir `Assets/_Project/Scenes/Nivel01/Nivel01_ConozcoLaSelva.unity`.
 3. Ejecutar Play.
 
 La interfaz utiliza uGUI y TextMeshPro. Los recursos visuales, sonoros y tipográficos se organizan en `Assets/Sprites`, `Assets/Audio` y `Assets/Fonts`. Las dependencias se declaran en `Packages/manifest.json` y se fijan en `Packages/packages-lock.json`.
 
 ## Estructura
 
-- `Assets/_Project/Scenes`: escenas del proyecto.
+- `Assets/_Project/Scenes/Nivel01` a `Nivel05`: escenas agrupadas por nivel. Las carpetas de los niveles aún sin escenas quedan preparadas para el equipo.
 - `Assets/_Project/Scripts/Core`: control y navegación general.
 - `Assets/_Project/Scripts/UI`: componentes de interfaz.
 - `Assets/_Project/Scripts/Niveles`: lógica específica de cada actividad.
 - `Assets/_Project/Scripts/Audio` y `Assets/_Project/Scripts/Data`: servicios de audio y persistencia.
 - `Assets/_Project/Editor`: herramientas del Editor.
-- `Assets/_Project/Settings`: perfiles de compilación y ajustes del proyecto.
+- `Assets/Settings`: perfiles de compilación de Unity.
 - `Assets/Sprites`, `Assets/Audio`, `Assets/Fonts`, `Assets/Prefabs` y `Assets/Materials`: recursos del juego.
 - `Assets/Documentation`: documentación complementaria.
 - `ProjectSettings`: configuración compartida de Unity.
 - `Packages`: dependencias del proyecto.
+
+### Escenas y actividades
+
+La escena de entrada está en la carpeta del primer nivel. La actividad de identificación del jaguar también se guarda allí como escena independiente. Para volver a generar las carpetas, importar el atlas de animales y actualizar las escenas de compilación, ejecutar `Guardianes > Preparar estructura y reto del jaguar` desde Unity. Las cuatro opciones y sus ilustraciones son recursos independientes dentro de una tarjeta reutilizable; la respuesta correcta habilita el botón del siguiente reto y el avance se conserva localmente.
 
 ## Políticas de trabajo con Git y GitHub
 
