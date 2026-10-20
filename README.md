@@ -5,17 +5,22 @@ Aplicación educativa interactiva ambientada en la Amazonía. Está desarrollada
 ## Abrir y ejecutar
 
 1. Abrir la carpeta del repositorio desde Unity Hub con Unity `6000.6.5f1`.
-2. Abrir una escena disponible en `Assets/Scenes`.
+2. Abrir la escena principal disponible en `Assets/_Project/Scenes`.
 3. Ejecutar Play.
 
-La interfaz utiliza uGUI y TextMeshPro; los recursos de arte y audio se encuentran en `Assets/Art` y `Assets/Audio`. Las dependencias del proyecto se declaran en `Packages/manifest.json` y se fijan en `Packages/packages-lock.json`.
+La interfaz utiliza uGUI y TextMeshPro. Los recursos visuales, sonoros y tipográficos se organizan en `Assets/Sprites`, `Assets/Audio` y `Assets/Fonts`. Las dependencias se declaran en `Packages/manifest.json` y se fijan en `Packages/packages-lock.json`.
 
 ## Estructura
 
-- `Assets/Scenes`: escenas.
-- `Assets/Scripts`: lógica de la aplicación.
-- `Assets/Editor`: herramientas del Editor.
-- `Assets/Art` y `Assets/Audio`: recursos visuales y sonoros.
+- `Assets/_Project/Scenes`: escenas del proyecto.
+- `Assets/_Project/Scripts/Core`: control y navegación general.
+- `Assets/_Project/Scripts/UI`: componentes de interfaz.
+- `Assets/_Project/Scripts/Niveles`: lógica específica de cada actividad.
+- `Assets/_Project/Scripts/Audio` y `Assets/_Project/Scripts/Data`: servicios de audio y persistencia.
+- `Assets/_Project/Editor`: herramientas del Editor.
+- `Assets/_Project/Settings`: perfiles de compilación y ajustes del proyecto.
+- `Assets/Sprites`, `Assets/Audio`, `Assets/Fonts`, `Assets/Prefabs` y `Assets/Materials`: recursos del juego.
+- `Assets/Documentation`: documentación complementaria.
 - `ProjectSettings`: configuración compartida de Unity.
 - `Packages`: dependencias del proyecto.
 

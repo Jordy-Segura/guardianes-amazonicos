@@ -147,9 +147,13 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a0c34583c9a4a5b4faf7d1b855a16cd1, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::GuardianesAmazonicos.Nivel1.BienvenidaNivel1
+  m_EditorClassIdentifier: Assembly-CSharp::GuardianesAmazonicos.Core.ControladorNivel
   _fondoSelva: {fileID: 21300000, guid: 21728b14e2a269d4ba1807164290b471, type: 3}
+  _tipografia: {fileID: 11400000, guid: d76896172e8aabe4392f949908e6b045, type: 2}
   _audioBienvenida: {fileID: 8300000, guid: e58dd61e2e935b84e9e3f704e82610f4, type: 3}
+  _audioInicio: {fileID: 8300000, guid: fb66af0390204848a2bc374a9cde8560, type: 3}
+  _audioPista: {fileID: 8300000, guid: c2acfa12a3d64df282e6945749bce64d, type: 3}
+  _audioContinuacion: {fileID: 8300000, guid: cb7b54f1b56f4f3b910018271b1af083, type: 3}
 --- !u!4 &1227620825
 Transform:
   m_ObjectHideFlags: 0

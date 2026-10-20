@@ -5,14 +5,16 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Networking;
 using UnityEngine.UI;
+using GuardianesAmazonicos.Audio;
+using GuardianesAmazonicos.Niveles.Nivel01;
+using GuardianesAmazonicos.Data;
+using GuardianesAmazonicos.UI;
 
-namespace GuardianesAmazonicos.Nivel1
+namespace GuardianesAmazonicos.Core
 {
-    public sealed class BienvenidaNivel1 : MonoBehaviour
+    public sealed class ControladorNivel : MonoBehaviour
     {
         private const string TextoBienvenida = "¡Hola, explorador! Bienvenido a la selva. Hoy vamos a conocer algunos de sus tesoros. ¿Quieres comenzar?";
-        private const string ClaveInicio = "guardianes.nivel1.iniciado";
-        private const string ClaveProgreso = "guardianes.nivel1.progreso";
         private const int TotalRetos = 12;
         private const string TextoPista = "Observa la selva, escucha al Guardián y presiona COMENZAR cuando estés listo para explorar.";
         private const string FrasePruebaApi = "hello explorer welcome to the jungle";
@@ -21,12 +23,14 @@ namespace GuardianesAmazonicos.Nivel1
         private static Sprite _spriteTarjetaRedondeada;
 
         [SerializeField] private Sprite _fondoSelva;
+        [SerializeField] private TMP_FontAsset _tipografia;
         [SerializeField] private AudioClip _audioBienvenida;
-        private AudioClip _audioInicio;
-        private AudioClip _audioPista;
-        private AudioClip _audioContinuacion;
+        [SerializeField] private AudioClip _audioInicio;
+        [SerializeField] private AudioClip _audioPista;
+        [SerializeField] private AudioClip _audioContinuacion;
 
-        private AudioSource _reproductor;
+        private GestorAudio _gestorAudio;
+        private ControladorProgresoNivel _controladorProgreso;
         private TMP_Text _mensaje;
         private TMP_Text _progreso;
         private TMP_Text _estadoAudio;
@@ -58,25 +62,17 @@ namespace GuardianesAmazonicos.Nivel1
 
         private void CargarRecursosLocales()
         {
-            var ilustracion = Resources.Load<Sprite>("BienvenidaNivel1_Pantalla");
-            if (ilustracion != null)
-                _fondoSelva = ilustracion;
-
-            _tipografiaCompartida = Resources.Load<TMP_FontAsset>("NunitoBoldSDF");
+            _tipografiaCompartida = _tipografia;
             if (_tipografiaCompartida == null)
                 _tipografiaCompartida = TMP_Settings.defaultFontAsset;
-
-            _audioInicio = Resources.Load<AudioClip>("Audio/Nivel1Inicio");
-            _audioPista = Resources.Load<AudioClip>("Audio/PistaNivel1");
-            _audioContinuacion = Resources.Load<AudioClip>("Audio/ContinuacionNivel1");
         }
 
         private void ConfigurarAudio()
         {
-            _reproductor = gameObject.AddComponent<AudioSource>();
-            _reproductor.playOnAwake = false;
-            _reproductor.spatialBlend = 0f;
-            _reproductor.clip = _audioBienvenida;
+            _gestorAudio = GetComponent<GestorAudio>();
+            if (_gestorAudio == null)
+                _gestorAudio = gameObject.AddComponent<GestorAudio>();
+            _gestorAudio.Configurar();
         }
 
         private static void CrearCamaraSiHaceFalta()
@@ -195,11 +191,13 @@ namespace GuardianesAmazonicos.Nivel1
                 return;
             }
 
-            if (_reproductor.isPlaying)
-                _reproductor.Stop();
+            if (_gestorAudio == null || !_gestorAudio.Reproducir(clip))
+            {
+                if (_estadoAudio != null)
+                    _estadoAudio.text = mensajeSinAudio;
+                return;
+            }
 
-            _reproductor.clip = clip;
-            _reproductor.Play();
             if (_estadoAudio != null)
                 _estadoAudio.text = "Reproduciendo el mensaje…";
             CancelInvoke(nameof(IndicarFinAudio));
@@ -218,9 +216,7 @@ namespace GuardianesAmazonicos.Nivel1
                 return;
 
             _aventuraIniciada = true;
-            PlayerPrefs.SetInt(ClaveInicio, 1);
-            PlayerPrefs.SetInt(ClaveProgreso, 1);
-            PlayerPrefs.Save();
+            _controladorProgreso.Iniciar(TotalRetos);
 
             _mensaje.text = "¡Muy bien, explorador! Ya diste tu primer paso. El Guardián te acompaña por la selva.";
             _botonComenzar.interactable = false;
@@ -232,9 +228,13 @@ namespace GuardianesAmazonicos.Nivel1
 
         private void RestaurarProgreso()
         {
-            var cantidad = Mathf.Clamp(PlayerPrefs.GetInt(ClaveProgreso, 0), 0, TotalRetos);
-            _aventuraIniciada = PlayerPrefs.GetInt(ClaveInicio, 0) == 1;
-            _progreso.text = $"{cantidad} de {TotalRetos}";
+            _controladorProgreso = GetComponent<ControladorProgresoNivel>();
+            if (_controladorProgreso == null)
+                _controladorProgreso = gameObject.AddComponent<ControladorProgresoNivel>();
+
+            var datos = _controladorProgreso.Cargar(TotalRetos);
+            _aventuraIniciada = datos.AventuraIniciada;
+            _progreso.text = $"{datos.RetosCompletados} de {TotalRetos}";
 
             if (!_aventuraIniciada)
                 return;
@@ -374,8 +374,7 @@ namespace GuardianesAmazonicos.Nivel1
             AplicarTarjetaRedondeada(imagen, color);
             var boton = imagen.gameObject.AddComponent<Button>();
             boton.interactable = activo;
-            if (accion != null)
-                boton.onClick.AddListener(accion);
+            ControladorBotonAccesible.Configurar(boton, nombre, accion);
 
             var etiqueta = CrearEtiqueta("Texto " + nombre, imagen.transform, texto, 18f, new Color(0.08f, 0.17f, 0.13f), Vector2.zero, Vector2.one, TextAlignmentOptions.Center, true);
             etiqueta.textWrappingMode = TextWrappingModes.NoWrap;
@@ -464,7 +463,7 @@ namespace GuardianesAmazonicos.Nivel1
             var fondo = CrearImagen(nombre, padre, anclaMin, anclaMax, new Color(0.98f, 0.68f, 0.08f));
             AplicarTarjetaRedondeada(fondo, new Color(0.98f, 0.68f, 0.08f));
             var boton = fondo.gameObject.AddComponent<Button>();
-            boton.onClick.AddListener(accion);
+            ControladorBotonAccesible.Configurar(boton, nombre, accion);
             var etiqueta = CrearEtiqueta("Texto " + nombre, fondo.transform, texto, 25f, new Color(0.1f, 0.17f, 0.1f), Vector2.zero, Vector2.one, TextAlignmentOptions.Center, true);
             etiqueta.raycastTarget = false;
             return boton;
@@ -482,7 +481,7 @@ namespace GuardianesAmazonicos.Nivel1
             colores.selectedColor = new Color(1f, 1f, 1f, 0.08f);
             colores.fadeDuration = 0.12f;
             boton.colors = colores;
-            boton.onClick.AddListener(accion);
+            ControladorBotonAccesible.Configurar(boton, nombre, accion);
             var etiqueta = CrearEtiqueta("Texto " + nombre, imagen.transform, texto, tamano, new Color(0.07f, 0.15f, 0.1f), Vector2.zero, Vector2.one, TextAlignmentOptions.Center, true);
             etiqueta.enableAutoSizing = true;
             etiqueta.fontSizeMin = Mathf.Max(16f, tamano * 0.72f);
