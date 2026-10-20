@@ -2,6 +2,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using GuardianesAmazonicos.Audio;
 using GuardianesAmazonicos.Data;
 using GuardianesAmazonicos.UI;
 
@@ -22,7 +23,9 @@ namespace GuardianesAmazonicos.Niveles.Nivel01
         [SerializeField] private Sprite _fondoSelva;
         [SerializeField] private TMP_FontAsset _tipografia;
         [SerializeField] private Sprite[] _imagenesAnimales;
+        [SerializeField] private AudioClip _audioConsigna;
 
+        private GestorAudio _gestorAudio;
         private TMP_Text _textoEstado;
         private TMP_Text _textoProgreso;
         private Button _botonSiguiente;
@@ -113,8 +116,8 @@ namespace GuardianesAmazonicos.Niveles.Nivel01
             _textoEstado = CrearTexto("Retroalimentacion", padre, "Toca una imagen para elegir.", 20f, _colorTexto,
                 new Vector2(0.06f, 0.42f), new Vector2(0.32f, 0.57f), TextAlignmentOptions.Center, false);
             _textoEstado.fontSizeMin = 17f;
-            CrearBoton("BotonAudio", padre, "AUDIO NO DISPONIBLE", new Vector2(0.06f, 0.32f), new Vector2(0.20f, 0.40f),
-                new Color32(167, 221, 247, 255), null).interactable = false;
+            CrearBoton("BotonAudio", padre, "ESCUCHAR", new Vector2(0.06f, 0.32f), new Vector2(0.20f, 0.40f),
+                new Color32(167, 221, 247, 255), ReproducirConsigna);
             CrearBoton("BotonAyuda", padre, "VER PISTA", new Vector2(0.21f, 0.32f), new Vector2(0.32f, 0.40f),
                 new Color32(246, 196, 69, 255), MostrarPista);
         }
@@ -210,6 +213,26 @@ namespace GuardianesAmazonicos.Niveles.Nivel01
         {
             if (!_retoCompletado)
                 _textoEstado.text = TextoPista;
+        }
+
+        private void ReproducirConsigna()
+        {
+            if (_audioConsigna == null)
+            {
+                _textoEstado.text = "La locución de esta consigna todavía no está disponible.";
+                return;
+            }
+
+            if (_gestorAudio == null)
+            {
+                _gestorAudio = GetComponent<GestorAudio>();
+                if (_gestorAudio == null)
+                    _gestorAudio = gameObject.AddComponent<GestorAudio>();
+                _gestorAudio.Configurar();
+            }
+
+            if (_gestorAudio.Reproducir(_audioConsigna))
+                _textoEstado.text = "Reproduciendo la consigna. Puedes escucharla otra vez cuando quieras.";
         }
 
         private void ContinuarReto()

@@ -14,6 +14,7 @@ public static class PrepararEscenasNiveles
     private const string RutaAtlas = "Assets/Sprites/AnimalesSelva_Atlas.png";
     private const string RutaFondo = "Assets/Sprites/BienvenidaSelva.png";
     private const string RutaFuente = "Assets/Fonts/NunitoBoldSDF.asset";
+    private const string RutaAudioConsigna = "Assets/Audio/ConsignaJaguar.wav";
 
     [MenuItem("Guardianes/Preparar estructura y reto del jaguar")]
     public static void Preparar()
@@ -93,6 +94,7 @@ public static class PrepararEscenasNiveles
 
         var fondo = AssetDatabase.LoadAssetAtPath<Sprite>(RutaFondo);
         var tipografia = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>(RutaFuente);
+        var audioConsigna = AssetDatabase.LoadAssetAtPath<AudioClip>(RutaAudioConsigna);
         if (fondo == null)
         {
             Debug.LogError("No se encontró el fondo de selva para el reto.");
@@ -110,6 +112,8 @@ public static class PrepararEscenasNiveles
             .SetValue(controlador, tipografia);
         tipo.GetField("_imagenesAnimales", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)
             .SetValue(controlador, imagenes);
+        tipo.GetField("_audioConsigna", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)
+            .SetValue(controlador, audioConsigna);
 
         EditorSceneManager.SaveScene(escena, RutaEscenaReto);
     }

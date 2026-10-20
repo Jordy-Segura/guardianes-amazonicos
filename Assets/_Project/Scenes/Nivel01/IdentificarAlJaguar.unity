@@ -119,7 +119,7 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &706208745
+--- !u!1 &1169899752
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -127,8 +127,8 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 706208747}
-  - component: {fileID: 706208746}
+  - component: {fileID: 1169899754}
+  - component: {fileID: 1169899753}
   m_Layer: 0
   m_Name: ControladorRetoJaguar
   m_TagString: Untagged
@@ -136,13 +136,13 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &706208746
+--- !u!114 &1169899753
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 706208745}
+  m_GameObject: {fileID: 1169899752}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 57934cd574c428545baefa7135489eb0, type: 3}
@@ -155,13 +155,14 @@ MonoBehaviour:
   - {fileID: -3781644642718103779, guid: f2b0b0ddabd62c64e886a0a8cb33e3ce, type: 3}
   - {fileID: 6225081921307004964, guid: f2b0b0ddabd62c64e886a0a8cb33e3ce, type: 3}
   - {fileID: -3823261445417403650, guid: f2b0b0ddabd62c64e886a0a8cb33e3ce, type: 3}
---- !u!4 &706208747
+  _audioConsigna: {fileID: 8300000, guid: 8c69922daede16f4b9d310f4b5205579, type: 3}
+--- !u!4 &1169899754
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 706208745}
+  m_GameObject: {fileID: 1169899752}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
@@ -174,4 +175,4 @@ Transform:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 706208747}
+  - {fileID: 1169899754}
