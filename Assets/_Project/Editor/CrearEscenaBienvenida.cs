@@ -1,44 +1,65 @@
 using System.IO;
-using GuardianesAmazonicos.Nivel1;
+using GuardianesAmazonicos.Core;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.TextCore.LowLevel;
 using TMPro;
+using GuardianesAmazonicos.Data;
 
-public static class CrearEscenaNivel1
+public static class CrearEscenaBienvenida
 {
-    private const string RutaArte = "Assets/Resources/BienvenidaNivel1_Pantalla.png";
+    private const string RutaEscena = "Assets/_Project/Scenes/Nivel01/Nivel01_ConozcoLaSelva.unity";
+    public const string RutaArte = "Assets/Sprites/BienvenidaSelva.png";
     private const string RutaFuente = "Assets/Fonts/NunitoBold.ttf";
-    private const string RutaFuenteTMP = "Assets/Resources/NunitoBoldSDF.asset";
+    private const string RutaFuenteTMP = "Assets/Fonts/NunitoBoldSDF.asset";
 
-    [MenuItem("Guardianes/Crear escena de bienvenida del Nivel 1")]
+    [MenuItem("Guardianes/Crear escena de bienvenida")]
     public static void Crear()
     {
         ConfigurarIlustracion();
         ConfigurarTipografia();
         var escena = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
-        escena.name = "BienvenidaNivel1";
+        escena.name = "Nivel01_ConozcoLaSelva";
+        CrearCamaraPrincipal();
         var objeto = new GameObject("Controlador de bienvenida");
-        var controlador = objeto.AddComponent<BienvenidaNivel1>();
+        var controlador = objeto.AddComponent<ControladorNivel>();
         var fondo = AssetDatabase.LoadAssetAtPath<Sprite>(RutaArte);
-        var audio = AssetDatabase.LoadAssetAtPath<AudioClip>("Assets/Audio/BienvenidaNivel1.wav");
-        var tipo = typeof(BienvenidaNivel1);
+        var audio = AssetDatabase.LoadAssetAtPath<AudioClip>("Assets/Audio/Bienvenida.wav");
+        var audioInicio = AssetDatabase.LoadAssetAtPath<AudioClip>("Assets/Audio/Nivel1Inicio.wav");
+        var audioPista = AssetDatabase.LoadAssetAtPath<AudioClip>("Assets/Audio/PistaNivel1.wav");
+        var audioContinuacion = AssetDatabase.LoadAssetAtPath<AudioClip>("Assets/Audio/ContinuacionNivel1.wav");
+        var tipografia = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>(RutaFuenteTMP);
+        var tipo = typeof(ControladorNivel);
         tipo.GetField("_fondoSelva", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic).SetValue(controlador, fondo);
         tipo.GetField("_audioBienvenida", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic).SetValue(controlador, audio);
-        EditorSceneManager.SaveScene(escena, "Assets/Scenes/BienvenidaNivel1.unity");
-        EditorBuildSettings.scenes = new[] { new EditorBuildSettingsScene("Assets/Scenes/BienvenidaNivel1.unity", true) };
+        tipo.GetField("_audioInicio", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic).SetValue(controlador, audioInicio);
+        tipo.GetField("_audioPista", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic).SetValue(controlador, audioPista);
+        tipo.GetField("_audioContinuacion", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic).SetValue(controlador, audioContinuacion);
+        tipo.GetField("_tipografia", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic).SetValue(controlador, tipografia);
+        EditorSceneManager.SaveScene(escena, RutaEscena);
+        EditorBuildSettings.scenes = new[] { new EditorBuildSettingsScene(RutaEscena, true) };
         AssetDatabase.SaveAssets();
-        Debug.Log("Escena de bienvenida del Nivel 1 creada y añadida a Build Settings.");
+        Debug.Log("Escena de bienvenida creada y añadida a Build Settings.");
     }
 
-    [MenuItem("Guardianes/Reiniciar progreso local del Nivel 1")]
+    private static void CrearCamaraPrincipal()
+    {
+        var objetoCamara = new GameObject("Main Camera");
+        objetoCamara.tag = "MainCamera";
+        objetoCamara.transform.position = new Vector3(0f, 0f, -10f);
+        var camara = objetoCamara.AddComponent<Camera>();
+        camara.orthographic = true;
+        camara.clearFlags = CameraClearFlags.SolidColor;
+        camara.backgroundColor = new Color(0.08f, 0.29f, 0.19f);
+        objetoCamara.AddComponent<AudioListener>();
+    }
+
+    [MenuItem("Guardianes/Reiniciar progreso local")]
     public static void ReiniciarProgreso()
     {
-        PlayerPrefs.DeleteKey("guardianes.nivel1.iniciado");
-        PlayerPrefs.DeleteKey("guardianes.nivel1.progreso");
-        PlayerPrefs.Save();
-        Debug.Log("Progreso local del Nivel 1 reiniciado.");
+        GuardadoProgreso.Reiniciar();
+        Debug.Log("Progreso local reiniciado.");
     }
 
     private static void ConfigurarIlustracion()
@@ -80,7 +101,7 @@ public static class CrearEscenaNivel1
         foreach (var atlas in fuenteTmp.atlasTextures)
             AssetDatabase.AddObjectToAsset(atlas, fuenteTmp);
         AssetDatabase.AddObjectToAsset(fuenteTmp.material, fuenteTmp);
-        fuenteTmp.TryAddCharacters("¡Hola, explorador! Bienvenido a la selva. Hoy vamos a conocer algunos de sus tesoros. ¿Quieres comenzar? NIVEL 1 CONOZCO progreso ayuda señas lectura AUDIO ESCUCHAR COMENZAR PISTA LENGUA DE SEÑAS ECUATORIANA Video en preparación REPRODUCIR REPETIR AMPLIAR VISOR VOLVER A LA ACTIVIDAD Aprende a tu ritmo");
+        fuenteTmp.TryAddCharacters("¡Hola, explorador! Bienvenido a la selva. Hoy vamos a conocer algunos de sus tesoros. ¿Quieres comenzar? NIVEL 1 CONOZCO progreso ayuda señas lectura AUDIO ESCUCHAR COMENZAR PISTA LENGUA DE SEÑAS ECUATORIANA Video en preparación REPRODUCIR REPETIR AMPLIAR VISOR VOLVER A LA ACTIVIDAD Aprende a tu ritmo …");
         EditorUtility.SetDirty(fuenteTmp);
         AssetDatabase.SaveAssets();
     }
@@ -90,7 +111,7 @@ public sealed class BienvenidaSpriteImportador : AssetPostprocessor
 {
     private void OnPreprocessTexture()
     {
-        if (assetPath != "Assets/Resources/BienvenidaNivel1_Pantalla.png")
+        if (assetPath != CrearEscenaBienvenida.RutaArte)
             return;
 
         var importer = (TextureImporter)assetImporter;
@@ -111,7 +132,7 @@ public static class ConfigurarArteBienvenida
 
     private static void Configurar()
     {
-        const string ruta = "Assets/Resources/BienvenidaNivel1_Pantalla.png";
+        const string ruta = CrearEscenaBienvenida.RutaArte;
         var importer = AssetImporter.GetAtPath(ruta) as TextureImporter;
         if (importer == null || importer.textureType == TextureImporterType.Sprite)
             return;

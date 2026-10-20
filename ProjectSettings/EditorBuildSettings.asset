@@ -6,7 +6,10 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/BienvenidaNivel1.unity
+    path: Assets/_Project/Scenes/Nivel01/Nivel01_ConozcoLaSelva.unity
     guid: 0c58e86ad2fcd0e488282fdfbb54080b
+  - enabled: 1
+    path: Assets/_Project/Scenes/Nivel01/IdentificarAlJaguar.unity
+    guid: 381bb715786107d4889af7f0d51e5a32
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
