@@ -1,12 +1,12 @@
 # Guardianes de la Amazonía Lectora
 
-Proyecto Unity nuevo y vacío, preparado para comenzar el desarrollo desde cero. Usa Unity `6000.6.5f1`, C# y Universal Render Pipeline (URP) 3D. La escena inicial es `Assets/Scenes/SampleScene.unity`.
+Proyecto Unity nuevo y vacío, preparado para comenzar el desarrollo desde cero. Usa Unity `6000.6.5f1`, C# y Universal Render Pipeline (URP) 3D. La escena inicial es `Assets/_Project/Scenes/Nivel01/SampleScene.unity`.
 
 ## Abrir el proyecto
 
 1. En Unity Hub, selecciona **Add project from disk** y elige la carpeta raíz del repositorio.
 2. Usa Unity `6000.6.5f1` para conservar la compatibilidad.
-3. Abre `Assets/Scenes/SampleScene.unity` y pulsa **Play**.
+3. Abre `Assets/_Project/Scenes/Nivel01/SampleScene.unity` y pulsa **Play**.
 
 Unity volverá a crear `Library` y otros cachés locales al abrir el proyecto. Las dependencias se encuentran en `Packages/manifest.json` y `Packages/packages-lock.json`.
 
@@ -59,3 +59,4 @@ Antes de solicitar revisión, comprobar que el proyecto abre en Unity, que los f
 - Los cambios visuales se verifican en la resolución objetivo; los cambios de audio se escuchan en el Editor.
 - El diff no contiene archivos generados, configuraciones locales ni secretos.
 - El Pull Request tiene revisión aprobada y conflictos resueltos.
+
