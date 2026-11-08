@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.IO;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,6 +10,8 @@ namespace GuardianesAmazonicos.Views
 {
     public sealed class BienvenidaNivelView : MonoBehaviour, IBienvenidaView
     {
+        private const string NombreVideoBienvenidaSenas = "BienvenidaLSEC.mp4";
+
         [Header("Contenido")]
         [SerializeField] private TMP_Text _textoBienvenida;
         [SerializeField] private TMP_Text _textoProgreso;
@@ -61,6 +64,11 @@ namespace GuardianesAmazonicos.Views
             if (_reproductorSenas != null && _reproductorSenas.isPlaying)
             {
                 _reproductorSenas.Stop();
+            }
+
+            if (_reproductorSenas != null)
+            {
+                _reproductorSenas.prepareCompleted -= ReproducirVideoPreparado;
             }
         }
 
@@ -116,7 +124,7 @@ namespace GuardianesAmazonicos.Views
                 _panelSenas.transform.SetAsLastSibling();
             }
 
-            bool tieneVideo = _reproductorSenas != null && _reproductorSenas.clip != null;
+            bool tieneVideo = ConfigurarVideoLocalSenas();
             if (_botonReproducirSenas != null)
             {
                 _botonReproducirSenas.interactable = tieneVideo;
@@ -145,14 +153,57 @@ namespace GuardianesAmazonicos.Views
 
         public void ReproducirVideoSenas()
         {
-            if (_reproductorSenas == null || _reproductorSenas.clip == null)
+            if (_reproductorSenas == null)
             {
                 MostrarPanelSenas();
                 return;
             }
 
             _reproductorSenas.Stop();
-            _reproductorSenas.Play();
+            if (_reproductorSenas.clip != null)
+            {
+                _reproductorSenas.Play();
+                return;
+            }
+
+            if (!ConfigurarVideoLocalSenas())
+            {
+                MostrarPanelSenas();
+                return;
+            }
+
+            _reproductorSenas.prepareCompleted -= ReproducirVideoPreparado;
+            _reproductorSenas.prepareCompleted += ReproducirVideoPreparado;
+            _reproductorSenas.Prepare();
+        }
+
+        private bool ConfigurarVideoLocalSenas()
+        {
+            if (_reproductorSenas == null)
+            {
+                return false;
+            }
+
+            if (_reproductorSenas.clip != null)
+            {
+                return true;
+            }
+
+            string rutaVideo = Path.Combine(Application.streamingAssetsPath, "LSEC", NombreVideoBienvenidaSenas);
+            if (!File.Exists(rutaVideo))
+            {
+                return false;
+            }
+
+            _reproductorSenas.source = VideoSource.Url;
+            _reproductorSenas.url = rutaVideo;
+            return true;
+        }
+
+        private void ReproducirVideoPreparado(VideoPlayer reproductor)
+        {
+            reproductor.prepareCompleted -= ReproducirVideoPreparado;
+            reproductor.Play();
         }
 
         private IEnumerator EsperarFinDeAudio()
