@@ -1,23 +1,43 @@
 # Guardianes de la Amazonía Lectora
 
-Aplicación educativa interactiva ambientada en la Amazonía. Está desarrollada con Unity 6.0 (`6000.6.5f1`), C#, uGUI y TextMeshPro.
+Proyecto educativo desarrollado en Unity para que estudiantes exploren la selva amazónica mediante actividades interactivas y recursos de accesibilidad.
 
-## Abrir y ejecutar
+## Requisitos y ejecución
 
-1. Abrir la carpeta del repositorio desde Unity Hub con Unity `6000.6.5f1`.
-2. Abrir una escena disponible en `Assets/Scenes`.
-3. Ejecutar Play.
+- Unity `6000.6.5f1` (ver `ProjectSettings/ProjectVersion.txt`).
+- C# y Unity uGUI con TextMesh Pro.
+- Abrir la carpeta raíz del repositorio desde Unity Hub.
+- Abrir la escena de inicio indicada en **File > Build Profiles > Scene List** y pulsar **Play**. Los recursos de Unity y sus paquetes se importan al abrir el proyecto.
 
-La interfaz utiliza uGUI y TextMeshPro; los recursos de arte y audio se encuentran en `Assets/Art` y `Assets/Audio`. Las dependencias del proyecto se declaran en `Packages/manifest.json` y se fijan en `Packages/packages-lock.json`.
+Las dependencias se registran en `Packages/manifest.json` y `Packages/packages-lock.json`. No se debe borrar ni ignorar el archivo de bloqueo de paquetes.
 
-## Estructura
+## Organización del proyecto
 
-- `Assets/Scenes`: escenas.
-- `Assets/Scripts`: lógica de la aplicación.
-- `Assets/Editor`: herramientas del Editor.
-- `Assets/Art` y `Assets/Audio`: recursos visuales y sonoros.
-- `ProjectSettings`: configuración compartida de Unity.
-- `Packages`: dependencias del proyecto.
+```text
+Assets/
+├── Scenes/Niveles/       Escenas organizadas en seis niveles
+├── Art/                  Fondos, personajes e ilustraciones 2D
+├── Audio/                Locuciones, efectos y música
+├── Fonts/                Fuentes y recursos de TextMesh Pro
+├── Prefabs/              Controles y componentes visuales reutilizables
+├── StreamingAssets/LSEC/ Videos locales de lengua de señas
+└── Scripts/
+    ├── Models/NivelesData/ Datos de actividades y progreso
+    ├── Views/               Vistas uGUI
+    ├── Presenters/          Coordinación entre vistas y modelos
+    ├── Events/              Eventos tipados del juego
+    └── Persistence/         Persistencia local
+```
+
+Cada carpeta de nivel contiene sus escenas. Las pantallas usan Canvas con `Scale With Screen Size`, resolución de referencia 1920×1080 y proporción 16:9. Los textos se renderizan sobre la plantilla para que puedan ajustarse y traducirse sin volver a editar las ilustraciones.
+
+## Arquitectura y accesibilidad
+
+- Se utiliza MVP: las vistas presentan información y emiten acciones; los presenters coordinan la lógica; los modelos contienen datos y reglas sin depender de Unity.
+- Los eventos son tipados y locales a cada funcionalidad. Las suscripciones se registran y liberan en los ciclos de vida del componente.
+- El avance se guarda como JSON local en `Application.persistentDataPath`; las preferencias de accesibilidad se reservan para `PlayerPrefs`.
+- La interfaz contempla lectura en pantalla, reproducción de locuciones y un visor para videos LSEC almacenados localmente. Solo deben incorporarse videos de señas revisados y grabados siguiendo los estándares del proyecto; no se simulan señas con gestos o imágenes genéricas.
+- Los controles deben tener objetivos táctiles amplios, contraste legible, texto ajustable y alternativas visuales o auditivas cuando correspondan.
 
 ## Políticas de trabajo con Git y GitHub
 
@@ -28,49 +48,43 @@ La interfaz utiliza uGUI y TextMeshPro; los recursos de arte y audio se encuentr
 | `main` | Versiones estables, aprobadas y etiquetadas. |
 | `develop` | Integración de cambios revisados. |
 | `test` | Validación de una versión candidata antes de aprobar su publicación. |
-| Rama personal (por ejemplo, `jordy`) | Rama de trabajo exclusiva de cada integrante. Desde ella se envían cambios a `develop`. |
+| Rama personal (por ejemplo, `jordy`) | Rama de trabajo de cada integrante; desde ella se envían cambios a `develop`. |
 
-No se trabaja directamente en `main`, `develop` ni `test`. Cuando la configuración de GitHub lo permita, se protegen contra pushes directos y force-pushes. Cada integrante trabaja en su propia rama personal; no se requiere crear ramas `feature/*` ni `fix/*`.
+No se trabaja directamente en `main`, `develop` ni `test`. Cada integrante trabaja en su propia rama; no se crean ramas `feature/*` ni `fix/*`. Cuando la configuración de GitHub lo permita, se protegen las ramas compartidas contra pushes directos y force-pushes.
 
 ### Flujo de integración
 
-1. Confirmar que Unity Hub usa la versión `6000.6.5f1`.
+1. Confirmar que Unity Hub usa `6000.6.5f1`.
 2. Actualizar la rama personal con los cambios recientes de `develop` y resolver ahí cualquier conflicto.
 3. Abrir un Pull Request desde la rama personal hacia `develop`. Incluir objetivo, resumen, pasos y resultado de verificación; adjuntar capturas cuando cambie la interfaz.
-4. Revisar el código y comprobar el proyecto en Unity antes de aprobar y fusionar. Si se necesita validación de equipo, promover `develop` a `test` mediante Pull Request; las correcciones se realizan en la rama personal y se envían a `develop` con otro Pull Request.
+4. Revisar el código y comprobar el proyecto en Unity antes de aprobar y fusionar. Si se necesita validación de equipo, promover `develop` a `test` mediante Pull Request; las correcciones se envían desde la rama personal hacia `develop` mediante otro Pull Request.
 5. Cuando la versión candidata esté aprobada, integrar `develop` a `main` mediante Pull Request y crear una etiqueta, por ejemplo `v1.0.0`.
 
-La rama `test` es un entorno de validación, no un destino alternativo para saltarse la revisión de `develop`. No se integra una versión en `main` sin aprobación y verificación satisfactorias.
+La rama `test` es un entorno de validación, no un destino alternativo para omitir la revisión de `develop`. No se integra una versión en `main` sin aprobación y verificación satisfactorias.
 
 ### Commits y revisión
 
-Los mensajes de commit deben ser breves, describir el cambio y seguir el estilo Conventional Commits en minúsculas. Se puede añadir un ámbito para precisar el área:
+Usar mensajes breves en minúsculas que describan el cambio, siguiendo Conventional Commits:
 
-- `feat: agregar bienvenida del guardian`
-- `fix(audio): corregir locución de bienvenida`
-- `docs: actualizar instrucciones del proyecto`
+- `feat: agregar una mecánica`
+- `fix(audio): corregir la reproducción`
+- `docs: actualizar instrucciones`
 
-Antes de solicitar revisión, comprobar que el proyecto abre en Unity, que los flujos modificados funcionan y que no hay errores nuevos en Console. Para cambios de UI, revisar la vista Game en la resolución objetivo y adjuntar una captura al Pull Request. Registrar cambios importantes de dependencias y configuración en el Pull Request o en esta documentación.
+Antes de solicitar revisión, comprobar que el proyecto abre en Unity, que los flujos modificados funcionan y que no hay errores nuevos en Console. Para cambios visuales, revisar Game View en la resolución objetivo y adjuntar una captura al Pull Request. Registrar cambios importantes de dependencias y configuración.
 
 ### Unity, dependencias y archivos versionados
 
-- El equipo utiliza Unity `6000.6.5f1` para evitar diferencias de serialización y compatibilidad.
-- Se versionan scripts, escenas, recursos, archivos `.meta`, `ProjectSettings` y la configuración necesaria de `Packages`.
-- Se mantienen `Packages/manifest.json` y `Packages/packages-lock.json` en Git para documentar y fijar las dependencias.
-- No se versionan cachés, compilaciones, preferencias personales, temporales ni credenciales. Nunca se incluyen tokens, claves privadas o contraseñas en commits.
-- Después de clonar, abrir el proyecto desde Unity Hub y dejar que Unity regenere `Library`; comunicar diferencias de paquetes antes de actualizar versiones.
+- Todo el equipo utiliza Unity `6000.6.5f1`.
+- Versionar scripts, escenas, recursos, archivos `.meta`, `ProjectSettings` y la configuración necesaria de `Packages`.
+- Mantener `Packages/manifest.json` y `Packages/packages-lock.json` en Git.
+- No versionar cachés, compilaciones, preferencias personales, temporales ni credenciales. Nunca incluir tokens, claves privadas ni contraseñas.
+- Después de clonar, abrir el proyecto desde Unity Hub y dejar que Unity regenere `Library`.
 - Gestionar los archivos `.meta` junto con cada recurso nuevo, eliminado o renombrado.
 
-### Comprobación mínima antes de integrar
+### Comprobación antes de integrar
 
 - Unity abre el proyecto con la versión indicada y sin errores nuevos de compilación.
 - Los flujos modificados se prueban en Play según sus criterios de aceptación.
-- Los cambios visuales se verifican en la resolución objetivo y los cambios de audio se escuchan en el Editor.
+- Los cambios visuales se verifican en la resolución objetivo; los cambios de audio se escuchan en el Editor.
 - El diff no contiene archivos generados, configuraciones locales ni secretos.
 - El Pull Request tiene revisión aprobada y conflictos resueltos.
-
-## Unity Hub
-
-Si se abre el proyecto con otra instalación de Unity 6, verificar que `ProjectSettings/ProjectSettings.asset` habilite la entrada antigua o ambas entradas. El EventSystem usa `StandaloneInputModule` y funciona con `Input Manager (Old)` o `Both`.
-
-Si Unity no dispone de los recursos esenciales de TextMeshPro, importarlos desde `Window > TextMesh Pro > Import TMP Essential Resources`.
