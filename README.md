@@ -37,6 +37,7 @@ Cada carpeta de nivel contiene sus escenas. Las pantallas usan Canvas con `Scale
 - Los eventos son tipados y locales a cada funcionalidad. Las suscripciones se registran y liberan en los ciclos de vida del componente.
 - El avance se guarda como JSON local en `Application.persistentDataPath`; las preferencias de accesibilidad se reservan para `PlayerPrefs`.
 - La interfaz contempla lectura en pantalla, reproducción de locuciones y un visor para videos LSEC almacenados localmente. Solo deben incorporarse videos de señas revisados y grabados siguiendo los estándares del proyecto; no se simulan señas con gestos o imágenes genéricas.
+- El visor busca el archivo `Assets/StreamingAssets/LSEC/BienvenidaLSEC.mp4`; mientras no esté disponible, la opción de reproducir permanece deshabilitada y se muestra el aviso correspondiente.
 - Los controles deben tener objetivos táctiles amplios, contraste legible, texto ajustable y alternativas visuales o auditivas cuando correspondan.
 
 ## Políticas de trabajo con Git y GitHub
