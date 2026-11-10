@@ -8,5 +8,11 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Niveles/Nivel01/Nivel1_ConozcoLaSelva.unity
     guid: 3656bff73b2ff7148863290ef1d28c27
+  - enabled: 1
+    path: Assets/Scenes/Niveles/Nivel01/Escena05_HU05_Jaguar.unity
+    guid: 5d5ac1fced6cfa24a8a490795437e6c5
+  - enabled: 1
+    path: Assets/Scenes/Niveles/Nivel01/Escena09_HU09_Platano.unity
+    guid: dddbcd5243e5cb24e8fa34001a24f0df
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
