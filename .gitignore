@@ -24,8 +24,10 @@ unity-*.log
 # IDE y archivos generados por Unity para el IDE
 .vs/
 .idea/
+.vscode/
 *.csproj
 *.sln
+*.slnx
 *.sln.iml
 *.suo
 *.user
