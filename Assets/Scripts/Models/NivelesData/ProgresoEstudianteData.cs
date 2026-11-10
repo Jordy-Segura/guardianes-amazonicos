@@ -7,9 +7,10 @@ namespace GuardianesAmazonicos.Models
     public sealed class ProgresoEstudianteData
     {
         public bool bienvenidaSelvaCompletada;
-        public bool aventuraIniciada;
+        public bool retoGuacamayoCompletado;
         public bool retoJaguarCompletado;
         public bool retoPlatanoCompletado;
+        public bool aventuraIniciada;
         [SerializeField] private bool _retoMonoCuriosoCompletado;
         [SerializeField] private int _progresoNivel2;
 
