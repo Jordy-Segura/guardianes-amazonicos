@@ -6,6 +6,9 @@ namespace GuardianesAmazonicos.Models
     public sealed class ProgresoEstudianteData
     {
         public bool bienvenidaSelvaCompletada;
+        public bool retoGuacamayoCompletado;
+        public bool retoJaguarCompletado;
+        public bool retoPlatanoCompletado;
         public bool aventuraIniciada;
         public int puntoProgresoActual;
         public int totalPuntosProgreso = 12;
