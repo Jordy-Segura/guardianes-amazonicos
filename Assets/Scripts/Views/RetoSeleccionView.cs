@@ -92,6 +92,8 @@ namespace GuardianesAmazonicos.Views
             if (s != null) return s;
             s = UnityEditor.AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Resources/UI/Sprites/" + nombre + ".png");
             if (s != null) return s;
+            s = UnityEditor.AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Art/Backgrounds/" + nombre + ".png");
+            if (s != null) return s;
 #endif
             return null;
         }
@@ -155,16 +157,44 @@ namespace GuardianesAmazonicos.Views
             Image personaje = CrearImagenTopLeft("PersonajeGuia", root, _configuracion.explorador, Color.white, new Vector2(147f, -428f), new Vector2(390f, 562f), true);
             personaje.preserveAspect = true;
 
-            // 4. Columna Derecha Superior: Marco de Escena e Ilustración
-            // Marco de escena (921, -188, 800, 425)
-            CrearImagenTopLeft("MarcoEscena", root, _spriteMarco, Color.white, new Vector2(921f, -188f), new Vector2(800f, 425f), false);
-            // Ilustración temática de escena
-            Sprite ilustracionEscena = ObtenerSprite(0);
-            if (ilustracionEscena != null)
+            // 4. Columna Derecha Superior: Marco de Escena e Ilustración (Valores oficiales, pág 3 y 10)
+            // A. Contenedor de la escena con fondo opaco y RectMask2D (942, -206, 758, 390)
+            GameObject goContenedor = new GameObject("ContenedorEscena", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image), typeof(RectMask2D));
+            goContenedor.transform.SetParent(root, false);
+            RectTransform rectContenedor = goContenedor.transform as RectTransform;
+            PrepararRectTopLeft(rectContenedor, new Vector2(942f, -206f), new Vector2(758f, 390f));
+
+            // Fondo de color oficial para que la escena nunca sea transparente (#FFF8E8 crema cálido / panel)
+            Image fondoEscena = goContenedor.GetComponent<Image>();
+            fondoEscena.color = new Color(1f, 0.972f, 0.91f, 1f);
+            fondoEscena.raycastTarget = false;
+
+            // B. Ilustración temática de la escena (dentro de la máscara)
+            Sprite spriteEscena = _configuracion.imagenEscena;
+            if (spriteEscena == null)
             {
-                Image imagenEscena = CrearImagenTopLeft("ImagenEscena", root, ilustracionEscena, Color.white, new Vector2(942f, -206f), new Vector2(758f, 390f), true);
-                imagenEscena.preserveAspect = true;
+                spriteEscena = CargarSprite("EscenaSelvaHabitat");
             }
+
+            if (spriteEscena != null)
+            {
+                GameObject goImagen = new GameObject("ImagenEscena", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+                goImagen.transform.SetParent(rectContenedor, false);
+                RectTransform rectImagen = goImagen.transform as RectTransform;
+                rectImagen.anchorMin = Vector2.zero;
+                rectImagen.anchorMax = Vector2.one;
+                rectImagen.pivot = new Vector2(0.5f, 0.5f);
+                rectImagen.offsetMin = Vector2.zero;
+                rectImagen.offsetMax = Vector2.zero;
+                Image img = goImagen.GetComponent<Image>();
+                img.sprite = spriteEscena;
+                img.color = Color.white;
+                img.preserveAspect = false;
+                img.raycastTarget = false;
+            }
+
+            // C. Marco dorado decorativo por encima de la escena (921, -188, 800, 425)
+            CrearImagenTopLeft("MarcoEscena", root, _spriteMarco, Color.white, new Vector2(921f, -188f), new Vector2(800f, 425f), false);
 
             // 5. Columna Derecha Inferior: 3 Tarjetas de Respuesta (Y = -663, 256 x 307)
             if (_configuracion.AtlasOpciones != null)

@@ -30,6 +30,7 @@ namespace GuardianesAmazonicos.Models
         public string siguienteEscena;
         public string textoContinuar = "SIGUIENTE RETO";
         public Sprite fondo;
+        public Sprite imagenEscena;
         public Sprite explorador;
         public TMP_FontAsset fuente;
     }

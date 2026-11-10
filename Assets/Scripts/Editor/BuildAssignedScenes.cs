@@ -58,6 +58,7 @@ namespace GuardianesAmazonicos.Editor
             mono.siguienteEscena = "Escena05_HU05_Jaguar";
             mono.textoContinuar = "SIGUIENTE RETO";
             mono.fondo = fondo;
+            mono.imagenEscena = Cargar<Sprite>("Assets/Art/Backgrounds/EscenaSelvaHabitat.png");
             mono.explorador = explorador;
             mono.fuente = fuente;
             EditorUtility.SetDirty(mono);
