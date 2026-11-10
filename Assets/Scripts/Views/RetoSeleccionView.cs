@@ -136,11 +136,15 @@ namespace GuardianesAmazonicos.Views
 
             // Placa Título de Nivel (592, -12, 484, 108)
             RectTransform placaTitulo = CrearImagenTopLeft("PlacaTitulo", root, _spritePlacaNivel, Color.white, new Vector2(592f, -12f), new Vector2(484f, 108f), false).rectTransform;
-            CrearTextoRelativo("TextoTitulo", placaTitulo, _configuracion.titulo, new Vector2(25f, -25f), new Vector2(434f, 58f), 26f, Tinta, TextAlignmentOptions.Center, true);
+            string tituloMostrado = NormalizarTituloNivel(_configuracion.titulo);
+            CrearTextoRelativo("TextoTitulo", placaTitulo, tituloMostrado, new Vector2(65f, -24f), new Vector2(354f, 60f), 22f, Tinta, TextAlignmentOptions.Center, true, autoAjustar: true, fuenteMinima: 12f, modoAjuste: TextWrappingModes.NoWrap);
 
             // Placa Progreso (1092, -16, 236, 94)
             RectTransform placaProgreso = CrearImagenTopLeft("PlacaProgreso", root, _spritePlacaProgreso, Color.white, new Vector2(1092f, -16f), new Vector2(236f, 94f), false).rectTransform;
-            CrearTextoRelativo("TextoProgreso", placaProgreso, _configuracion.numeroEscena + " de 12", new Vector2(20f, -20f), new Vector2(196f, 54f), 28f, TintaBlanca, TextAlignmentOptions.Center, true);
+            string textoProgreso = !string.IsNullOrWhiteSpace(_configuracion.textoProgreso)
+                ? _configuracion.textoProgreso
+                : (_configuracion.numeroEscena + " de 2");
+            CrearTextoRelativo("TextoProgreso", placaProgreso, textoProgreso, new Vector2(65f, -20f), new Vector2(150f, 54f), 24f, TintaBlanca, TextAlignmentOptions.Center, true, autoAjustar: true, fuenteMinima: 14f, modoAjuste: TextWrappingModes.NoWrap);
 
             // Botones de Navegación derecha (84x84)
             CrearBotonTopLeft("BotonRegresar", root, _spriteRegresar, new Vector2(1506f, -12f), new Vector2(84f, 84f), null);
@@ -151,10 +155,11 @@ namespace GuardianesAmazonicos.Views
             // 3. Columna Izquierda: Personaje y Globo de Pregunta
             // Globo de pregunta (158, -174, 684, 240)
             RectTransform globo = CrearImagenTopLeft("GloboPregunta", root, _spriteGlobo, Color.white, new Vector2(158f, -174f), new Vector2(684f, 240f), false).rectTransform;
-            _textoPregunta = CrearTextoRelativo("TextoPregunta", globo, _configuracion.pregunta, new Vector2(43f, -34f), new Vector2(598f, 150f), 32f, Tinta, TextAlignmentOptions.Center, true);
+            string preguntaFormateada = FormatearPreguntaConSignos(_configuracion.pregunta);
+            _textoPregunta = CrearTextoRelativo("TextoPregunta", globo, preguntaFormateada, new Vector2(43f, -34f), new Vector2(598f, 150f), 26f, Tinta, TextAlignmentOptions.Center, true, autoAjustar: true, fuenteMinima: 18f, modoAjuste: TextWrappingModes.Normal);
 
-            // Personaje Guía (147, -428, 390, 562)
-            Image personaje = CrearImagenTopLeft("PersonajeGuia", root, _configuracion.explorador, Color.white, new Vector2(147f, -428f), new Vector2(390f, 562f), true);
+            // Personaje Guía a nivel del suelo (147, -495, 390, 562)
+            Image personaje = CrearImagenTopLeft("PersonajeGuia", root, _configuracion.explorador, Color.white, new Vector2(147f, -495f), new Vector2(390f, 562f), true);
             personaje.preserveAspect = true;
 
             // 4. Columna Derecha Superior: Marco de Escena e Ilustración (Valores oficiales, pág 3 y 10)
@@ -267,10 +272,22 @@ namespace GuardianesAmazonicos.Views
                     _brillosOpciones[i] = brillo;
                 }
 
-                // Ilustración de la opción (18, -22, 220, 188)
+                // Ilustración de la opción centrada horizontal y verticalmente en la tarjeta
                 Sprite sp = ObtenerSprite(i);
-                Image imgOpcion = CrearImagenRelativa("Ilustracion", rectTarjeta, sp, Color.white, new Vector2(18f, -22f), new Vector2(220f, 188f), false);
+                GameObject goIlustracion = new GameObject("Ilustracion", typeof(RectTransform), typeof(Image));
+                goIlustracion.transform.SetParent(rectTarjeta, false);
+                RectTransform rectIlustracion = goIlustracion.transform as RectTransform;
+                rectIlustracion.anchorMin = new Vector2(0.5f, 1f);
+                rectIlustracion.anchorMax = new Vector2(0.5f, 1f);
+                rectIlustracion.pivot = new Vector2(0.5f, 0.5f);
+                rectIlustracion.anchoredPosition = new Vector2(0f, -112f);
+                rectIlustracion.sizeDelta = new Vector2(216f, 180f);
+
+                Image imgOpcion = goIlustracion.GetComponent<Image>();
+                imgOpcion.sprite = sp;
+                imgOpcion.color = Color.white;
                 imgOpcion.preserveAspect = true;
+                imgOpcion.raycastTarget = false;
 
                 // Nombre TMP de la opción (15, -216, 226, 76)
                 CrearTextoRelativo("Nombre", rectTarjeta, _configuracion.opciones[i], new Vector2(15f, -216f), new Vector2(226f, 76f), 24f, Tinta, TextAlignmentOptions.Center, true);
@@ -582,7 +599,63 @@ namespace GuardianesAmazonicos.Views
             return boton;
         }
 
-        private TMP_Text CrearTextoRelativo(string nombre, RectTransform padre, string texto, Vector2 posicion, Vector2 tamano, float tamanoFuente, Color color, TextAlignmentOptions alineacion, bool negrita)
+        private static string NormalizarTituloNivel(string titulo)
+        {
+            if (string.IsNullOrWhiteSpace(titulo)) return "Nivel 1. Conozco la Selva";
+            string res = titulo.Trim();
+            res = res.Replace("·", ".").Replace(" - ", ". ").Replace(" \xB7 ", ". ");
+            if (res.Contains("selva"))
+            {
+                res = res.Replace("selva", "Selva");
+            }
+            return res;
+        }
+
+        private static string FormatearPreguntaConSignos(string pregunta)
+        {
+            if (string.IsNullOrWhiteSpace(pregunta)) return pregunta;
+
+            string res = pregunta.Trim();
+
+            // Garantizar signo de apertura ¿ obligatorio en español
+            if (!res.StartsWith("¿"))
+            {
+                res = "¿" + res;
+            }
+
+            // Garantizar signo de cierre ? obligatorio en español
+            if (!res.EndsWith("?"))
+            {
+                if (res.EndsWith("."))
+                    res = res.Substring(0, res.Length - 1) + "?";
+                else
+                    res += "?";
+            }
+
+            // En la tipografía OpenDyslexic el glifo '¿' tiene un avance horizontal nulo que
+            // provoca una colisión visual directa con la letra inicial. Añadimos un micro-espacio
+            // nativo de TMP para que ambos signos de interrogación mantengan un posicionamiento legible.
+            if (res.StartsWith("¿") && res.Length > 1 && res[1] != ' ' && !res.StartsWith("¿<space="))
+            {
+                res = "¿<space=0.18em>" + res.Substring(1);
+            }
+
+            return res;
+        }
+
+        private TMP_Text CrearTextoRelativo(
+            string nombre,
+            RectTransform padre,
+            string texto,
+            Vector2 posicion,
+            Vector2 tamano,
+            float tamanoFuente,
+            Color color,
+            TextAlignmentOptions alineacion,
+            bool negrita,
+            bool autoAjustar = true,
+            float fuenteMinima = -1f,
+            TextWrappingModes modoAjuste = TextWrappingModes.Normal)
         {
             GameObject objeto = new GameObject(nombre, typeof(RectTransform), typeof(TextMeshProUGUI));
             objeto.transform.SetParent(padre, false);
@@ -592,13 +665,13 @@ namespace GuardianesAmazonicos.Views
             tmp.text = texto;
             tmp.font = _configuracion.fuente;
             tmp.fontSize = tamanoFuente;
-            tmp.enableAutoSizing = true;
-            tmp.fontSizeMin = Mathf.Max(14f, tamanoFuente - 10f);
+            tmp.enableAutoSizing = autoAjustar;
+            tmp.fontSizeMin = fuenteMinima > 0f ? fuenteMinima : Mathf.Max(12f, tamanoFuente - 10f);
             tmp.fontSizeMax = tamanoFuente;
             tmp.color = color;
             tmp.alignment = alineacion;
             tmp.fontStyle = negrita ? FontStyles.Bold : FontStyles.Normal;
-            tmp.textWrappingMode = TextWrappingModes.Normal;
+            tmp.textWrappingMode = modoAjuste;
             tmp.raycastTarget = false;
             return tmp;
         }

@@ -17,7 +17,8 @@ namespace GuardianesAmazonicos.Models
         public int FilasAtlas { get => _filasAtlas; set => _filasAtlas = value; }
 
         [Min(1)] public int numeroEscena = 1;
-        public string titulo = "Reto de la selva";
+        public string titulo = "Nivel 1. Conozco la Selva";
+        public string textoProgreso = "2 de 2";
         [TextArea(1, 2)] public string pregunta;
         [TextArea(1, 2)] public string instruccion;
         public string[] opciones;
