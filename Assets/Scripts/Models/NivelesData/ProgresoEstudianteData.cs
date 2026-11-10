@@ -8,6 +8,7 @@ namespace GuardianesAmazonicos.Models
     {
         public bool bienvenidaSelvaCompletada;
         public bool aventuraIniciada;
+        public bool retoMonoCompletado;
         public bool retoJaguarCompletado;
         public bool retoPlatanoCompletado;
         [SerializeField] private bool _retoMonoCuriosoCompletado;

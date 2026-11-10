@@ -31,7 +31,7 @@ MonoBehaviour:
   pistaIncorrecta: Busca un felino amarillo con manchas oscuras.
   mensajeCorrecto: "\xA1Muy bien! Encontraste al jaguar."
   pronunciaciones: []
-  siguienteEscena:
+  siguienteEscena: Escena09_HU09_Platano
   textoContinuar: SIGUIENTE RETO
   fondo: {fileID: 21300000, guid: e45662abda8e3f84e9116b11d98d6aca, type: 3}
   explorador: {fileID: 21300000, guid: a81643ec7d4969547b69939d11fa69ca, type: 3}

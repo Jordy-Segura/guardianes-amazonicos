@@ -113,12 +113,22 @@ namespace GuardianesAmazonicos.Views
 
         public void MostrarIncorrecta(string pista)
         {
+            if (IndiceSeleccionado >= 0 && _bordesOpciones != null && IndiceSeleccionado < _bordesOpciones.Length)
+            {
+                _bordesOpciones[IndiceSeleccionado].effectColor = new Color(0.85f, 0.2f, 0.2f, 1f);
+                _bordesOpciones[IndiceSeleccionado].effectDistance = new Vector2(5f, -5f);
+            }
             _textoEstado.text = "¡Buen intento! " + pista;
-            _textoEstado.color = new Color(0.45f, 0.25f, 0.03f, 1f);
+            _textoEstado.color = new Color(0.72f, 0.15f, 0.1f, 1f);
         }
 
         public void MostrarCorrecta(string mensaje)
         {
+            if (IndiceSeleccionado >= 0 && _bordesOpciones != null && IndiceSeleccionado < _bordesOpciones.Length)
+            {
+                _bordesOpciones[IndiceSeleccionado].effectColor = Verde;
+                _bordesOpciones[IndiceSeleccionado].effectDistance = new Vector2(6f, -6f);
+            }
             _textoEstado.text = mensaje;
             _textoEstado.color = Verde;
             _botonContinuar.interactable = true;

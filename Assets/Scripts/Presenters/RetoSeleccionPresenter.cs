@@ -96,7 +96,9 @@ namespace GuardianesAmazonicos.Presenters
             try
             {
                 ProgresoEstudianteData progreso = _repositorio.Cargar();
-                if (_configuracion.Nivel == 1 && _configuracion.numeroEscena == 5)
+                if (_configuracion.Nivel == 1 && _configuracion.numeroEscena == 2)
+                    progreso.retoMonoCompletado = true;
+                else if (_configuracion.Nivel == 1 && _configuracion.numeroEscena == 5)
                     progreso.retoJaguarCompletado = true;
                 else if (_configuracion.Nivel == 1 && _configuracion.numeroEscena == 9)
                     progreso.retoPlatanoCompletado = true;
@@ -129,6 +131,8 @@ namespace GuardianesAmazonicos.Presenters
             try
             {
                 ProgresoEstudianteData progreso = _repositorio.Cargar();
+                if (_configuracion.Nivel == 1 && _configuracion.numeroEscena == 2)
+                    return progreso.retoMonoCompletado;
                 if (_configuracion.Nivel == 1 && _configuracion.numeroEscena == 5)
                     return progreso.retoJaguarCompletado;
                 if (_configuracion.Nivel == 1 && _configuracion.numeroEscena == 9)

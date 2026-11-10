@@ -15,12 +15,61 @@ namespace GuardianesAmazonicos.Editor
 {
     public static class BuildAssignedScenes
     {
+        private const string ConfigMonoPath = "Assets/Scripts/Models/NivelesData/RetoMono.asset";
         private const string ConfigJaguarPath = "Assets/Scripts/Models/NivelesData/RetoJaguar.asset";
         private const string ConfigPlatanoPath = "Assets/Scripts/Models/NivelesData/RetoPlatano.asset";
         private const string ConfigMonoCuriosoPath = "Assets/Scripts/Models/NivelesData/ProtegerHabitatMono.asset";
+        private const string SceneMonoPath = "Assets/Scenes/Niveles/Nivel01/Escena02_HU02_Mono.unity";
         private const string SceneJaguarPath = "Assets/Scenes/Niveles/Nivel01/Escena05_HU05_Jaguar.unity";
         private const string ScenePlatanoPath = "Assets/Scenes/Niveles/Nivel01/Escena09_HU09_Platano.unity";
         private const string SceneMonoCuriosoPath = "Assets/Scenes/Niveles/Nivel02/Escena01_ProtegerHabitatMono.unity";
+
+        [MenuItem("Guardianes/Generar actividad del Mono (HU-02)")]
+        public static void GenerarActividadMonoHU02()
+        {
+            ConfigurarImportadores();
+            AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
+
+            TMP_FontAsset fuente = Cargar<TMP_FontAsset>("Assets/Fonts/OpenDyslexic3-Regular SDF.asset");
+            Sprite fondo = Cargar<Sprite>("Assets/Art/Backgrounds/N1_ConozcoLaSelva.png");
+            Sprite explorador = Cargar<Sprite>("Assets/Art/Characters/Explorador.png");
+
+            RetoSeleccionConfiguracion mono = CrearConfiguracion(ConfigMonoPath);
+            mono.Nivel = 1;
+            mono.numeroEscena = 2;
+            mono.titulo = "Nivel 1 · Conozco la selva";
+            mono.pregunta = "¿Cuál de estos animales es el mono?";
+            mono.instruccion = "Toca la imagen del mono.";
+            mono.opciones = new[] { "Mono", "Guacamayo", "Tortuga" };
+            mono.imagenes = new[]
+            {
+                Cargar<Sprite>("Assets/Art/Characters/Mono.png"),
+                Cargar<Sprite>("Assets/Art/Characters/Guacamayo.png"),
+                Cargar<Sprite>("Assets/Art/Characters/Tortuga.png")
+            };
+            mono.atlasDosPorDos = null;
+            mono.AtlasOpciones = null;
+            mono.ColumnasAtlas = 3;
+            mono.FilasAtlas = 1;
+            mono.indiceCorrecto = 0;
+            mono.pistaIncorrecta = "Busca al animal de cola larga que trepa y salta entre las ramas.";
+            mono.mensajeCorrecto = "¡Muy bien! Reconociste al mono.";
+            mono.pronunciaciones = null;
+            mono.siguienteEscena = "Escena05_HU05_Jaguar";
+            mono.textoContinuar = "SIGUIENTE RETO";
+            mono.fondo = fondo;
+            mono.explorador = explorador;
+            mono.fuente = fuente;
+            EditorUtility.SetDirty(mono);
+
+            CrearEscena(SceneMonoPath, mono);
+            List<EditorBuildSettingsScene> escenas = EditorBuildSettings.scenes.ToList();
+            AgregarEscenaBuild(escenas, SceneMonoPath);
+            EditorBuildSettings.scenes = escenas.ToArray();
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+            Debug.Log("Actividad del Mono (HU-02) generada en Nivel 1.");
+        }
 
         [MenuItem("Guardianes/Generar actividad del Mono Curioso")]
         public static void GenerarActividadMonoCurioso()
@@ -258,6 +307,7 @@ namespace GuardianesAmazonicos.Editor
         {
             List<EditorBuildSettingsScene> escenas = EditorBuildSettings.scenes.ToList();
             AgregarEscenaBuild(escenas, "Assets/Scenes/Niveles/Nivel01/Nivel1_ConozcoLaSelva.unity");
+            AgregarEscenaBuild(escenas, SceneMonoPath);
             AgregarEscenaBuild(escenas, SceneJaguarPath);
             AgregarEscenaBuild(escenas, ScenePlatanoPath);
             EditorBuildSettings.scenes = escenas.ToArray();
