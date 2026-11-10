@@ -145,13 +145,28 @@ namespace GuardianesAmazonicos.Editor
             GameObject actividad = new GameObject("RetoSeleccion");
             RetoSeleccionView vista = actividad.AddComponent<RetoSeleccionView>();
             RetoSeleccionPresenter presenter = actividad.AddComponent<RetoSeleccionPresenter>();
-            SerializedObject serializedPresenter = new SerializedObject(presenter);
-            serializedPresenter.FindProperty("_configuracion").objectReferenceValue = configuracion;
-            serializedPresenter.FindProperty("_vista").objectReferenceValue = vista;
-            serializedPresenter.ApplyModifiedPropertiesWithoutUndo();
+            presenter.Configurar(configuracion, vista);
+            EditorUtility.SetDirty(presenter);
 
             EditorSceneManager.MarkSceneDirty(escena);
             EditorSceneManager.SaveScene(escena, ruta);
+            VerificarReferenciasGuardadas(ruta);
+        }
+
+        private static void VerificarReferenciasGuardadas(string ruta)
+        {
+            Scene escena = EditorSceneManager.OpenScene(ruta, OpenSceneMode.Single);
+            RetoSeleccionPresenter presenter = escena.GetRootGameObjects()
+                .SelectMany(objeto => objeto.GetComponentsInChildren<RetoSeleccionPresenter>(true))
+                .FirstOrDefault();
+            if (presenter == null)
+                throw new System.InvalidOperationException("No se guardó el presenter en la escena: " + ruta);
+
+            SerializedObject serialized = new SerializedObject(presenter);
+            serialized.Update();
+            if (serialized.FindProperty("_configuracion").objectReferenceValue == null ||
+                serialized.FindProperty("_vista").objectReferenceValue == null)
+                throw new System.InvalidOperationException("La escena quedó sin referencias del reto: " + ruta);
         }
 
         private static void CrearCamara()

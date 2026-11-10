@@ -16,6 +16,12 @@ namespace GuardianesAmazonicos.Presenters
         private RetoSeleccionModel _modelo;
         private IProgresoRepository _repositorio;
 
+        public void Configurar(RetoSeleccionConfiguracion configuracion, RetoSeleccionView vista)
+        {
+            _configuracion = configuracion;
+            _vista = vista;
+        }
+
         private void Awake()
         {
             if (_vista == null) _vista = GetComponent<RetoSeleccionView>();

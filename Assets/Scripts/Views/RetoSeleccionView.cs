@@ -145,7 +145,7 @@ namespace GuardianesAmazonicos.Views
             for (int i = 0; i < _configuracion.opciones.Length; i++)
             {
                 int indice = i;
-                GameObject tarjeta = new GameObject("TarjetaOpcion" + (i + 1), typeof(RectTransform));
+                GameObject tarjeta = new GameObject("TarjetaOpcion" + (i + 1), typeof(RectTransform), typeof(CanvasRenderer));
                 tarjeta.transform.SetParent(panel, false);
                 RectTransform rect = tarjeta.transform as RectTransform;
                 PrepararRect(rect, posiciones[i], new Vector2(480f, 245f));
@@ -244,7 +244,7 @@ namespace GuardianesAmazonicos.Views
 
         private RectTransform CrearPanel(string nombre, RectTransform padre, Vector2 posicion, Vector2 tamano, Color color)
         {
-            GameObject objeto = new GameObject(nombre, typeof(RectTransform));
+            GameObject objeto = new GameObject(nombre, typeof(RectTransform), typeof(CanvasRenderer));
             objeto.transform.SetParent(padre, false);
             RectTransform rect = objeto.transform as RectTransform;
             PrepararRect(rect, posicion, tamano);
@@ -279,7 +279,7 @@ namespace GuardianesAmazonicos.Views
         private Button CrearBoton(string nombre, RectTransform padre, string etiqueta,
             Vector2 posicion, Vector2 tamano, Color fondoColor, Color textoColor)
         {
-            GameObject objeto = new GameObject(nombre, typeof(RectTransform));
+            GameObject objeto = new GameObject(nombre, typeof(RectTransform), typeof(CanvasRenderer));
             objeto.transform.SetParent(padre, false);
             RectTransform rect = objeto.transform as RectTransform;
             PrepararRect(rect, posicion, tamano);
