@@ -1,4 +1,5 @@
 using GuardianesAmazonicos.Views;
+using AnimacionPersonajePNG = GuardianesAmazonicos.Views.AnimacionPersonajePNG;
 using TMPro;
 using UnityEditor;
 using UnityEngine;

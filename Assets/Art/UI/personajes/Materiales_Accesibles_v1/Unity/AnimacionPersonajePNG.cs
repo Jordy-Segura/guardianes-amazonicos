@@ -1,6 +1,9 @@
 using UnityEngine;
 using UnityEngine.UI;
 
+namespace GuardianesAmazonicos.MaterialesAccesiblesDemo
+{
+
 // Reproductor opcional: asigna los PNG importados como Sprite en orden numérico.
 [DisallowMultipleComponent]
 public class AnimacionPersonajePNG : MonoBehaviour
@@ -53,4 +56,6 @@ public class AnimacionPersonajePNG : MonoBehaviour
         if (destinoEscena != null) destinoEscena.sprite = fotogramas[indice];
         if (destinoCanvas != null) destinoCanvas.sprite = fotogramas[indice];
     }
+}
+
 }

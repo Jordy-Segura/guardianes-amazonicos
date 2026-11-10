@@ -614,14 +614,19 @@ namespace GuardianesAmazonicos.Views
 
             // Marco con ilustración
             RectTransform marco = CrearImagenTopLeft("MarcoEscena", capaActividad, CargarSprite("MarcoEscena"), Color.white, new Vector2(942f, -206f), new Vector2(758f, 390f)).rectTransform;
-            GameObject ventanaMask = new GameObject("VentanaMascara", typeof(RectTransform), typeof(RectMask2D));
+            GameObject ventanaMask = new GameObject("VentanaMascara", typeof(RectTransform), typeof(Image), typeof(RectMask2D));
             ventanaMask.transform.SetParent(marco, false);
             RectTransform rectMascara = ventanaMask.transform as RectTransform;
             rectMascara.anchorMin = Vector2.zero;
             rectMascara.anchorMax = Vector2.one;
             rectMascara.offsetMin = new Vector2(16f, 16f);
             rectMascara.offsetMax = new Vector2(-16f, -16f);
-            Image imgEscena = CrearImagenRelativa("Ilustracion", rectMascara, c.ImagenEscena, Color.white, Vector2.zero, new Vector2(726f, 358f));
+            Image fondoMarco = ventanaMask.GetComponent<Image>();
+            fondoMarco.color = new Color(1f, 0.972f, 0.91f, 1f);
+            fondoMarco.raycastTarget = false;
+
+            Sprite spEscena = c.ImagenEscena != null ? c.ImagenEscena : CargarSprite("EscenaSelvaHabitat");
+            Image imgEscena = CrearImagenRelativa("Ilustracion", rectMascara, spEscena, Color.white, Vector2.zero, new Vector2(726f, 358f));
             imgEscena.preserveAspect = false;
 
             // Tarjetas de respuesta
@@ -739,7 +744,16 @@ namespace GuardianesAmazonicos.Views
             Sprite s = Resources.Load<Sprite>("UI/Sprites/" + nombre);
             if (s != null) return s;
             s = Resources.Load<Sprite>(nombre);
-            return s;
+            if (s != null) return s;
+#if UNITY_EDITOR
+            s = UnityEditor.AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Art/UI/Sprites/" + nombre + ".png");
+            if (s != null) return s;
+            s = UnityEditor.AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Resources/UI/Sprites/" + nombre + ".png");
+            if (s != null) return s;
+            s = UnityEditor.AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Art/Backgrounds/" + nombre + ".png");
+            if (s != null) return s;
+#endif
+            return null;
         }
 
         private static Image CrearImagenFull(string nombre, RectTransform padre, Sprite sprite)
