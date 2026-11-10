@@ -3,6 +3,7 @@ using System;
 namespace GuardianesAmazonicos.Models
 {
     /// <summary>
+    /// HU-04 - Escena 4 del Nivel 1. Asignada a: Jirleidy Raquel Santos Muentes (Sprint 1).
     /// "Como estudiante, quiero reconocer una planta entre varias imagenes,
     /// para asociar la palabra con un elemento de la selva."
     /// Modelo de dominio (POCO observador): valida la respuesta, registra intentos

@@ -9,7 +9,7 @@ using UnityEngine.SceneManagement;
 namespace GuardianesAmazonicos.Presenters
 {
     /// <summary>
-    /// Actividad de protección de tortugas.
+    /// HU-12 - Escena 12 del Nivel 1. Asignada a: Jirleidy Raquel Santos Muentes (Sprint 1).
     /// Orquesta la actividad de tortugas: suscribe la vista pasiva al modelo de dominio
     /// (patrón MVP + Observer), persiste el punto de progreso 12 de 12 (cierra el Nivel 1)
     /// y gestiona la navegación entre escenas del nivel.
@@ -20,7 +20,7 @@ namespace GuardianesAmazonicos.Presenters
         [SerializeField] private ActividadTortugasView _vista;
 
         [Header("Navegación entre escenas")]
-        [SerializeField] private string _nombreEscenaAnterior = "Escena09_IdentificarPlatano";
+        [SerializeField] private string _nombreEscenaAnterior = "Nivel1_ConozcoLaSelva";
         [SerializeField] private string _nombreEscenaSiguiente = "Nivel2_CuidoLosAnimales";
 
         private IProgresoRepository _repositorio;

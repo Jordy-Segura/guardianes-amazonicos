@@ -9,7 +9,7 @@ using UnityEngine.SceneManagement;
 namespace GuardianesAmazonicos.Presenters
 {
     /// <summary>
-    /// Actividad de protección de aves.
+    /// HU-08 - Escena 8 del Nivel 1. Asignada a: Jirleidy Raquel Santos Muentes (Sprint 1).
     /// Orquesta la actividad de aves: suscribe la vista pasiva al modelo de dominio
     /// (patrón MVP + Observer), persiste el punto de progreso 8 de 12 y gestiona la
     /// navegación entre escenas del nivel.
@@ -20,8 +20,8 @@ namespace GuardianesAmazonicos.Presenters
         [SerializeField] private ActividadAvesView _vista;
 
         [Header("Navegación entre escenas")]
-        [SerializeField] private string _nombreEscenaAnterior = "Escena05_IdentificarJaguar";
-        [SerializeField] private string _nombreEscenaSiguiente = "Escena09_IdentificarPlatano";
+        [SerializeField] private string _nombreEscenaAnterior = "Nivel1_ConozcoLaSelva";
+        [SerializeField] private string _nombreEscenaSiguiente = "Escena9";
 
         private IProgresoRepository _repositorio;
         private ActividadAvesModel _modelo;

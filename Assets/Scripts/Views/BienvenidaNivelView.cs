@@ -77,13 +77,13 @@ namespace GuardianesAmazonicos.Views
             if (_textoProgreso != null)
             {
                 _textoProgreso.text = aventuraIniciada
-                    ? "PROGRESO  " + puntoActual + "  DE  " + totalPuntos
-                    : "PROGRESO  0  DE  " + totalPuntos;
+                    ? puntoActual + " de " + totalPuntos
+                    : "0 de " + totalPuntos;
             }
 
             if (_textoComenzar != null)
             {
-                _textoComenzar.text = aventuraIniciada ? "¡AVENTURA INICIADA!" : "¡COMENZAR!";
+                _textoComenzar.text = aventuraIniciada ? "¡Aventura iniciada!" : "¡Comenzar!";
             }
 
             if (_botonComenzar != null)

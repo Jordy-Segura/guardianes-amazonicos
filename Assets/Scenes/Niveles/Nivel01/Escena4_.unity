@@ -119,7 +119,7 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &430858745
+--- !u!1 &1449269776
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -127,8 +127,9 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 430858747}
-  - component: {fileID: 430858746}
+  - component: {fileID: 1449269778}
+  - component: {fileID: 1449269777}
+  - component: {fileID: 1449269779}
   m_Layer: 0
   m_Name: Directional Light
   m_TagString: Untagged
@@ -136,13 +137,13 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!108 &430858746
+--- !u!108 &1449269777
 Light:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 430858745}
+  m_GameObject: {fileID: 1449269776}
   m_Enabled: 1
   serializedVersion: 13
   m_Type: 1
@@ -201,13 +202,13 @@ Light:
   m_LightUnit: 1
   m_LuxAtDistance: 1
   m_EnableSpotReflector: 1
---- !u!4 &430858747
+--- !u!4 &1449269778
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 430858745}
+  m_GameObject: {fileID: 1449269776}
   serializedVersion: 2
   m_LocalRotation: {x: 0.40821788, y: -0.23456968, z: 0.10938163, w: 0.8754261}
   m_LocalPosition: {x: 0, y: 3, z: 0}
@@ -216,7 +217,36 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
---- !u!1 &1584032654
+--- !u!114 &1449269779
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1449269776}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalLightData
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_CustomShadowLayers: 0
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
+  m_SoftShadowQuality: 0
+  m_RenderingLayersMask:
+    serializedVersion: 0
+    m_Bits: 1
+  m_ShadowRenderingLayersMask:
+    serializedVersion: 0
+    m_Bits: 1
+  m_Version: 4
+  m_LightLayerMask: 1
+  m_ShadowLayerMask: 1
+  m_RenderingLayers: 1
+  m_ShadowRenderingLayers: 1
+--- !u!1 &1751673942
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -224,9 +254,10 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1584032657}
-  - component: {fileID: 1584032656}
-  - component: {fileID: 1584032655}
+  - component: {fileID: 1751673945}
+  - component: {fileID: 1751673944}
+  - component: {fileID: 1751673943}
+  - component: {fileID: 1751673946}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -234,21 +265,21 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!81 &1584032655
+--- !u!81 &1751673943
 AudioListener:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1584032654}
+  m_GameObject: {fileID: 1751673942}
   m_Enabled: 1
---- !u!20 &1584032656
+--- !u!20 &1751673944
 Camera:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1584032654}
+  m_GameObject: {fileID: 1751673942}
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 1
@@ -293,13 +324,13 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!4 &1584032657
+--- !u!4 &1751673945
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1584032654}
+  m_GameObject: {fileID: 1751673942}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 1, z: -10}
@@ -308,6 +339,50 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1751673946
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1751673942}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a79441f348de89743a2939f4d699eac1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalCameraData
+  m_RenderShadows: 1
+  m_RequiresDepthTextureOption: 2
+  m_RequiresOpaqueTextureOption: 2
+  m_CameraType: 0
+  m_Cameras: []
+  m_RendererIndex: -1
+  m_VolumeLayerMask:
+    serializedVersion: 2
+    m_Bits: 1
+  m_VolumeTrigger: {fileID: 0}
+  m_VolumeFrameworkUpdateModeOption: 2
+  m_RenderPostProcessing: 0
+  m_Antialiasing: 0
+  m_AntialiasingQuality: 2
+  m_StopNaN: 0
+  m_Dithering: 0
+  m_ClearDepth: 1
+  m_AllowXRRendering: 1
+  m_AllowHDROutput: 1
+  m_UseScreenCoordOverride: 0
+  m_ScreenSizeOverride: {x: 0, y: 0, z: 0, w: 0}
+  m_ScreenCoordScaleBias: {x: 0, y: 0, z: 0, w: 0}
+  m_RequiresDepthTexture: 0
+  m_RequiresColorTexture: 0
+  m_TaaSettings:
+    m_Quality: 3
+    m_FrameInfluence: 0.1
+    m_JitterScale: 1
+    m_MipBias: 0
+    m_VarianceClampScale: 0.9
+    m_ContrastAdaptiveSharpening: 0
+  m_Version: 2
 --- !u!224 &410000003
 RectTransform:
   m_ObjectHideFlags: 0
@@ -404,7 +479,7 @@ GameObject:
   - component: {fileID: 410000005}
   - component: {fileID: 410000006}
   m_Layer: 0
-  m_Name: CanvasAves
+  m_Name: CanvasPlantas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -516,7 +591,7 @@ GameObject:
   - component: {fileID: 410000241}
   - component: {fileID: 410000242}
   m_Layer: 0
-  m_Name: PanelActividadAves
+  m_Name: PanelActividadPlantas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1279,7 +1354,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "PROGRESO 8 DE 12"
+  m_text: "PROGRESO 4 DE 12"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 767ffc8669e62e144951bc56a822d1e6, type: 2}
   m_sharedMaterial: {fileID: -4203256325650379, guid: 767ffc8669e62e144951bc56a822d1e6, type: 2}
@@ -2042,7 +2117,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "El guardi\xE1n trae un reto: toca el GUACAMAYO de la selva y luego toca ACEPTAR."
+  m_text: "El guardi\xE1n trae un reto: toca la PLANTA de la selva y luego toca ACEPTAR."
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 767ffc8669e62e144951bc56a822d1e6, type: 2}
   m_sharedMaterial: {fileID: -4203256325650379, guid: 767ffc8669e62e144951bc56a822d1e6, type: 2}
@@ -3255,7 +3330,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "GUACAMAYO"
+  m_text: "PLANTA"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 767ffc8669e62e144951bc56a822d1e6, type: 2}
   m_sharedMaterial: {fileID: -4203256325650379, guid: 767ffc8669e62e144951bc56a822d1e6, type: 2}
@@ -3383,7 +3458,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "GUACAMAYO"
+  m_text: "PLANTA"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 767ffc8669e62e144951bc56a822d1e6, type: 2}
   m_sharedMaterial: {fileID: -4203256325650379, guid: 767ffc8669e62e144951bc56a822d1e6, type: 2}
@@ -3797,7 +3872,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "TUC\xC1N"
+  m_text: "JAGUAR"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 767ffc8669e62e144951bc56a822d1e6, type: 2}
   m_sharedMaterial: {fileID: -4203256325650379, guid: 767ffc8669e62e144951bc56a822d1e6, type: 2}
@@ -3925,7 +4000,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "TUC\xC1N"
+  m_text: "JAGUAR"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 767ffc8669e62e144951bc56a822d1e6, type: 2}
   m_sharedMaterial: {fileID: -4203256325650379, guid: 767ffc8669e62e144951bc56a822d1e6, type: 2}
@@ -4339,7 +4414,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "LORO"
+  m_text: "MONO"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 767ffc8669e62e144951bc56a822d1e6, type: 2}
   m_sharedMaterial: {fileID: -4203256325650379, guid: 767ffc8669e62e144951bc56a822d1e6, type: 2}
@@ -4467,7 +4542,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "LORO"
+  m_text: "MONO"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 767ffc8669e62e144951bc56a822d1e6, type: 2}
   m_sharedMaterial: {fileID: -4203256325650379, guid: 767ffc8669e62e144951bc56a822d1e6, type: 2}
@@ -5290,7 +5365,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "El GUACAMAYO es un ave de plumas coloridas: rojas, azules y amarillas. Tiene un pico curvo y fuerte y vuela sobre los \xE1rboles de la selva. Busca la tarjeta del ave con plumas rojas, azules y amarillas."
+  m_text: "La PLANTA es un ser vivo de la selva: no camina ni salta. Tiene hojas, tallo y ra\xEDces. Busca la tarjeta donde crecen hojas verdes."
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 767ffc8669e62e144951bc56a822d1e6, type: 2}
   m_sharedMaterial: {fileID: -4203256325650379, guid: 767ffc8669e62e144951bc56a822d1e6, type: 2}
@@ -5720,7 +5795,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "SE\xD1AS EN LSEC - PALABRA: GUACAMAYO"
+  m_text: "SE\xD1AS EN LSEC - PALABRA: PLANTA"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 767ffc8669e62e144951bc56a822d1e6, type: 2}
   m_sharedMaterial: {fileID: -4203256325650379, guid: 767ffc8669e62e144951bc56a822d1e6, type: 2}
@@ -6358,9 +6433,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 410000011}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e51186d95646994e2f4776275c093573, type: 3}
+  m_Script: {fileID: 11500000, guid: b8f2a7d1c4e64f38a9b0c5d2e7f8a134, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::GuardianesAmazonicos.Views.ActividadAvesView
+  m_EditorClassIdentifier: Assembly-CSharp::GuardianesAmazonicos.Views.ActividadPlantasView
   _textoPregunta: {fileID: 410000078}
   _textoProgreso: {fileID: 410000046}
   _textoRetroalimentacion: {fileID: 410000105}
@@ -6411,12 +6486,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 410000011}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c30eaf5c4bb131f1b5b33cfd4012dc79, type: 3}
+  m_Script: {fileID: 11500000, guid: 2a7c9e4f1b3d4a68b0c5d8e2f7a4c931, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::GuardianesAmazonicos.Presenters.ActividadAvesPresenter
+  m_EditorClassIdentifier: Assembly-CSharp::GuardianesAmazonicos.Presenters.ActividadPlantasPresenter
   _vista: {fileID: 410000241}
-  _nombreEscenaAnterior: Escena05_IdentificarJaguar
-  _nombreEscenaSiguiente: Escena09_IdentificarPlatano
+  _nombreEscenaAnterior: Nivel1_ConozcoLaSelva
+  _nombreEscenaSiguiente: Escena5
 --- !u!1 &352058241
 GameObject:
   m_ObjectHideFlags: 0
@@ -7273,7 +7348,7 @@ MonoBehaviour:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 1584032657}
-  - {fileID: 430858747}
+  - {fileID: 1751673945}
+  - {fileID: 1449269778}
   - {fileID: 410000003}
   - {fileID: 352058244}

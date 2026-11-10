@@ -9,6 +9,7 @@ using UnityEngine.Video;
 namespace GuardianesAmazonicos.Views
 {
     /// <summary>
+    /// HU-04 - Escena 4 del Nivel 1. Asignada a: Jirleidy Raquel Santos Muentes (Sprint 1).
     /// Vista pasiva de la actividad de plantas: muestra el enunciado escrito, la imagen
     /// de apoyo, tres tarjetas de respuesta y retroalimentación. Expone audio (LECTURA),
     /// video LSEC (SEÑAS) y pista (AYUDA) conforme al diseño multimodal DUA.

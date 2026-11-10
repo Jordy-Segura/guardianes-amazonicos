@@ -3,6 +3,7 @@ using System;
 namespace GuardianesAmazonicos.Views
 {
     /// <summary>
+    /// HU-08 - Escena 8 del Nivel 1. Asignada a: Jirleidy Raquel Santos Muentes (Sprint 1).
     /// Contrato de la vista pasiva de la actividad de aves (multimodal: texto, audio y LSEC).
     /// </summary>
     public interface IActividadAvesView

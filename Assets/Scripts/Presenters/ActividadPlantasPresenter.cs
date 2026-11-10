@@ -9,7 +9,7 @@ using UnityEngine.SceneManagement;
 namespace GuardianesAmazonicos.Presenters
 {
     /// <summary>
-    /// Actividad de cuidado de plantas.
+    /// HU-04 - Escena 4 del Nivel 1. Asignada a: Jirleidy Raquel Santos Muentes (Sprint 1).
     /// Orquesta la actividad de plantas: suscribe la vista pasiva al modelo de dominio
     /// (patrón MVP + Observer), persiste el punto de progreso 4 de 12 y gestiona la
     /// navegación entre escenas del nivel.
@@ -20,8 +20,8 @@ namespace GuardianesAmazonicos.Presenters
         [SerializeField] private ActividadPlantasView _vista;
 
         [Header("Navegación entre escenas")]
-        [SerializeField] private string _nombreEscenaAnterior = "BienvenidaDelGuardian";
-        [SerializeField] private string _nombreEscenaSiguiente = "Escena05_IdentificarJaguar";
+        [SerializeField] private string _nombreEscenaAnterior = "Nivel1_ConozcoLaSelva";
+        [SerializeField] private string _nombreEscenaSiguiente = "Escena5";
 
         private IProgresoRepository _repositorio;
         private ActividadPlantasModel _modelo;
