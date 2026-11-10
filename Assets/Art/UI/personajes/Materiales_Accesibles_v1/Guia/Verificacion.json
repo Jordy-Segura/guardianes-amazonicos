@@ -1,0 +1,12 @@
+{
+  "resultados": [
+    "Sin movimiento automÃ¡tico al abrir",
+    "SelecciÃ³n, error, reintento y acierto con mensajes visibles",
+    "Pista y lectura abren su contenido",
+    "AnimaciÃ³n funciona y Reducir movimiento la detiene",
+    "390 px de ancho + texto muy grande: sin desbordamiento horizontal",
+    "Controles HTML nativos y foco de teclado presentes; no se probÃ³ lector de pantalla"
+  ],
+  "errores_js": [],
+  "archivos": "184 fotogramas RGBA, tamaño 512 × 768, con margen y sin recortes en los extremos; todas las secuencias contienen movimiento."
+}

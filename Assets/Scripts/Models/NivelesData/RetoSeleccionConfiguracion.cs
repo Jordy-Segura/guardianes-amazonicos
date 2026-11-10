@@ -60,23 +60,91 @@ namespace GuardianesAmazonicos.Models
         [Header("Texto")]
         [SerializeField] private TMP_FontAsset _fuente;
 
+        // Campos compatibles con serialización directa de retos (HU-02)
+        [Min(1)] public int numeroEscena = 1;
+        public string titulo = "Nivel 1. Conozco la Selva";
+        public string textoProgreso = "2 de 2";
+        [TextArea(1, 2)] public string pregunta;
+        [TextArea(1, 2)] public string instruccion;
+        public string[] opciones;
+        public Sprite[] imagenes;
+        public Texture2D atlasDosPorDos;
+        [Range(0, 3)] public int indiceCorrecto;
+        [TextArea(1, 2)] public string pistaIncorrecta;
+        [TextArea(1, 2)] public string mensajeCorrecto;
+        public AudioClip[] pronunciaciones;
+        public string siguienteEscena;
+        public string textoContinuar = "SIGUIENTE RETO";
+        public Sprite fondo;
+        public Sprite imagenEscena;
+        public Sprite explorador;
+        public TMP_FontAsset fuente;
+
         public int Nivel { get => _nivel; set => _nivel = value; }
-        public int NumeroEscena { get => _numeroEscena; set => _numeroEscena = value; }
+        public int NumeroEscena
+        {
+            get => _numeroEscena > 1 ? _numeroEscena : (numeroEscena > 1 ? numeroEscena : _numeroEscena);
+            set { _numeroEscena = value; numeroEscena = value; }
+        }
         public int TotalEscenas { get => _totalEscenas; set => _totalEscenas = value; }
-        public string TituloNivel { get => _tituloNivel; set => _tituloNivel = value; }
-        public string SiguienteEscena { get => _siguienteEscena; set => _siguienteEscena = value; }
-        public string Pregunta { get => _pregunta; set => _pregunta = value; }
-        public string[] Opciones { get => _opciones; set => _opciones = value; }
-        public Sprite[] ImagenesOpciones { get => _imagenesOpciones; set => _imagenesOpciones = value; }
-        public int IndiceCorrecto { get => _indiceCorrecto; set => _indiceCorrecto = value; }
+        public string TituloNivel
+        {
+            get => !string.IsNullOrEmpty(_tituloNivel) && _tituloNivel != "Nivel 1 • Conozco la selva" ? _tituloNivel : (!string.IsNullOrEmpty(titulo) ? titulo : _tituloNivel);
+            set { _tituloNivel = value; titulo = value; }
+        }
+        public string SiguienteEscena
+        {
+            get => !string.IsNullOrEmpty(_siguienteEscena) ? _siguienteEscena : siguienteEscena;
+            set { _siguienteEscena = value; siguienteEscena = value; }
+        }
+        public string Pregunta
+        {
+            get => !string.IsNullOrEmpty(_pregunta) ? _pregunta : pregunta;
+            set { _pregunta = value; pregunta = value; }
+        }
+        public string[] Opciones
+        {
+            get => (_opciones != null && _opciones.Length > 0 && !string.IsNullOrEmpty(_opciones[0])) ? _opciones : opciones;
+            set { _opciones = value; opciones = value; }
+        }
+        public Sprite[] ImagenesOpciones
+        {
+            get => (_imagenesOpciones != null && _imagenesOpciones.Length > 0 && _imagenesOpciones[0] != null) ? _imagenesOpciones : imagenes;
+            set { _imagenesOpciones = value; imagenes = value; }
+        }
+        public int IndiceCorrecto
+        {
+            get => _indiceCorrecto != 0 ? _indiceCorrecto : indiceCorrecto;
+            set { _indiceCorrecto = value; indiceCorrecto = value; }
+        }
         public string[] ExplicacionesIncorrectas { get => _explicacionesIncorrectas; set => _explicacionesIncorrectas = value; }
-        public string Pista { get => _pista; set => _pista = value; }
-        public string Felicitacion { get => _felicitacion; set => _felicitacion = value; }
-        public Sprite ImagenEscena { get => _imagenEscena; set => _imagenEscena = value; }
+        public string Pista
+        {
+            get => !string.IsNullOrEmpty(_pista) ? _pista : pistaIncorrecta;
+            set { _pista = value; pistaIncorrecta = value; }
+        }
+        public string Felicitacion
+        {
+            get => !string.IsNullOrEmpty(_felicitacion) && _felicitacion != "¡Lo lograste!" ? _felicitacion : (!string.IsNullOrEmpty(mensajeCorrecto) ? mensajeCorrecto : _felicitacion);
+            set { _felicitacion = value; mensajeCorrecto = value; }
+        }
+        public Sprite ImagenEscena
+        {
+            get => _imagenEscena != null ? _imagenEscena : imagenEscena;
+            set { _imagenEscena = value; imagenEscena = value; }
+        }
         public Sprite ElementoEscena { get => _elementoEscena; set => _elementoEscena = value; }
         public Rect RectElementoEscena { get => _rectElementoEscena; set => _rectElementoEscena = value; }
-        public Sprite Fondo { get => _fondo; set => _fondo = value; }
-        public Sprite Personaje { get => _personaje; set => _personaje = value; }
+        public Sprite Fondo
+        {
+            get => _fondo != null ? _fondo : fondo;
+            set { _fondo = value; fondo = value; }
+        }
+        public Sprite Personaje
+        {
+            get => _personaje != null ? _personaje : explorador;
+            set { _personaje = value; explorador = value; }
+        }
         public Sprite[] FotogramasCelebracion { get => _fotogramasCelebracion; set => _fotogramasCelebracion = value; }
         public AudioClip AudioLectura { get => _audioLectura; set => _audioLectura = value; }
         public string VideoSenas { get => _videoSenas; set => _videoSenas = value; }
@@ -88,7 +156,11 @@ namespace GuardianesAmazonicos.Models
         public Sprite BienvenidaImagen { get => _bienvenidaImagen; set => _bienvenidaImagen = value; }
         public AudioClip BienvenidaAudio { get => _bienvenidaAudio; set => _bienvenidaAudio = value; }
         public string BienvenidaVideoSenas { get => _bienvenidaVideoSenas; set => _bienvenidaVideoSenas = value; }
-        public TMP_FontAsset Fuente { get => _fuente; set => _fuente = value; }
+        public TMP_FontAsset Fuente
+        {
+            get => _fuente != null ? _fuente : fuente;
+            set { _fuente = value; fuente = value; }
+        }
 
         /// <summary>Explicación breve y positiva para la opción incorrecta elegida.</summary>
         public string ObtenerExplicacion(int indice)
@@ -97,6 +169,11 @@ namespace GuardianesAmazonicos.Models
                 && !string.IsNullOrWhiteSpace(_explicacionesIncorrectas[indice]))
             {
                 return _explicacionesIncorrectas[indice];
+            }
+
+            if (!string.IsNullOrWhiteSpace(pistaIncorrecta))
+            {
+                return pistaIncorrecta;
             }
 
             return "Esa no es la respuesta. Observa otra vez y vuelve a intentarlo.";

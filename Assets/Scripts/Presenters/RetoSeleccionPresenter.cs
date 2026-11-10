@@ -199,7 +199,9 @@ namespace GuardianesAmazonicos.Presenters
                 ProgresoEstudianteData progreso = _repositorio.Cargar();
                 int nivel = _configuracion.Nivel;
                 int escena = _configuracion.NumeroEscena;
-                if (nivel == 1 && escena == 5)
+                if (nivel == 1 && escena == 2)
+                    progreso.retoMonoCompletado = true;
+                else if (nivel == 1 && escena == 5)
                     progreso.retoJaguarCompletado = true;
                 else if (nivel == 1 && escena == 9)
                     progreso.retoPlatanoCompletado = true;
@@ -236,6 +238,7 @@ namespace GuardianesAmazonicos.Presenters
                 ProgresoEstudianteData progreso = _repositorio.Cargar();
                 int nivel = _configuracion.Nivel;
                 int escena = _configuracion.NumeroEscena;
+                if (nivel == 1 && escena == 2) return progreso.retoMonoCompletado;
                 if (nivel == 1 && escena == 5) return progreso.retoJaguarCompletado;
                 if (nivel == 1 && escena == 9) return progreso.retoPlatanoCompletado;
                 return nivel == 2 && escena == 1 && progreso.RetoMonoCuriosoCompletado;

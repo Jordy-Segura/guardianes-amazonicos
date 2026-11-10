@@ -1,0 +1,27 @@
+[
+  {
+    "fotograma": 1,
+    "prompt": "Edit the supplied explorer into ONE single full-body animation frame for a five-frame friendly hand-wave loop. Preserve EXACT same boy identity, face, happy open smile, eyes, brown hair, yellow explorer hat with green band and leaf, lime-green shirt, tan shorts, backpack and brown hiking boots. Same illustration style and colors as original. ONLY move the arm and open hand on viewer RIGHT; other hand gripping backpack strap, torso, head, legs and boots stay locked identical in every frame. Portrait canvas 1024x1536, full body fully visible with margin. Keep hat top at y=75, boot soles baseline y=1460, body center x=465, same camera and scale. True transparent background with alpha, no black or white backdrop, no ground, no shadow, no text, no border, no extra characters. Exactly one character and one pose, no sprite sheet. Hand extended sideways as in reference, palm tilted upward 15 degrees; start of greeting.",
+    "herramienta": "image_gen integrada"
+  },
+  {
+    "fotograma": 2,
+    "prompt": "Edit the supplied explorer into ONE single full-body animation frame for a five-frame friendly hand-wave loop. Preserve EXACT same boy identity, face, happy open smile, eyes, brown hair, yellow explorer hat with green band and leaf, lime-green shirt, tan shorts, backpack and brown hiking boots. Same illustration style and colors as original. ONLY move the arm and open hand on viewer RIGHT; other hand gripping backpack strap, torso, head, legs and boots stay locked identical in every frame. Portrait canvas 1024x1536, full body fully visible with margin. Keep hat top at y=75, boot soles baseline y=1460, body center x=465, same camera and scale. True transparent background with alpha, no black or white backdrop, no ground, no shadow, no text, no border, no extra characters. Exactly one character and one pose, no sprite sheet. Same upper arm, bend elbow so open waving palm rises to shoulder height, fingers point diagonally upward 40 degrees.",
+    "herramienta": "image_gen integrada"
+  },
+  {
+    "fotograma": 3,
+    "prompt": "Edit the supplied explorer into ONE single full-body animation frame for a five-frame friendly hand-wave loop. Preserve EXACT same boy identity, face, happy open smile, eyes, brown hair, yellow explorer hat with green band and leaf, lime-green shirt, tan shorts, backpack and brown hiking boots. Same illustration style and colors as original. ONLY move the arm and open hand on viewer RIGHT; other hand gripping backpack strap, torso, head, legs and boots stay locked identical in every frame. Portrait canvas 1024x1536, full body fully visible with margin. Keep hat top at y=75, boot soles baseline y=1460, body center x=465, same camera and scale. True transparent background with alpha, no black or white backdrop, no ground, no shadow, no text, no border, no extra characters. Exactly one character and one pose, no sprite sheet. Bend elbow farther: open palm raised beside head, fingers vertical, palm faces viewer; peak greeting.",
+    "herramienta": "image_gen integrada"
+  },
+  {
+    "fotograma": 4,
+    "prompt": "Edit the supplied explorer into ONE single full-body animation frame for a five-frame friendly hand-wave loop. Preserve EXACT same boy identity, face, happy open smile, eyes, brown hair, yellow explorer hat with green band and leaf, lime-green shirt, tan shorts, backpack and brown hiking boots. Same illustration style and colors as original. ONLY move the arm and open hand on viewer RIGHT; other hand gripping backpack strap, torso, head, legs and boots stay locked identical in every frame. Portrait canvas 1024x1536, full body fully visible with margin. Keep hat top at y=75, boot soles baseline y=1460, body center x=465, same camera and scale. True transparent background with alpha, no black or white backdrop, no ground, no shadow, no text, no border, no extra characters. Exactly one character and one pose, no sprite sheet. Same raised hand beside head, wrist tilted outward 20 degrees in a gentle wave.",
+    "herramienta": "image_gen integrada"
+  },
+  {
+    "fotograma": 5,
+    "prompt": "Edit the supplied explorer into ONE single full-body animation frame for a five-frame friendly hand-wave loop. Preserve EXACT same boy identity, face, happy open smile, eyes, brown hair, yellow explorer hat with green band and leaf, lime-green shirt, tan shorts, backpack and brown hiking boots. Same illustration style and colors as original. ONLY move the arm and open hand on viewer RIGHT; other hand gripping backpack strap, torso, head, legs and boots stay locked identical in every frame. Portrait canvas 1024x1536, full body fully visible with margin. Keep hat top at y=75, boot soles baseline y=1460, body center x=465, same camera and scale. True transparent background with alpha, no black or white backdrop, no ground, no shadow, no text, no border, no extra characters. Exactly one character and one pose, no sprite sheet. Return hand to midway between shoulder and original extended position, fingers diagonal 25 degrees, to close loop back to frame 1.",
+    "herramienta": "image_gen integrada"
+  }
+]
