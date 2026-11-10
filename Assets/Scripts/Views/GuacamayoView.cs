@@ -42,6 +42,7 @@ namespace GuardianesAmazonicos.Views
         [SerializeField] private Sprite _letreroAcierto;
         [SerializeField] private Sprite _brilloSeleccion;
         [SerializeField] private Sprite _bannerNivel;
+        [SerializeField] private Sprite _insigniaProgreso;
         [SerializeField] private Sprite _cartaPista;
         [SerializeField] private Sprite _tarjetaSenas;
         [SerializeField] private Sprite _botonCerrarModal;
@@ -57,7 +58,7 @@ namespace GuardianesAmazonicos.Views
         public void ConfigurarArte(Sprite tarjeta, Sprite marco, Sprite globo, Sprite[] iconosToolbar,
             Sprite[] iconosNavegacion, Sprite aceptar, Sprite reintentar, Sprite siguiente, Sprite letreroAcierto,
             Sprite brilloSeleccion, Sprite bannerNivel, Sprite cartaPista, Sprite tarjetaSenas,
-            Sprite botonCerrarModal, Sprite botonReproducirModal, Sprite personajePreocupado,
+            Sprite insigniaProgreso, Sprite botonCerrarModal, Sprite botonReproducirModal, Sprite personajePreocupado,
             Sprite personajeCelebrando, Sprite fondoAcierto, Sprite iconoReintentar)
         {
             _tarjeta = tarjeta;
@@ -71,6 +72,7 @@ namespace GuardianesAmazonicos.Views
             _letreroAcierto = letreroAcierto;
             _brilloSeleccion = brilloSeleccion;
             _bannerNivel = bannerNivel;
+            _insigniaProgreso = insigniaProgreso;
             _cartaPista = cartaPista;
             _tarjetaSenas = tarjetaSenas;
             _botonCerrarModal = botonCerrarModal;
@@ -115,8 +117,8 @@ namespace GuardianesAmazonicos.Views
 
         public void Construir(RetoSeleccionConfiguracion configuracion)
         {
-            if (configuracion == null || configuracion.opciones == null || configuracion.opciones.Length != 3 ||
-                configuracion.imagenes == null || configuracion.imagenes.Length != 3)
+            if (configuracion == null || configuracion.Opciones == null || configuracion.Opciones.Length != 3 ||
+                configuracion.ImagenesOpciones == null || configuracion.ImagenesOpciones.Length != 3)
             {
                 throw new ArgumentException("HU-03 requiere tres opciones con sus imágenes.", nameof(configuracion));
             }
@@ -126,32 +128,31 @@ namespace GuardianesAmazonicos.Views
             _audio.playOnAwake = false;
             _audio.loop = false;
             _audio.volume = PlayerPrefs.GetFloat("HU03_AudioVolumen", 1f);
-            _audio.clip = configuracion.pronunciaciones != null && configuracion.pronunciaciones.Length > 0
-                ? configuracion.pronunciaciones[0] : null;
+            _audio.clip = configuracion.AudioLectura;
             _movimientoReducido = PlayerPrefs.GetInt("HU03_MovimientoReducido", 0) == 1;
             _fotogramasExplorador = Resources.LoadAll<Sprite>("HU03/Animaciones/Explorador");
             _fotogramasGuacamayo = Resources.LoadAll<Sprite>("HU03/Animaciones/Guacamayo");
             Array.Sort(_fotogramasExplorador, (a, b) => string.CompareOrdinal(a.name, b.name));
             Array.Sort(_fotogramasGuacamayo, (a, b) => string.CompareOrdinal(a.name, b.name));
             RectTransform raiz = CrearCanvas().transform as RectTransform;
-            CrearImagen("Fondo", raiz, configuracion.fondo, Color.white, true, false,
+            CrearImagen("Fondo", raiz, configuracion.Fondo, Color.white, true, false,
                 Vector2.zero, new Vector2(1920, 1080), true);
             Boton("Audio", raiz, "AUDIO", 30, 16, 132, 114, () => OnAudioSolicitado?.Invoke());
             Boton("Senas", raiz, "SEÑAS", 170, 16, 132, 114, () => OnSenasSolicitadas?.Invoke());
             Boton("Ayuda", raiz, "AYUDA", 310, 16, 132, 114, () => OnAyudaSolicitada?.Invoke());
             CrearNavegacion(raiz);
             Panel("Titulo", raiz, 592, 12, 484, 108, Verde);
-            Texto("TituloNivel", raiz, "Nivel 1 · Conozco la selva", 625, 28, 420, 70, 25, Tinta);
-            if (configuracion.insigniaProgreso != null)
-                Imagen("DistintivoProgreso", raiz, configuracion.insigniaProgreso, 1092, 16, 236, 94);
+            Texto("TituloNivel", raiz, configuracion.TituloNivel, 625, 28, 420, 70, 25, Tinta);
+            if (_insigniaProgreso != null)
+                Imagen("DistintivoProgreso", raiz, _insigniaProgreso, 1092, 16, 236, 94);
             else
                 Panel("Progreso", raiz, 1092, 16, 236, 94, Verde);
-            int totalRetos = Mathf.Max(1, configuracion.totalRetos);
-            int numeroReto = Mathf.Clamp(configuracion.numeroEscena, 1, totalRetos);
+            int totalRetos = Mathf.Max(1, configuracion.TotalEscenas);
+            int numeroReto = Mathf.Clamp(configuracion.NumeroEscena, 1, totalRetos);
             Texto("NumeroReto", raiz, numeroReto + " de " + totalRetos, 1102, 34, 216, 48, 30, Color.white);
             _burbujaPregunta = Panel("Globo", raiz, 158, 174, 684, 240, Crema).GetComponent<Image>();
-            _pregunta = Texto("Pregunta", raiz, configuracion.pregunta, 201, 208, 598, 150, 40, Tinta);
-            _exploradorAnimado = CrearImagen("Guardian", raiz, configuracion.explorador, Color.white, true, false,
+            _pregunta = Texto("Pregunta", raiz, configuracion.Pregunta, 201, 208, 598, 150, 40, Tinta);
+            _exploradorAnimado = CrearImagen("Guardian", raiz, configuracion.Personaje, Color.white, true, false,
                 Vector2.zero, new Vector2(390, 562), false);
             Ubicar(_exploradorAnimado.rectTransform, 147, 428, 390, 562);
             CrearEscenaIlustrada(raiz, configuracion, 921, 188, 800, 425);
@@ -167,8 +168,8 @@ namespace GuardianesAmazonicos.Views
                 _bordes[indice] = tarjeta.gameObject.AddComponent<Outline>();
                 _bordes[indice].effectDistance = new Vector2(6, -6);
                 _bordes[indice].enabled = false;
-                Imagen("Animal", tarjeta.transform as RectTransform, configuracion.imagenes[indice], 8, 15, 240, 276);
-                if (indice == configuracion.indiceCorrecto)
+                Imagen("Animal", tarjeta.transform as RectTransform, configuracion.ImagenesOpciones[indice], 8, 15, 240, 276);
+                if (indice == configuracion.IndiceCorrecto)
                 {
                     foreach (Image imagen in tarjeta.GetComponentsInChildren<Image>())
                         if (imagen.gameObject.name == "AnimalContenido") _guacamayoAnimado = imagen;
@@ -273,13 +274,13 @@ namespace GuardianesAmazonicos.Views
         {
             _animarGuacamayoTrasAcierto = false;
             _animarExploradorVictoria = false;
-            if (_guacamayoAnimado != null && _configuracion != null && _configuracion.imagenes != null)
-                _guacamayoAnimado.sprite = _configuracion.imagenes[_configuracion.indiceCorrecto];
+            if (_guacamayoAnimado != null && _configuracion != null && _configuracion.ImagenesOpciones != null)
+                _guacamayoAnimado.sprite = _configuracion.ImagenesOpciones[_configuracion.IndiceCorrecto];
             _seleccion = -1;
-            _pregunta.text = _configuracion.pregunta;
+            _pregunta.text = _configuracion.Pregunta;
             if (_burbujaPregunta != null) _burbujaPregunta.color = Color.white;
             if (_exploradorAnimado != null && _configuracion != null)
-                _exploradorAnimado.sprite = _configuracion.explorador;
+                _exploradorAnimado.sprite = _configuracion.Personaje;
             _saludoExploradorCompleto = false;
             if (_burbujaPregunta != null)
             {
@@ -316,7 +317,7 @@ namespace GuardianesAmazonicos.Views
         public void MostrarAyuda()
         {
             RectTransform panel = AbrirModal("Ayuda", _cartaPista, 350, 118, 1220, 844);
-            Texto("Pista", panel, _configuracion.pistaIncorrecta, 210, 330, 800, 190, 44, Tinta);
+            Texto("Pista", panel, _configuracion.Pista, 210, 330, 800, 190, 44, Tinta);
             BotonConImagen("CerrarAyuda", panel, _imagenReintentar, 390, 608, 440, 122, CerrarModal).Select();
         }
 
@@ -428,9 +429,9 @@ namespace GuardianesAmazonicos.Views
             contenedor.transform.SetParent(raiz, false);
             RectTransform rectContenedor = contenedor.transform as RectTransform;
             Ubicar(rectContenedor, x, y, ancho, alto);
-            Sprite ilustracion = configuracion.imagenEscena != null
-                ? configuracion.imagenEscena
-                : configuracion.fondo;
+            Sprite ilustracion = configuracion.ImagenEscena != null
+                ? configuracion.ImagenEscena
+                : configuracion.Fondo;
             CrearImagen("FaunaAmazonica", rectContenedor, ilustracion, Color.white, true, false,
                 Vector2.zero, new Vector2(ancho, alto), true);
         }
@@ -472,7 +473,7 @@ namespace GuardianesAmazonicos.Views
                 fondoVerde.transform.SetAsFirstSibling();
             }
             _imagenExploradorVictoria = CrearImagen("ExploradorVictoria", objeto.transform as RectTransform,
-                _configuracion.explorador, Color.white, false, false, Vector2.zero, new Vector2(540, 690), false);
+                _configuracion.Personaje, Color.white, false, false, Vector2.zero, new Vector2(540, 690), false);
             Ubicar(_imagenExploradorVictoria.rectTransform, 270, 235, 540, 690);
             Image letrero = CrearImagen("LetreroMuyBien", objeto.transform as RectTransform, _letreroAcierto,
                 Color.white, false, false, Vector2.zero, new Vector2(870, 285), false);
@@ -738,7 +739,7 @@ namespace GuardianesAmazonicos.Views
             PrepararRect(rect, posicion, tamano);
             TMP_Text etiqueta = objeto.GetComponent<TextMeshProUGUI>();
             etiqueta.text = texto;
-            etiqueta.font = _configuracion.fuente;
+            etiqueta.font = _configuracion.Fuente;
             etiqueta.fontSize = tamanoFuente;
             etiqueta.enableAutoSizing = true;
             etiqueta.fontSizeMin = Mathf.Max(16f, tamanoFuente - 8f);

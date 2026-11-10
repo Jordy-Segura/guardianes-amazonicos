@@ -32,9 +32,12 @@ namespace GuardianesAmazonicos.Editor
         {
             if (string.IsNullOrWhiteSpace(Carpeta)) throw new InvalidOperationException("Falta HU03_PRUEBAS.");
             Directory.CreateDirectory(Carpeta);
-            RetoSeleccionModel modelo = new RetoSeleccionModel(1);
-            Comprobar(!modelo.Evaluar(0), "Modelo rechaza distractor");
-            Comprobar(modelo.Evaluar(1), "Modelo acepta guacamayo tras error");
+            RetoSeleccionModel modelo = new RetoSeleccionModel(1, 3);
+            Comprobar(modelo.Seleccionar(0), "Modelo permite seleccionar distractor");
+            Comprobar(!modelo.Confirmar(), "Modelo rechaza distractor");
+            modelo.Reintentar();
+            Comprobar(modelo.Seleccionar(1), "Modelo permite elegir guacamayo tras error");
+            Comprobar(modelo.Confirmar(), "Modelo acepta guacamayo tras error");
             EditorSceneManager.OpenScene(VerificarGuacamayo.RutaEscena);
             SessionState.SetBool("HU03_Pruebas", true);
             EditorApplication.EnterPlaymode();

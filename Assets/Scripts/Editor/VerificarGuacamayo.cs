@@ -96,23 +96,22 @@ namespace GuardianesAmazonicos.Editor
                 configuracion = ScriptableObject.CreateInstance<RetoSeleccionConfiguracion>();
                 AssetDatabase.CreateAsset(configuracion, RutaConfiguracion);
             }
-            configuracion.numeroEscena = 3;
-            configuracion.totalRetos = 12;
-            configuracion.titulo = "Nivel 1 · Conozco la selva";
-            configuracion.pregunta = "Escucha: guacamayo.\n¿Cuál es el guacamayo?";
-            configuracion.instruccion = "Escucha, selecciona y pulsa Aceptar.";
-            configuracion.opciones = new[] { "Mono", "Guacamayo", "Tortuga" };
-            configuracion.imagenes = animales.Take(3).Select(animal => Cargar<Sprite>("Assets/Art/Characters/" + animal + ".png")).ToArray();
-            configuracion.imagenEscena = Cargar<Sprite>("Assets/Art/Backgrounds/EscenaFaunaHU03.png");
-            configuracion.insigniaProgreso = Cargar<Sprite>("Assets/Art/UI/HU03/InsigniaProgreso.png");
-            configuracion.indiceCorrecto = 1;
-            configuracion.pistaIncorrecta = "Busca el ave de plumas rojas, amarillas y azules y pico curvo.";
-            configuracion.mensajeCorrecto = "¡Muy bien! Identificaste al guacamayo.";
-            configuracion.pronunciaciones = new[] { Cargar<AudioClip>("Assets/Audio/Voice/Guacamayo.wav") };
-            configuracion.fondo = Cargar<Sprite>("Assets/Art/Backgrounds/N1_Conozco_la_selva.png");
-            configuracion.explorador = Cargar<Sprite>("Assets/Art/Characters/Explorador.png");
-            configuracion.fuente = Cargar<TMP_FontAsset>("Assets/Fonts/OpenDyslexic3-Regular SDF.asset");
-            configuracion.siguienteEscena = "Escena04_HU04_Plantas";
+            configuracion.Nivel = 1;
+            configuracion.NumeroEscena = 3;
+            configuracion.TotalEscenas = 12;
+            configuracion.TituloNivel = "Nivel 1 · Conozco la selva";
+            configuracion.Pregunta = "Escucha: guacamayo.\n¿Cuál es el guacamayo?";
+            configuracion.Opciones = new[] { "Mono", "Guacamayo", "Tortuga" };
+            configuracion.ImagenesOpciones = animales.Take(3).Select(animal => Cargar<Sprite>("Assets/Art/Characters/" + animal + ".png")).ToArray();
+            configuracion.ImagenEscena = Cargar<Sprite>("Assets/Art/Backgrounds/EscenaFaunaHU03.png");
+            configuracion.IndiceCorrecto = 1;
+            configuracion.Pista = "Busca el ave de plumas rojas, amarillas y azules y pico curvo.";
+            configuracion.Felicitacion = "¡Lo lograste!";
+            configuracion.AudioLectura = Cargar<AudioClip>("Assets/Audio/Voice/Guacamayo.wav");
+            configuracion.Fondo = Cargar<Sprite>("Assets/Art/Backgrounds/N1_Conozco_la_selva.png");
+            configuracion.Personaje = Cargar<Sprite>("Assets/Art/Characters/Explorador.png");
+            configuracion.Fuente = Cargar<TMP_FontAsset>("Assets/Fonts/OpenDyslexic3-Regular SDF.asset");
+            configuracion.SiguienteEscena = "Escena04_HU04_Plantas";
             EditorUtility.SetDirty(configuracion);
             AssetDatabase.SaveAssets();
             Scene escena = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
@@ -132,7 +131,8 @@ namespace GuardianesAmazonicos.Editor
                 Cargar<Sprite>("Assets/Art/UI/HU03/boton_siguiente.png"), Cargar<Sprite>("Assets/Art/UI/HU03/letrero_muy_bien.png"),
                 Cargar<Sprite>("Assets/Art/UI/HU03/brillo_respuesta_seleccionada.png"),
                 Cargar<Sprite>("Assets/Art/UI/HU03/BannerNivel.png"), Cargar<Sprite>("Assets/Art/UI/HU03/CartaPista.png"),
-                Cargar<Sprite>("Assets/Art/UI/HU03/TarjetaSenas.png"), Cargar<Sprite>("Assets/Art/UI/HU03/boton_cerrar.png"),
+                Cargar<Sprite>("Assets/Art/UI/HU03/TarjetaSenas.png"),
+                Cargar<Sprite>("Assets/Art/UI/HU03/InsigniaProgreso.png"), Cargar<Sprite>("Assets/Art/UI/HU03/boton_cerrar.png"),
                 Cargar<Sprite>("Assets/Art/UI/HU03/boton_reproducir.png"),
                 Cargar<Sprite>("Assets/Art/Characters/ExploradorPreocupado.png"),
                 Cargar<Sprite>("Assets/Art/Characters/ExploradorCelebrando.png"),

@@ -27,16 +27,17 @@ namespace GuardianesAmazonicos.Presenters
 
         private void Awake()
         {
-            if (_vista == null || _configuracion == null || _configuracion.opciones == null ||
-                _configuracion.opciones.Length != 3 || _configuracion.indiceCorrecto < 0 ||
-                _configuracion.indiceCorrecto >= 3 || _configuracion.imagenes == null ||
-                _configuracion.imagenes.Length != 3 || Array.Exists(_configuracion.imagenes, imagen => imagen == null))
+            if (_vista == null || _configuracion == null || _configuracion.Opciones == null ||
+                _configuracion.Opciones.Length != 3 || _configuracion.IndiceCorrecto < 0 ||
+                _configuracion.IndiceCorrecto >= 3 || _configuracion.ImagenesOpciones == null ||
+                _configuracion.ImagenesOpciones.Length != 3 ||
+                Array.Exists(_configuracion.ImagenesOpciones, imagen => imagen == null))
             {
                 Debug.LogError("GuacamayoPresenter: faltan la vista, configuración o imágenes de HU-03.", this);
                 enabled = false;
                 return;
             }
-            _modelo = new RetoSeleccionModel(_configuracion.indiceCorrecto);
+            _modelo = new RetoSeleccionModel(_configuracion.IndiceCorrecto, _configuracion.Opciones.Length);
             _repositorio = new JsonProgresoRepository();
             _vista.Construir(_configuracion);
             _interfaz = _vista;
@@ -78,6 +79,7 @@ namespace GuardianesAmazonicos.Presenters
         private void Seleccionar(int indice)
         {
             if (_resultadoMostrado || indice < 0 || indice >= 3) return;
+            if (!_modelo.Seleccionar(indice)) return;
             _seleccion = indice;
             _interfaz.MostrarSeleccion(indice);
         }
@@ -86,12 +88,13 @@ namespace GuardianesAmazonicos.Presenters
         {
             if (_resultadoMostrado || _seleccion < 0) return;
             _resultadoMostrado = true;
-            _interfaz.MostrarResultado(_modelo.Evaluar(_seleccion));
+            _interfaz.MostrarResultado(_modelo.Confirmar());
         }
 
         private void Reintentar()
         {
             if (_modelo.Resuelto) return;
+            _modelo.Reintentar();
             _seleccion = -1;
             _resultadoMostrado = false;
             _interfaz.ReiniciarSeleccion();
@@ -135,10 +138,10 @@ namespace GuardianesAmazonicos.Presenters
                     return;
                 }
             }
-            if (!string.IsNullOrWhiteSpace(_configuracion.siguienteEscena) &&
-                Application.CanStreamedLevelBeLoaded(_configuracion.siguienteEscena))
+            if (!string.IsNullOrWhiteSpace(_configuracion.SiguienteEscena) &&
+                Application.CanStreamedLevelBeLoaded(_configuracion.SiguienteEscena))
             {
-                SceneManager.LoadScene(_configuracion.siguienteEscena);
+                SceneManager.LoadScene(_configuracion.SiguienteEscena);
             }
             else
             {
