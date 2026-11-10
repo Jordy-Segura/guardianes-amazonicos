@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.IO;
 using GuardianesAmazonicos.Models;
 using TMPro;
@@ -25,20 +26,59 @@ namespace GuardianesAmazonicos.Views
         public event Action OnSiguienteSolicitado;
         public event Action OnAyudaSolicitada;
         public event Action OnSenasSolicitadas;
+        public event Action OnInicioSolicitado;
+        public event Action OnRegresarSolicitado;
+        public event Action OnAvanzarSolicitado;
+        public event Action OnConfiguracionSolicitada;
 
         [SerializeField] private Sprite _tarjeta;
         [SerializeField] private Sprite _marco;
         [SerializeField] private Sprite _globo;
         [SerializeField] private Sprite[] _iconosToolbar;
+        [SerializeField] private Sprite[] _iconosNavegacion;
+        [SerializeField] private Sprite _imagenAceptar;
+        [SerializeField] private Sprite _imagenReintentar;
+        [SerializeField] private Sprite _imagenSiguiente;
+        [SerializeField] private Sprite _letreroAcierto;
+        [SerializeField] private Sprite _brilloSeleccion;
+        [SerializeField] private Sprite _bannerNivel;
+        [SerializeField] private Sprite _cartaPista;
+        [SerializeField] private Sprite _tarjetaSenas;
+        [SerializeField] private Sprite _botonCerrarModal;
+        [SerializeField] private Sprite _botonReproducirModal;
+        [SerializeField] private Sprite _personajePreocupado;
+        [SerializeField] private Sprite _personajeCelebrando;
+        [SerializeField] private Sprite _fondoAcierto;
+        [SerializeField] private Sprite _iconoReintentar;
         private TMP_Text _pregunta;
+        private Image _burbujaPregunta;
         private RetoSeleccionConfiguracion _configuracion;
 
-        public void ConfigurarArte(Sprite tarjeta, Sprite marco, Sprite globo, Sprite[] iconosToolbar)
+        public void ConfigurarArte(Sprite tarjeta, Sprite marco, Sprite globo, Sprite[] iconosToolbar,
+            Sprite[] iconosNavegacion, Sprite aceptar, Sprite reintentar, Sprite siguiente, Sprite letreroAcierto,
+            Sprite brilloSeleccion, Sprite bannerNivel, Sprite cartaPista, Sprite tarjetaSenas,
+            Sprite botonCerrarModal, Sprite botonReproducirModal, Sprite personajePreocupado,
+            Sprite personajeCelebrando, Sprite fondoAcierto, Sprite iconoReintentar)
         {
             _tarjeta = tarjeta;
             _marco = marco;
             _globo = globo;
             _iconosToolbar = iconosToolbar;
+            _iconosNavegacion = iconosNavegacion;
+            _imagenAceptar = aceptar;
+            _imagenReintentar = reintentar;
+            _imagenSiguiente = siguiente;
+            _letreroAcierto = letreroAcierto;
+            _brilloSeleccion = brilloSeleccion;
+            _bannerNivel = bannerNivel;
+            _cartaPista = cartaPista;
+            _tarjetaSenas = tarjetaSenas;
+            _botonCerrarModal = botonCerrarModal;
+            _botonReproducirModal = botonReproducirModal;
+            _personajePreocupado = personajePreocupado;
+            _personajeCelebrando = personajeCelebrando;
+            _fondoAcierto = fondoAcierto;
+            _iconoReintentar = iconoReintentar;
         }
         private readonly Button[] _opciones = new Button[3];
         private readonly Outline[] _bordes = new Outline[3];
@@ -51,6 +91,27 @@ namespace GuardianesAmazonicos.Views
         private RenderTexture _texturaVideo;
         private GameObject _focoAnterior;
         private int _seleccion = -1;
+        private Image _exploradorAnimado;
+        private Image _guacamayoAnimado;
+        private Sprite[] _fotogramasExplorador;
+        private Sprite[] _fotogramasGuacamayo;
+        private float _tiempoFotograma;
+        private float _tiempoGuacamayo;
+        private int _indiceFotogramaExplorador;
+        private int _indiceFotogramaGuacamayo;
+        private bool _saludoExploradorCompleto;
+        private bool _animarGuacamayoTrasAcierto;
+        private bool _animarExploradorVictoria;
+        private float _tiempoExploradorVictoria;
+        private Coroutine _ocultarResultado;
+        private GameObject _estadoResultado;
+        private TMP_Text _textoEstado;
+        private Image _imagenExploradorVictoria;
+        private AnimacionEntradaUI _animacionResultado;
+        private bool _movimientoReducido;
+        private Button _navAvanzar;
+
+        public bool MovimientoReducido => _movimientoReducido;
 
         public void Construir(RetoSeleccionConfiguracion configuracion)
         {
@@ -64,35 +125,54 @@ namespace GuardianesAmazonicos.Views
             _audio = gameObject.AddComponent<AudioSource>();
             _audio.playOnAwake = false;
             _audio.loop = false;
+            _audio.volume = PlayerPrefs.GetFloat("HU03_AudioVolumen", 1f);
             _audio.clip = configuracion.pronunciaciones != null && configuracion.pronunciaciones.Length > 0
                 ? configuracion.pronunciaciones[0] : null;
+            _movimientoReducido = PlayerPrefs.GetInt("HU03_MovimientoReducido", 0) == 1;
+            _fotogramasExplorador = Resources.LoadAll<Sprite>("HU03/Animaciones/Explorador");
+            _fotogramasGuacamayo = Resources.LoadAll<Sprite>("HU03/Animaciones/Guacamayo");
+            Array.Sort(_fotogramasExplorador, (a, b) => string.CompareOrdinal(a.name, b.name));
+            Array.Sort(_fotogramasGuacamayo, (a, b) => string.CompareOrdinal(a.name, b.name));
             RectTransform raiz = CrearCanvas().transform as RectTransform;
             CrearImagen("Fondo", raiz, configuracion.fondo, Color.white, true, false,
                 Vector2.zero, new Vector2(1920, 1080), true);
             Boton("Audio", raiz, "AUDIO", 30, 16, 132, 114, () => OnAudioSolicitado?.Invoke());
             Boton("Senas", raiz, "SEÑAS", 170, 16, 132, 114, () => OnSenasSolicitadas?.Invoke());
             Boton("Ayuda", raiz, "AYUDA", 310, 16, 132, 114, () => OnAyudaSolicitada?.Invoke());
+            CrearNavegacion(raiz);
             Panel("Titulo", raiz, 592, 12, 484, 108, Verde);
-            Texto("TituloNivel", raiz, "Nivel 1 · Conozco la selva", 602, 22, 464, 88, 30, Color.white);
-            Panel("Progreso", raiz, 1092, 16, 236, 94, Verde);
-            Texto("NumeroReto", raiz, "3 de 12", 1102, 26, 216, 74, 32, Color.white);
-            Panel("Globo", raiz, 158, 174, 684, 240, Crema);
+            Texto("TituloNivel", raiz, "Nivel 1 · Conozco la selva", 625, 28, 420, 70, 25, Tinta);
+            if (configuracion.insigniaProgreso != null)
+                Imagen("DistintivoProgreso", raiz, configuracion.insigniaProgreso, 1092, 16, 236, 94);
+            else
+                Panel("Progreso", raiz, 1092, 16, 236, 94, Verde);
+            int totalRetos = Mathf.Max(1, configuracion.totalRetos);
+            int numeroReto = Mathf.Clamp(configuracion.numeroEscena, 1, totalRetos);
+            Texto("NumeroReto", raiz, numeroReto + " de " + totalRetos, 1102, 34, 216, 48, 30, Color.white);
+            _burbujaPregunta = Panel("Globo", raiz, 158, 174, 684, 240, Crema).GetComponent<Image>();
             _pregunta = Texto("Pregunta", raiz, configuracion.pregunta, 201, 208, 598, 150, 40, Tinta);
-            Imagen("Guardian", raiz, configuracion.explorador, 147, 428, 390, 562);
+            _exploradorAnimado = CrearImagen("Guardian", raiz, configuracion.explorador, Color.white, true, false,
+                Vector2.zero, new Vector2(390, 562), false);
+            Ubicar(_exploradorAnimado.rectTransform, 147, 428, 390, 562);
+            CrearEscenaIlustrada(raiz, configuracion, 921, 188, 800, 425);
             Panel("Marco", raiz, 921, 188, 800, 425, Crema);
-            Imagen("Escena", raiz, configuracion.imagenes[configuracion.indiceCorrecto], 942, 206, 758, 390);
             for (int indice = 0; indice < 3; indice++)
             {
                 int opcion = indice;
                 float posicion = 921 + indice * 272;
                 Button tarjeta = Boton("Opcion" + indice, raiz, "", posicion, 663, 256, 307,
                     () => OnOpcionSeleccionada?.Invoke(opcion));
+                tarjeta.gameObject.AddComponent<RectMask2D>();
                 _opciones[indice] = tarjeta;
                 _bordes[indice] = tarjeta.gameObject.AddComponent<Outline>();
                 _bordes[indice].effectDistance = new Vector2(6, -6);
                 _bordes[indice].enabled = false;
-                Imagen("Animal", tarjeta.transform as RectTransform, configuracion.imagenes[indice], 18, 22, 220, 188);
-                Texto("Nombre", tarjeta.transform as RectTransform, configuracion.opciones[indice], 15, 216, 226, 76, 30, Tinta);
+                Imagen("Animal", tarjeta.transform as RectTransform, configuracion.imagenes[indice], 8, 15, 240, 276);
+                if (indice == configuracion.indiceCorrecto)
+                {
+                    foreach (Image imagen in tarjeta.GetComponentsInChildren<Image>())
+                        if (imagen.gameObject.name == "AnimalContenido") _guacamayoAnimado = imagen;
+                }
             }
             _aceptar = Boton("Aceptar", raiz, "ACEPTAR", 1171, 990, 300, 74, () => OnAceptarSolicitado?.Invoke());
             _reintentar = Boton("Reintentar", raiz, "REINTENTAR", 1171, 990, 300, 74, () => OnReintentarSolicitado?.Invoke());
@@ -100,6 +180,11 @@ namespace GuardianesAmazonicos.Views
             _aceptar.interactable = false;
             _reintentar.gameObject.SetActive(false);
             _siguiente.gameObject.SetActive(false);
+            if (_navAvanzar != null) _navAvanzar.interactable = false;
+            AplicarImagenBoton(_aceptar, _imagenAceptar);
+            ConfigurarBotonReintentar(_reintentar);
+            AplicarImagenBoton(_siguiente, _imagenSiguiente);
+            CrearEstadoResultado(raiz);
             EventSystem.current.SetSelectedGameObject(_opciones[0].gameObject);
         }
 
@@ -111,6 +196,23 @@ namespace GuardianesAmazonicos.Views
             {
                 _bordes[opcion].enabled = opcion == indice;
                 _bordes[opcion].effectColor = Dorado;
+                Transform brilloAnterior = _opciones[opcion].transform.Find("BrilloSeleccion");
+                if (brilloAnterior != null) Destroy(brilloAnterior.gameObject);
+                if (opcion == indice && _brilloSeleccion != null)
+                {
+                    Image brillo = new GameObject("BrilloSeleccion", typeof(RectTransform), typeof(Image)).GetComponent<Image>();
+                    brillo.transform.SetParent(_opciones[opcion].transform, false);
+                    RectTransform rectBrillo = brillo.rectTransform;
+                    rectBrillo.anchorMin = Vector2.zero;
+                    rectBrillo.anchorMax = Vector2.one;
+                    rectBrillo.offsetMin = Vector2.zero;
+                    rectBrillo.offsetMax = Vector2.zero;
+                    brillo.sprite = _brilloSeleccion;
+                    brillo.type = Image.Type.Sliced;
+                    brillo.preserveAspect = false;
+                    brillo.raycastTarget = false;
+                    brillo.transform.SetAsLastSibling();
+                }
             }
             _aceptar.interactable = true;
 
@@ -119,18 +221,74 @@ namespace GuardianesAmazonicos.Views
         public void MostrarResultado(bool correcto)
         {
             // El resultado conserva la presentación de las demás tarjetas. El Presenter ignora nuevas selecciones.
-            if (_seleccion >= 0) _bordes[_seleccion].effectColor = correcto ? Verde : Rojo;
-            _pregunta.text = correcto ? "¡MUY BIEN!\nIdentificaste al guacamayo." : "¡Buen intento!\nBusca el ave de colores. Puedes reintentar.";
+            if (_seleccion >= 0)
+            {
+                _bordes[_seleccion].effectColor = correcto ? Verde : Rojo;
+                Transform brillo = _opciones[_seleccion].transform.Find("BrilloSeleccion");
+                if (brillo != null) brillo.GetComponent<Image>().color = correcto ? Verde : Rojo;
+            }
+            _pregunta.text = correcto ? "¡Muy bien! Identificaste al guacamayo." : "¡Buen intento! Busca el ave de colores. Puedes reintentar.";
+            if (_burbujaPregunta != null)
+            {
+                _burbujaPregunta.color = correcto ? Color.white : new Color(1f, 0.72f, 0.72f);
+                Outline bordeMensaje = _burbujaPregunta.GetComponent<Outline>();
+                if (!correcto && bordeMensaje == null) bordeMensaje = _burbujaPregunta.gameObject.AddComponent<Outline>();
+                if (bordeMensaje != null)
+                {
+                    bordeMensaje.enabled = !correcto;
+                    bordeMensaje.effectColor = Rojo;
+                    bordeMensaje.effectDistance = new Vector2(10, -10);
+                }
+            }
+            if (!correcto && _personajePreocupado != null && _exploradorAnimado != null)
+            {
+                _exploradorAnimado.sprite = _personajePreocupado;
+                _saludoExploradorCompleto = true;
+            }
+            _estadoResultado.SetActive(correcto);
+            _siguiente.gameObject.SetActive(correcto);
+            if (correcto)
+            {
+                _textoEstado.text = "¡Lo lograste!";
+                _estadoResultado.transform.SetAsLastSibling();
+                _indiceFotogramaExplorador = 0;
+                if (_personajeCelebrando != null) _imagenExploradorVictoria.sprite = _personajeCelebrando;
+                else if (_fotogramasExplorador != null && _fotogramasExplorador.Length > 0)
+                    _imagenExploradorVictoria.sprite = _fotogramasExplorador[0];
+                _animarExploradorVictoria = _personajeCelebrando == null;
+            }
+            else _animarExploradorVictoria = false;
+            _animarGuacamayoTrasAcierto = correcto;
+            if (_ocultarResultado != null) StopCoroutine(_ocultarResultado);
+            _ocultarResultado = null;
             _aceptar.gameObject.SetActive(false);
             _reintentar.gameObject.SetActive(!correcto);
-            _siguiente.gameObject.SetActive(correcto);
+            for (int indice = 0; indice < _opciones.Length; indice++) _opciones[indice].interactable = false;
+            if (_navAvanzar != null) _navAvanzar.interactable = false;
+            _animacionResultado.Reproducir(correcto);
             EventSystem.current.SetSelectedGameObject(correcto ? _siguiente.gameObject : _reintentar.gameObject);
         }
 
         public void ReiniciarSeleccion()
         {
+            _animarGuacamayoTrasAcierto = false;
+            _animarExploradorVictoria = false;
+            if (_guacamayoAnimado != null && _configuracion != null && _configuracion.imagenes != null)
+                _guacamayoAnimado.sprite = _configuracion.imagenes[_configuracion.indiceCorrecto];
             _seleccion = -1;
             _pregunta.text = _configuracion.pregunta;
+            if (_burbujaPregunta != null) _burbujaPregunta.color = Color.white;
+            if (_exploradorAnimado != null && _configuracion != null)
+                _exploradorAnimado.sprite = _configuracion.explorador;
+            _saludoExploradorCompleto = false;
+            if (_burbujaPregunta != null)
+            {
+                Outline bordeMensaje = _burbujaPregunta.GetComponent<Outline>();
+                if (bordeMensaje != null) bordeMensaje.enabled = false;
+            }
+            _estadoResultado.SetActive(false);
+            if (_ocultarResultado != null) StopCoroutine(_ocultarResultado);
+            _ocultarResultado = null;
             for (int indice = 0; indice < _opciones.Length; indice++)
             {
                 _opciones[indice].interactable = true;
@@ -140,6 +298,7 @@ namespace GuardianesAmazonicos.Views
             _aceptar.interactable = false;
             _reintentar.gameObject.SetActive(false);
             _siguiente.gameObject.SetActive(false);
+            if (_navAvanzar != null) _navAvanzar.interactable = false;
             EventSystem.current.SetSelectedGameObject(_opciones[0].gameObject);
         }
 
@@ -156,20 +315,19 @@ namespace GuardianesAmazonicos.Views
 
         public void MostrarAyuda()
         {
-            RectTransform panel = AbrirModal("Ayuda");
-            Texto("Pista", panel, _configuracion.pistaIncorrecta, 70, 55, 860, 130, 38, Tinta);
-            Imagen("PistaVisual", panel, _configuracion.imagenes[_configuracion.indiceCorrecto], 300, 200, 400, 330);
-            Boton("CerrarAyuda", panel, "¡VOY A INTENTARLO!", 280, 550, 440, 82, CerrarModal).Select();
+            RectTransform panel = AbrirModal("Ayuda", _cartaPista, 350, 118, 1220, 844);
+            Texto("Pista", panel, _configuracion.pistaIncorrecta, 210, 330, 800, 190, 44, Tinta);
+            BotonConImagen("CerrarAyuda", panel, _imagenReintentar, 390, 608, 440, 122, CerrarModal).Select();
         }
 
         public void MostrarSenas()
         {
-            RectTransform panel = AbrirModal("Senas");
+            RectTransform panel = AbrirModal("Senas", _tarjetaSenas, 230, 140, 1460, 825);
             string ruta = Path.Combine(Application.streamingAssetsPath, "LSEC", "GuacamayoLSEC.mp4");
             if (!File.Exists(ruta))
             {
-                Texto("SinVideo", panel, "El video de señas del guacamayo aún no está disponible.", 70, 110, 860, 300, 38, Tinta);
-                Boton("CerrarSenas", panel, "CERRAR", 350, 550, 300, 82, CerrarModal).Select();
+                Texto("SinVideo", panel, "El video de señas del guacamayo aún no está disponible.", 240, 320, 980, 180, 38, Tinta);
+                BotonImagenModal("CerrarSenas", panel, _botonCerrarModal, 1300, 22, 112, 112, CerrarModal).Select();
                 return;
             }
             _video = _modal.AddComponent<VideoPlayer>();
@@ -182,19 +340,211 @@ namespace GuardianesAmazonicos.Views
             _video.aspectRatio = VideoAspectRatio.FitInside;
             GameObject pantalla = new GameObject("Video", typeof(RectTransform), typeof(RawImage));
             pantalla.transform.SetParent(panel, false);
-            Ubicar(pantalla.transform as RectTransform, 70, 30, 860, 484);
+            Ubicar(pantalla.transform as RectTransform, 180, 225, 1100, 420);
             pantalla.GetComponent<RawImage>().texture = _texturaVideo;
-            Boton("Reproducir", panel, "REPRODUCIR / PAUSAR", 50, 550, 550, 82, () =>
+            BotonImagenModal("Reproducir", panel, _botonReproducirModal, 675, 675, 118, 118, () =>
             {
                 if (_video.isPlaying) _video.Pause();
                 else _video.Play();
             }).Select();
-            Boton("CerrarSenas", panel, "CERRAR", 650, 550, 300, 82, CerrarModal);
+            BotonImagenModal("CerrarSenas", panel, _botonCerrarModal, 1300, 22, 112, 112, CerrarModal);
         }
 
         public void MostrarAviso(string mensaje) { _pregunta.text = mensaje; }
 
-        private RectTransform AbrirModal(string nombre)
+        public void MostrarConfiguracion()
+        {
+            RectTransform panel = AbrirModal("Configuracion");
+            Texto("TituloConfiguracion", panel, "CONFIGURACIÓN", 80, 48, 840, 86, 42, Tinta);
+            Texto("TextoMovimiento", panel, "Animaciones", 110, 190, 330, 82, 34, Tinta);
+            Button movimiento = Boton("ReducirMovimiento", panel, "MOVIMIENTO REDUCIDO: " + (_movimientoReducido ? "SÍ" : "NO"),
+                440, 190, 430, 82, () =>
+                {
+                    _movimientoReducido = !_movimientoReducido;
+                    PlayerPrefs.SetInt("HU03_MovimientoReducido", _movimientoReducido ? 1 : 0);
+                    PlayerPrefs.Save();
+                    CerrarModal();
+                    MostrarConfiguracion();
+                });
+            movimiento.Select();
+            float volumen = PlayerPrefs.GetFloat("HU03_AudioVolumen", 1f);
+            Texto("TextoAudio", panel, "Volumen de lectura: " + Mathf.RoundToInt(volumen * 100f) + "%", 110, 310, 390, 82, 30, Tinta);
+            Boton("BajarVolumen", panel, "−", 520, 310, 130, 82, () => AjustarVolumen(-0.1f));
+            Boton("SubirVolumen", panel, "+", 670, 310, 130, 82, () => AjustarVolumen(0.1f));
+            Boton("CerrarConfiguracion", panel, "GUARDAR Y CERRAR", 280, 550, 440, 82, CerrarModal).Select();
+        }
+
+        private void AjustarVolumen(float delta)
+        {
+            float volumen = Mathf.Clamp01(PlayerPrefs.GetFloat("HU03_AudioVolumen", 1f) + delta);
+            PlayerPrefs.SetFloat("HU03_AudioVolumen", volumen);
+            PlayerPrefs.Save();
+            if (_audio != null) _audio.volume = volumen;
+            CerrarModal();
+            MostrarConfiguracion();
+        }
+
+        private void Update()
+        {
+            if (_movimientoReducido) return;
+            _tiempoFotograma += Time.unscaledDeltaTime;
+            if (_tiempoFotograma >= 1f / 24f)
+            {
+                _tiempoFotograma -= 1f / 24f;
+                if (!_saludoExploradorCompleto)
+                {
+                    AvanzarFotograma(_fotogramasExplorador, ref _indiceFotogramaExplorador, _exploradorAnimado);
+                    if (_fotogramasExplorador != null && _indiceFotogramaExplorador >= _fotogramasExplorador.Length)
+                    {
+                        _indiceFotogramaExplorador = _fotogramasExplorador.Length - 1;
+                        _saludoExploradorCompleto = true;
+                    }
+                }
+            }
+            if (_animarGuacamayoTrasAcierto)
+            {
+                _tiempoGuacamayo += Time.unscaledDeltaTime;
+                if (_tiempoGuacamayo >= 1f / 16f)
+                {
+                    _tiempoGuacamayo -= 1f / 16f;
+                    AvanzarFotograma(_fotogramasGuacamayo, ref _indiceFotogramaGuacamayo, _guacamayoAnimado);
+                }
+            }
+            if (_animarExploradorVictoria)
+            {
+                _tiempoExploradorVictoria += Time.unscaledDeltaTime;
+                if (_tiempoExploradorVictoria >= 1f / 12f)
+                {
+                    _tiempoExploradorVictoria -= 1f / 12f;
+                    AvanzarFotograma(_fotogramasExplorador, ref _indiceFotogramaExplorador, _imagenExploradorVictoria);
+                }
+            }
+        }
+
+        private void CrearEscenaIlustrada(RectTransform raiz, RetoSeleccionConfiguracion configuracion,
+            float x, float y, float ancho, float alto)
+        {
+            GameObject contenedor = new GameObject("IlustracionFauna", typeof(RectTransform), typeof(RectMask2D));
+            contenedor.transform.SetParent(raiz, false);
+            RectTransform rectContenedor = contenedor.transform as RectTransform;
+            Ubicar(rectContenedor, x, y, ancho, alto);
+            Sprite ilustracion = configuracion.imagenEscena != null
+                ? configuracion.imagenEscena
+                : configuracion.fondo;
+            CrearImagen("FaunaAmazonica", rectContenedor, ilustracion, Color.white, true, false,
+                Vector2.zero, new Vector2(ancho, alto), true);
+        }
+
+        private IEnumerator OcultarResultadoTrasTiempo(float segundos)
+        {
+            yield return new WaitForSecondsRealtime(segundos);
+            if (_estadoResultado != null) _estadoResultado.SetActive(false);
+            _ocultarResultado = null;
+        }
+
+        private void CrearNavegacion(RectTransform raiz)
+        {
+            string[] nombres = { "Regresar", "Avanzar", "Inicio", "Configuracion" };
+            Action[] acciones = { () => OnRegresarSolicitado?.Invoke(), () => OnAvanzarSolicitado?.Invoke(),
+                () => OnInicioSolicitado?.Invoke(), () => OnConfiguracionSolicitada?.Invoke() };
+            for (int i = 0; i < nombres.Length; i++)
+            {
+                Button boton = Boton(nombres[i], raiz, nombres[i] == "Configuracion" ? "AJUSTES" : nombres[i].ToUpperInvariant(),
+                    1390 + i * 128, 20, 118, 94, acciones[i]);
+                if (_iconosNavegacion != null && i < _iconosNavegacion.Length) AplicarImagenBoton(boton, _iconosNavegacion[i]);
+                if (i == 1) _navAvanzar = boton;
+            }
+        }
+
+        private void CrearEstadoResultado(RectTransform raiz)
+        {
+            GameObject objeto = new GameObject("EstadoResultado", typeof(RectTransform), typeof(Image));
+            objeto.transform.SetParent(raiz, false);
+            Ubicar(objeto.transform as RectTransform, 0, 0, 1920, 1080);
+            Image imagen = objeto.GetComponent<Image>();
+            imagen.color = new Color(0.01f, 0.08f, 0.05f, 0.82f);
+            imagen.raycastTarget = true;
+            if (_fondoAcierto != null)
+            {
+                Image fondoVerde = CrearImagen("FondoVerdeAcierto", objeto.transform as RectTransform,
+                    _fondoAcierto, new Color(1f, 1f, 1f, 0.78f), true, false,
+                    Vector2.zero, new Vector2(1920, 1080), true);
+                fondoVerde.transform.SetAsFirstSibling();
+            }
+            _imagenExploradorVictoria = CrearImagen("ExploradorVictoria", objeto.transform as RectTransform,
+                _configuracion.explorador, Color.white, false, false, Vector2.zero, new Vector2(540, 690), false);
+            Ubicar(_imagenExploradorVictoria.rectTransform, 270, 235, 540, 690);
+            Image letrero = CrearImagen("LetreroMuyBien", objeto.transform as RectTransform, _letreroAcierto,
+                Color.white, false, false, Vector2.zero, new Vector2(870, 285), false);
+            Ubicar(letrero.rectTransform, 805, 210, 870, 285);
+            _textoEstado = Texto("MensajeResultado", objeto.transform as RectTransform, "¡Lo lograste!",
+                850, 500, 780, 100, 62, Color.white);
+            _siguiente.transform.SetParent(objeto.transform, false);
+            Ubicar(_siguiente.transform as RectTransform, 945, 660, 555, 155);
+            _siguiente.gameObject.SetActive(false);
+            _animacionResultado = letrero.gameObject.AddComponent<AnimacionEntradaUI>();
+            _estadoResultado = objeto;
+            _estadoResultado.SetActive(false);
+        }
+
+        private void ConfigurarBotonReintentar(Button boton)
+        {
+            if (boton == null) return;
+            RectTransform rect = boton.transform as RectTransform;
+            Ubicar(rect, 1075, 965, 500, 84);
+            RoundedRectangleGraphic fondo = boton.GetComponent<RoundedRectangleGraphic>();
+            if (fondo != null) fondo.color = new Color(0.02f, 0.42f, 0.94f);
+            boton.colors = ColoresBoton(new Color(0.02f, 0.42f, 0.94f), new Color(0.15f, 0.58f, 1f));
+            TMP_Text etiqueta = boton.GetComponentInChildren<TMP_Text>();
+            if (etiqueta != null)
+            {
+                etiqueta.text = "INTENTARLO DE NUEVO";
+                etiqueta.color = Color.white;
+                etiqueta.fontSize = 24;
+                etiqueta.fontSizeMin = 22;
+                etiqueta.fontSizeMax = 24;
+                RectTransform textoRect = etiqueta.rectTransform;
+                textoRect.sizeDelta = new Vector2(360, 76);
+                textoRect.anchoredPosition = new Vector2(65, 0);
+            }
+            if (_iconoReintentar != null)
+            {
+                Image icono = CrearImagen("IconoReintentar", rect, _iconoReintentar, Color.white,
+                    false, false, Vector2.zero, new Vector2(64, 64), false);
+                Ubicar(icono.rectTransform, 64, 10, 64, 64);
+            }
+        }
+
+        private static void AplicarImagenBoton(Button boton, Sprite sprite)
+        {
+            if (boton == null || sprite == null) return;
+            RoundedRectangleGraphic fondo = boton.GetComponent<RoundedRectangleGraphic>();
+            if (fondo != null) fondo.enabled = false;
+            TMP_Text etiqueta = boton.GetComponentInChildren<TMP_Text>();
+            if (etiqueta != null) etiqueta.text = string.Empty;
+            GameObject objetoImagen = new GameObject("IconoAprobado", typeof(RectTransform), typeof(Image));
+            objetoImagen.transform.SetParent(boton.transform, false);
+            RectTransform rect = objetoImagen.transform as RectTransform;
+            rect.anchorMin = Vector2.zero;
+            rect.anchorMax = Vector2.one;
+            rect.offsetMin = Vector2.zero;
+            rect.offsetMax = Vector2.zero;
+            Image imagen = objetoImagen.GetComponent<Image>();
+            imagen.sprite = sprite;
+            imagen.preserveAspect = true;
+            imagen.raycastTarget = true;
+            boton.targetGraphic = imagen;
+            boton.colors = ColoresBoton(Color.white, new Color(1f, 0.94f, 0.7f));
+        }
+
+        private static void AvanzarFotograma(Sprite[] fotogramas, ref int indice, Image imagen)
+        {
+            if (fotogramas == null || fotogramas.Length == 0 || imagen == null) return;
+            imagen.sprite = fotogramas[indice++ % fotogramas.Length];
+        }
+
+        private RectTransform AbrirModal(string nombre, Sprite fondoModal = null,
+            float x = 460, float y = 200, float ancho = 1000, float alto = 680)
         {
             if (_modal != null) CerrarModal();
             _focoAnterior = EventSystem.current.currentSelectedGameObject;
@@ -209,7 +559,25 @@ namespace GuardianesAmazonicos.Views
                 if (control.interactable) _controlesModal.Add(control);
                 control.interactable = false;
             }
-            return Panel("Panel", _modal.transform as RectTransform, 460, 200, 1000, 680, Crema);
+            if (fondoModal == null) return Panel("Panel", _modal.transform as RectTransform, x, y, ancho, alto, Crema);
+            Image panelImagen = CrearImagen("Panel", _modal.transform as RectTransform, fondoModal, Color.white,
+                false, false, Vector2.zero, new Vector2(ancho, alto), true);
+            Ubicar(panelImagen.rectTransform, x, y, ancho, alto);
+            return panelImagen.rectTransform;
+        }
+
+        private Button BotonConImagen(string nombre, RectTransform padre, Sprite sprite,
+            float x, float y, float ancho, float alto, Action accion)
+        {
+            Button boton = Boton(nombre, padre, string.Empty, x, y, ancho, alto, accion);
+            AplicarImagenBoton(boton, sprite);
+            return boton;
+        }
+
+        private Button BotonImagenModal(string nombre, RectTransform padre, Sprite sprite,
+            float x, float y, float ancho, float alto, Action accion)
+        {
+            return BotonConImagen(nombre, padre, sprite, x, y, ancho, alto, accion);
         }
 
         private readonly System.Collections.Generic.List<Selectable> _controlesModal = new System.Collections.Generic.List<Selectable>();
@@ -241,7 +609,10 @@ namespace GuardianesAmazonicos.Views
 
         private RectTransform Panel(string nombre, RectTransform padre, float x, float y, float ancho, float alto, Color color)
         {
-            Sprite sprite = nombre == "Globo" ? _globo : nombre == "Marco" ? _marco : null;
+            Sprite sprite = nombre == "Globo" ? _globo
+                : nombre == "Marco" ? _marco
+                : nombre == "Titulo" ? _bannerNivel
+                : null;
             RectTransform panel;
             if (sprite != null)
             {

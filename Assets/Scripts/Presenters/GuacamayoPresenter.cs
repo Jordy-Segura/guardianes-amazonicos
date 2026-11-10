@@ -53,6 +53,10 @@ namespace GuardianesAmazonicos.Presenters
             _interfaz.OnSiguienteSolicitado += Continuar;
             _interfaz.OnAyudaSolicitada += MostrarAyuda;
             _interfaz.OnSenasSolicitadas += MostrarSenas;
+            _interfaz.OnInicioSolicitado += IrAInicio;
+            _interfaz.OnRegresarSolicitado += Regresar;
+            _interfaz.OnAvanzarSolicitado += Continuar;
+            _interfaz.OnConfiguracionSolicitada += MostrarConfiguracion;
         }
 
         private void OnDisable()
@@ -65,6 +69,10 @@ namespace GuardianesAmazonicos.Presenters
             _interfaz.OnSiguienteSolicitado -= Continuar;
             _interfaz.OnAyudaSolicitada -= MostrarAyuda;
             _interfaz.OnSenasSolicitadas -= MostrarSenas;
+            _interfaz.OnInicioSolicitado -= IrAInicio;
+            _interfaz.OnRegresarSolicitado -= Regresar;
+            _interfaz.OnAvanzarSolicitado -= Continuar;
+            _interfaz.OnConfiguracionSolicitada -= MostrarConfiguracion;
         }
 
         private void Seleccionar(int indice)
@@ -92,6 +100,19 @@ namespace GuardianesAmazonicos.Presenters
         private void ReproducirAudio() { _interfaz.ReproducirAudio(); }
         private void MostrarAyuda() { _interfaz.MostrarAyuda(); }
         private void MostrarSenas() { _interfaz.MostrarSenas(); }
+        private void MostrarConfiguracion() { _interfaz.MostrarConfiguracion(); }
+
+        private void IrAInicio() { CargarBienvenida("Inicio"); }
+        private void Regresar() { CargarBienvenida("Regresar"); }
+
+        private void CargarBienvenida(string accion)
+        {
+            const string escenaBienvenida = "Nivel1_ConozcoLaSelva";
+            if (Application.CanStreamedLevelBeLoaded(escenaBienvenida))
+                SceneManager.LoadScene(escenaBienvenida);
+            else
+                _interfaz.MostrarAviso(accion + ": la bienvenida del nivel aún no está incluida en esta compilación.");
+        }
 
         private void Continuar()
         {

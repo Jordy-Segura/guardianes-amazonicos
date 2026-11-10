@@ -11,6 +11,10 @@ namespace GuardianesAmazonicos.Views
         event Action OnSiguienteSolicitado;
         event Action OnAyudaSolicitada;
         event Action OnSenasSolicitadas;
+        event Action OnInicioSolicitado;
+        event Action OnRegresarSolicitado;
+        event Action OnAvanzarSolicitado;
+        event Action OnConfiguracionSolicitada;
         void MostrarSeleccion(int indice);
         void MostrarResultado(bool correcto);
         void ReiniciarSeleccion();
@@ -18,5 +22,7 @@ namespace GuardianesAmazonicos.Views
         void MostrarAyuda();
         void MostrarSenas();
         void MostrarAviso(string mensaje);
+        bool MovimientoReducido { get; }
+        void MostrarConfiguracion();
     }
 }

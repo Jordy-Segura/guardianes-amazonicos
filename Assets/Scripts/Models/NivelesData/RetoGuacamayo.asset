@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: RetoGuacamayo
   m_EditorClassIdentifier: Assembly-CSharp::GuardianesAmazonicos.Models.RetoSeleccionConfiguracion
   numeroEscena: 3
+  totalRetos: 12
   titulo: "Nivel 1 \xB7 Conozco la selva"
   pregunta: "Escucha: guacamayo.\n\xBFCu\xE1l es el guacamayo?"
   instruccion: Escucha, selecciona y pulsa Aceptar.
@@ -24,6 +25,8 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 9977c2fbc037d5b4eab7f9af870b265e, type: 3}
   - {fileID: 21300000, guid: 2bada71e16fe9ed4a837e1ce171b5c7c, type: 3}
   - {fileID: 21300000, guid: 2b33f77735e58b64ab39ee0b4f798c2d, type: 3}
+  imagenEscena: {fileID: 21300000, guid: 1b6eda37b3364fc4389888ef5ca1247d, type: 3}
+  insigniaProgreso: {fileID: 21300000, guid: 4afc0ee37f0ee0046875a0be6c46ab9e, type: 3}
   atlasDosPorDos: {fileID: 0}
   indiceCorrecto: 1
   pistaIncorrecta: Busca el ave de plumas rojas, amarillas y azules y pico curvo.

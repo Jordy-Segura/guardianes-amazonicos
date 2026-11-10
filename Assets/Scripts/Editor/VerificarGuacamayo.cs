@@ -26,39 +26,70 @@ namespace GuardianesAmazonicos.Editor
             string[] animales = { "Mono", "Guacamayo", "Tortuga", "Explorador" };
             TextureImporter importadorFondo = AssetImporter.GetAtPath("Assets/Art/Backgrounds/N1_Conozco_la_selva.png") as TextureImporter;
             if (importadorFondo == null) throw new InvalidOperationException("Falta el fondo de Nivel 1.");
-            importadorFondo.textureType = TextureImporterType.Sprite;
-            importadorFondo.spriteImportMode = SpriteImportMode.Single;
-            importadorFondo.SaveAndReimport();
+            ConfigurarSpriteAltaCalidad(importadorFondo);
             foreach (string animal in animales)
             {
                 string ruta = "Assets/Art/Characters/" + animal + ".png";
                 TextureImporter importador = AssetImporter.GetAtPath(ruta) as TextureImporter;
                 if (importador == null) throw new InvalidOperationException("Falta imagen: " + ruta);
-                if (importador.textureType != TextureImporterType.Sprite)
-                {
-                    importador.textureType = TextureImporterType.Sprite;
-                    importador.spriteImportMode = SpriteImportMode.Single;
-                    importador.SaveAndReimport();
-                }
+                ConfigurarSpriteAltaCalidad(importador);
+            }
+            foreach (string ruta in new[] {
+                "Assets/Art/Backgrounds/EscenaFaunaHU03.png",
+                "Assets/Art/Characters/ExploradorPreocupado.png",
+                "Assets/Art/Characters/ExploradorCelebrando.png",
+                "Assets/Art/UI/HU03/InsigniaProgreso.png",
+                "Assets/Art/UI/HU03/FondoAciertoVerde.png",
+                "Assets/Art/UI/HU03/IconoReintentar.png" })
+            {
+                TextureImporter importador = AssetImporter.GetAtPath(ruta) as TextureImporter;
+                if (importador == null) throw new InvalidOperationException("Falta recurso visual HU-03: " + ruta);
+                ConfigurarSpriteAltaCalidad(importador);
             }
             foreach (string nombre in new[] { "TarjetaRespuesta", "MarcoPregunta", "GloboPregunta" })
             {
                 TextureImporter importador = AssetImporter.GetAtPath("Assets/Art/UI/HU03/" + nombre + ".png") as TextureImporter;
                 if (importador == null) throw new InvalidOperationException("Falta UI: " + nombre);
-                importador.textureType = TextureImporterType.Sprite;
-                importador.spriteImportMode = SpriteImportMode.Single;
-                importador.alphaIsTransparency = true;
-                importador.SaveAndReimport();
+                ConfigurarSpriteAltaCalidad(importador);
+            }
+            foreach (string nombre in new[] { "BannerNivel", "InsigniaProgreso", "CartaPista", "TarjetaSenas", "boton_cerrar", "boton_reproducir" })
+            {
+                string ruta = "Assets/Art/UI/HU03/" + nombre + ".png";
+                TextureImporter importador = AssetImporter.GetAtPath(ruta) as TextureImporter;
+                if (importador == null) throw new InvalidOperationException("Falta componente visual HU-03: " + ruta);
+                ConfigurarSpriteAltaCalidad(importador);
             }
             foreach (string nombre in new[] { "BotonLectura", "BotonSenas", "BotonAyuda" })
             {
                 TextureImporter importador = AssetImporter.GetAtPath("Assets/Art/UI/HU03/" + nombre + ".png") as TextureImporter;
                 if (importador == null) throw new InvalidOperationException("Falta control aprobado: " + nombre);
-                importador.textureType = TextureImporterType.Sprite;
-                importador.spriteImportMode = SpriteImportMode.Single;
-                importador.alphaIsTransparency = true;
-                importador.SaveAndReimport();
+                ConfigurarSpriteAltaCalidad(importador);
             }
+            string[] componentes = { "1.7 Regresar", "1.7 Avanzar", "1.7 Inicio", "1.7 Configuración",
+                "boton_aceptar", "BotonVoyIntentarlo", "boton_siguiente", "letrero_muy_bien", "brillo_respuesta_seleccionada" };
+            foreach (string nombre in componentes)
+            {
+                string ruta = "Assets/Art/UI/HU03/" + nombre + ".png";
+                TextureImporter importador = AssetImporter.GetAtPath(ruta) as TextureImporter;
+                if (importador == null) throw new InvalidOperationException("Falta control aprobado: " + ruta);
+                ConfigurarSpriteAltaCalidad(importador);
+                if (nombre == "brillo_respuesta_seleccionada")
+                {
+                    importador.spriteBorder = new Vector4(155f, 155f, 155f, 155f);
+                    importador.SaveAndReimport();
+                }
+            }
+            foreach (string carpeta in new[] { "Assets/Resources/HU03/Animaciones/Explorador", "Assets/Resources/HU03/Animaciones/Guacamayo" })
+            {
+                if (!Directory.Exists(carpeta)) throw new InvalidOperationException("Faltan fotogramas aprobados: " + carpeta);
+                foreach (string ruta in Directory.GetFiles(carpeta, "*.png"))
+                {
+                    TextureImporter importador = AssetImporter.GetAtPath(ruta) as TextureImporter;
+                    if (importador == null) continue;
+                    ConfigurarSpriteAltaCalidad(importador, false);
+                }
+            }
+            AssetDatabase.Refresh();
             RetoSeleccionConfiguracion configuracion = AssetDatabase.LoadAssetAtPath<RetoSeleccionConfiguracion>(RutaConfiguracion);
             if (configuracion == null)
             {
@@ -66,11 +97,14 @@ namespace GuardianesAmazonicos.Editor
                 AssetDatabase.CreateAsset(configuracion, RutaConfiguracion);
             }
             configuracion.numeroEscena = 3;
+            configuracion.totalRetos = 12;
             configuracion.titulo = "Nivel 1 · Conozco la selva";
             configuracion.pregunta = "Escucha: guacamayo.\n¿Cuál es el guacamayo?";
             configuracion.instruccion = "Escucha, selecciona y pulsa Aceptar.";
             configuracion.opciones = new[] { "Mono", "Guacamayo", "Tortuga" };
             configuracion.imagenes = animales.Take(3).Select(animal => Cargar<Sprite>("Assets/Art/Characters/" + animal + ".png")).ToArray();
+            configuracion.imagenEscena = Cargar<Sprite>("Assets/Art/Backgrounds/EscenaFaunaHU03.png");
+            configuracion.insigniaProgreso = Cargar<Sprite>("Assets/Art/UI/HU03/InsigniaProgreso.png");
             configuracion.indiceCorrecto = 1;
             configuracion.pistaIncorrecta = "Busca el ave de plumas rojas, amarillas y azules y pico curvo.";
             configuracion.mensajeCorrecto = "¡Muy bien! Identificaste al guacamayo.";
@@ -91,7 +125,19 @@ namespace GuardianesAmazonicos.Editor
             vista.ConfigurarArte(Cargar<Sprite>("Assets/Art/UI/HU03/TarjetaRespuesta.png"),
                 Cargar<Sprite>("Assets/Art/UI/HU03/MarcoPregunta.png"), Cargar<Sprite>("Assets/Art/UI/HU03/GloboPregunta.png"),
                 new[] { Cargar<Sprite>("Assets/Art/UI/HU03/BotonLectura.png"), Cargar<Sprite>("Assets/Art/UI/HU03/BotonSenas.png"),
-                    Cargar<Sprite>("Assets/Art/UI/HU03/BotonAyuda.png") });
+                    Cargar<Sprite>("Assets/Art/UI/HU03/BotonAyuda.png") },
+                new[] { Cargar<Sprite>("Assets/Art/UI/HU03/1.7 Regresar.png"), Cargar<Sprite>("Assets/Art/UI/HU03/1.7 Avanzar.png"),
+                    Cargar<Sprite>("Assets/Art/UI/HU03/1.7 Inicio.png"), Cargar<Sprite>("Assets/Art/UI/HU03/1.7 Configuración.png") },
+                Cargar<Sprite>("Assets/Art/UI/HU03/boton_aceptar.png"), Cargar<Sprite>("Assets/Art/UI/HU03/BotonVoyIntentarlo.png"),
+                Cargar<Sprite>("Assets/Art/UI/HU03/boton_siguiente.png"), Cargar<Sprite>("Assets/Art/UI/HU03/letrero_muy_bien.png"),
+                Cargar<Sprite>("Assets/Art/UI/HU03/brillo_respuesta_seleccionada.png"),
+                Cargar<Sprite>("Assets/Art/UI/HU03/BannerNivel.png"), Cargar<Sprite>("Assets/Art/UI/HU03/CartaPista.png"),
+                Cargar<Sprite>("Assets/Art/UI/HU03/TarjetaSenas.png"), Cargar<Sprite>("Assets/Art/UI/HU03/boton_cerrar.png"),
+                Cargar<Sprite>("Assets/Art/UI/HU03/boton_reproducir.png"),
+                Cargar<Sprite>("Assets/Art/Characters/ExploradorPreocupado.png"),
+                Cargar<Sprite>("Assets/Art/Characters/ExploradorCelebrando.png"),
+                Cargar<Sprite>("Assets/Art/UI/HU03/FondoAciertoVerde.png"),
+                Cargar<Sprite>("Assets/Art/UI/HU03/IconoReintentar.png"));
             actividad.AddComponent<GuacamayoPresenter>().Configurar(configuracion, vista);
             EditorSceneManager.SaveScene(escena, RutaEscena);
             AssetDatabase.SaveAssets();
@@ -118,6 +164,36 @@ namespace GuardianesAmazonicos.Editor
             T recurso = AssetDatabase.LoadAssetAtPath<T>(ruta);
             if (recurso == null) throw new InvalidOperationException("Falta recurso: " + ruta);
             return recurso;
+        }
+
+        private static void ConfigurarSpriteAltaCalidad(TextureImporter importador, bool conservarSinPerdida = true)
+        {
+            TextureImporterCompression compresion = conservarSinPerdida
+                ? TextureImporterCompression.Uncompressed
+                : TextureImporterCompression.CompressedHQ;
+            importador.textureType = TextureImporterType.Sprite;
+            importador.spriteImportMode = SpriteImportMode.Single;
+            importador.alphaIsTransparency = true;
+            importador.mipmapEnabled = false;
+            importador.filterMode = FilterMode.Bilinear;
+            importador.anisoLevel = 4;
+            importador.maxTextureSize = 4096;
+            importador.textureCompression = compresion;
+            importador.compressionQuality = 100;
+
+            foreach (string plataforma in new[] { "Standalone", "Android", "iPhone" })
+            {
+                TextureImporterPlatformSettings ajustes = importador.GetPlatformTextureSettings(plataforma);
+                ajustes.name = plataforma;
+                ajustes.overridden = true;
+                ajustes.maxTextureSize = 4096;
+                ajustes.format = TextureImporterFormat.Automatic;
+                ajustes.textureCompression = compresion;
+                ajustes.compressionQuality = 100;
+                importador.SetPlatformTextureSettings(ajustes);
+            }
+
+            importador.SaveAndReimport();
         }
     }
 }
