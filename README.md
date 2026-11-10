@@ -31,6 +31,17 @@ Assets/
 
 La aventura se organiza en cinco niveles, cada uno con doce escenas (60 escenas en total). Dentro de cada nivel, las actividades se implementan en orden. El segundo nivel comienza con la actividad de protección del hábitat del Mono Curioso. Las demás escenas se incorporarán conforme se implementen sus actividades. Las pantallas usan Canvas con `Scale With Screen Size`, resolución de referencia 1920×1080 y proporción 16:9. Los textos se renderizan sobre la plantilla para que puedan ajustarse y traducirse sin volver a editar las ilustraciones.
 
+## Plantilla de actividades (Guía Unity)
+
+Las escenas de Jordy (Nivel 1: Bienvenida, Escena 5 y Escena 9; Nivel 2: Escena 1) se generan con la plantilla aprobada en *Guardianes de la Amazonía – Guía Unity*:
+
+- Menú **Guardianes > Generar mis escenas con la plantilla** reconstruye esas cuatro escenas; no abre ni modifica escenas de otros integrantes.
+- `Assets/Scripts/Editor/PlantillaUIBuilder.cs` coloca cada componente con las coordenadas de la guía (Anchor y Pivot en `(0, 1)`, Canvas 1920 × 1080): Lectura, Señas, Ayuda, título, progreso, navegación, globo, marco, imagen principal y tres tarjetas de 256 × 307.
+- Estados incluidos: Bienvenida → Sin selección → Seleccionada (destello + Aceptar) → Incorrecta (globo y borde rojo + Intentarlo de nuevo) o Correcta (MUY BIEN + Siguiente), y ventanas independientes de Pista y Señas.
+- El contenido variable de cada pregunta está en `Assets/Scripts/Models/NivelesData/*.asset` (enunciado, opciones, respuesta correcta, explicaciones, pista, audio y video).
+- Recursos con la convención de la guía: `Assets/Art/Escenas/pregunta_NN_EE_escena.png`, `Assets/Art/Items/Respuestas/respuesta_NN_EE_x.png` y `Assets/Audio/Voice/Lectura/lectura_NN_EE.wav`. Los videos de señas se buscan en `Assets/StreamingAssets/LSEC/senas_nivel_NN_pregunta_EE.mp4`.
+- **Guardianes > Capturar estados de mis escenas** genera capturas 1920 × 1080 de cada estado para revisar la composición.
+
 ## Arquitectura y accesibilidad
 
 - Se utiliza MVP: las vistas presentan información y emiten acciones; los presenters coordinan la lógica; los modelos contienen datos y reglas sin depender de Unity.

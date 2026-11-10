@@ -7,9 +7,17 @@ using UnityEngine;
 
 namespace GuardianesAmazonicos.Presenters
 {
+    /// <summary>
+    /// Bienvenida del nivel: al pulsar «¡Comenzar!» registra el inicio de la aventura
+    /// y abre la primera actividad del nivel.
+    /// </summary>
     public sealed class BienvenidaNivelPresenter : MonoBehaviour
     {
+        private const int ESCENA_BIENVENIDA = 1;
+
         [SerializeField] private BienvenidaNivelView _vista;
+        [Tooltip("Vacío: se carga la siguiente escena de Build Profiles.")]
+        [SerializeField] private string _siguienteEscena;
 
         private IProgresoRepository _repositorio;
         private AventuraBienvenidaModel _modelo;
@@ -44,90 +52,81 @@ namespace GuardianesAmazonicos.Presenters
 
         private void OnEnable()
         {
-            if (_vista == null || _modelo == null)
-            {
-                return;
-            }
+            if (_vista == null || _modelo == null) return;
 
             _vista.OnComenzarSolicitado += IniciarAventura;
-            _vista.OnAudioSolicitado += ReproducirBienvenida;
-            _vista.OnSenasSolicitadas += MostrarSenas;
-            _vista.OnCerrarSenasSolicitado += CerrarSenas;
-            _vista.OnReproducirSenasSolicitado += ReproducirSenas;
-            _modelo.OnProgresoActualizado += ActualizarProgreso;
-        }
-
-        private void Start()
-        {
-            if (_vista != null && _modelo != null)
-            {
-                _vista.MostrarProgreso(_modelo.PuntoProgresoActual, AventuraBienvenidaModel.TotalPuntosProgreso, _modelo.AventuraIniciada);
-            }
+            _vista.OnAudioSolicitado += _vista.ReproducirBienvenida;
+            _vista.OnSenasSolicitadas += _vista.MostrarPanelSenas;
+            _vista.OnCerrarSenasSolicitado += _vista.CerrarPanelSenas;
+            _vista.OnReproducirSenasSolicitado += _vista.ReproducirVideoSenas;
+            _vista.OnRegresarSolicitado += Regresar;
+            _vista.OnAvanzarSolicitado += Avanzar;
+            _vista.OnInicioSolicitado += NavegacionNiveles.CargarInicio;
+            _vista.OnConfiguracionSolicitada += AbrirConfiguracion;
         }
 
         private void OnDisable()
         {
-            if (_vista == null || _modelo == null)
-            {
-                return;
-            }
+            if (_vista == null || _modelo == null) return;
 
             _vista.OnComenzarSolicitado -= IniciarAventura;
-            _vista.OnAudioSolicitado -= ReproducirBienvenida;
-            _vista.OnSenasSolicitadas -= MostrarSenas;
-            _vista.OnCerrarSenasSolicitado -= CerrarSenas;
-            _vista.OnReproducirSenasSolicitado -= ReproducirSenas;
-            _modelo.OnProgresoActualizado -= ActualizarProgreso;
+            _vista.OnAudioSolicitado -= _vista.ReproducirBienvenida;
+            _vista.OnSenasSolicitadas -= _vista.MostrarPanelSenas;
+            _vista.OnCerrarSenasSolicitado -= _vista.CerrarPanelSenas;
+            _vista.OnReproducirSenasSolicitado -= _vista.ReproducirVideoSenas;
+            _vista.OnRegresarSolicitado -= Regresar;
+            _vista.OnAvanzarSolicitado -= Avanzar;
+            _vista.OnInicioSolicitado -= NavegacionNiveles.CargarInicio;
+            _vista.OnConfiguracionSolicitada -= AbrirConfiguracion;
+        }
+
+        private void Start()
+        {
+            if (_vista == null || _modelo == null) return;
+            _vista.MostrarProgreso(ESCENA_BIENVENIDA, AventuraBienvenidaModel.TotalPuntosProgreso);
+            _vista.PermitirNavegacion(NavegacionNiveles.HayAnterior(),
+                _modelo.AventuraIniciada && NavegacionNiveles.HaySiguiente(_siguienteEscena));
         }
 
         private void IniciarAventura()
         {
-            if (_modelo.AventuraIniciada)
+            _vista.DetenerAudio();
+            if (!_modelo.AventuraIniciada)
             {
-                return;
+                _modelo.IniciarAventura();
+                try
+                {
+                    _repositorio.Guardar(_modelo.Progreso);
+                }
+                catch (IOException excepcion)
+                {
+                    Debug.LogError("BienvenidaNivelPresenter: no se pudo guardar el progreso. " + excepcion.Message, this);
+                }
+                catch (UnauthorizedAccessException excepcion)
+                {
+                    Debug.LogError("BienvenidaNivelPresenter: no hay permisos para guardar el progreso. " + excepcion.Message, this);
+                }
             }
 
-            _modelo.IniciarAventura();
-
-            try
+            if (!NavegacionNiveles.CargarSiguiente(_siguienteEscena))
             {
-                _repositorio.Guardar(_modelo.Progreso);
-                _modelo.NotificarProgresoActualizado();
-                Debug.Log("BienvenidaNivelPresenter: aventura iniciada y primer punto de progreso guardado.", this);
-            }
-            catch (IOException excepcion)
-            {
-                Debug.LogError("BienvenidaNivelPresenter: no se pudo guardar el progreso. " + excepcion.Message, this);
-            }
-            catch (UnauthorizedAccessException excepcion)
-            {
-                Debug.LogError("BienvenidaNivelPresenter: no hay permisos para guardar el progreso. " + excepcion.Message, this);
+                Debug.Log("BienvenidaNivelPresenter: aún no hay una actividad siguiente en Build Profiles.", this);
             }
         }
 
-        private void ReproducirBienvenida()
+        private void Regresar()
         {
-            _vista.ReproducirBienvenida();
+            NavegacionNiveles.CargarAnterior();
         }
 
-        private void MostrarSenas()
+        private void Avanzar()
         {
-            _vista.MostrarPanelSenas();
+            if (_modelo.AventuraIniciada) NavegacionNiveles.CargarSiguiente(_siguienteEscena);
         }
 
-        private void CerrarSenas()
+        private void AbrirConfiguracion()
         {
-            _vista.CerrarPanelSenas();
-        }
-
-        private void ReproducirSenas()
-        {
-            _vista.ReproducirVideoSenas();
-        }
-
-        private void ActualizarProgreso(int puntoActual, int totalPuntos)
-        {
-            _vista.MostrarProgreso(puntoActual, totalPuntos, true);
+            Debug.Log("BienvenidaNivelPresenter: la ventana de configuración se incorporará en una próxima versión.", this);
         }
     }
 }

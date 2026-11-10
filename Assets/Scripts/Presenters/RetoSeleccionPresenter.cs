@@ -4,12 +4,17 @@ using GuardianesAmazonicos.Models;
 using GuardianesAmazonicos.Persistence;
 using GuardianesAmazonicos.Views;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace GuardianesAmazonicos.Presenters
 {
+    /// <summary>
+    /// Coordina la plantilla de actividad: la vista emite acciones, el modelo valida
+    /// y aquí se decide el estado siguiente, el audio, el video y el progreso guardado.
+    /// </summary>
     public sealed class RetoSeleccionPresenter : MonoBehaviour
     {
+        private const string MENSAJE_SIN_SIGUIENTE = "¡Progreso guardado! La siguiente actividad se agregará pronto.";
+
         [SerializeField] private RetoSeleccionConfiguracion _configuracion;
         [SerializeField] private RetoSeleccionView _vista;
 
@@ -32,63 +37,159 @@ namespace GuardianesAmazonicos.Presenters
                 return;
             }
 
-            _modelo = new RetoSeleccionModel(_configuracion.indiceCorrecto);
+            int cantidad = _configuracion.Opciones != null ? _configuracion.Opciones.Length : 0;
+            _modelo = new RetoSeleccionModel(_configuracion.IndiceCorrecto, cantidad);
             _repositorio = new JsonProgresoRepository();
-            _vista.Construir(_configuracion);
         }
 
         private void OnEnable()
         {
-            if (_vista == null) return;
-            _vista.OnOpcionSeleccionada += EvaluarOpcion;
-            _vista.OnAudioSolicitado += ReproducirPronunciacion;
-            _vista.OnContinuarSolicitado += Continuar;
+            if (_vista == null || _modelo == null) return;
+            _vista.OnComenzarSolicitado += Comenzar;
+            _vista.OnTarjetaSeleccionada += SeleccionarTarjeta;
+            _vista.OnAceptarSolicitado += Aceptar;
+            _vista.OnIntentarloDeNuevoSolicitado += IntentarloDeNuevo;
+            _vista.OnSiguienteSolicitado += Siguiente;
+            _vista.OnLecturaSolicitada += Leer;
+            _vista.OnAyudaSolicitada += AbrirPista;
+            _vista.OnCerrarPistaSolicitado += CerrarPista;
+            _vista.OnSenasSolicitadas += AbrirSenas;
+            _vista.OnCerrarSenasSolicitado += CerrarSenas;
+            _vista.OnReproducirSenasSolicitado += _vista.AlternarVideo;
+            _vista.OnRegresarSolicitado += Regresar;
+            _vista.OnAvanzarSolicitado += Avanzar;
+            _vista.OnInicioSolicitado += IrAlInicio;
+            _vista.OnConfiguracionSolicitada += AbrirConfiguracion;
         }
 
         private void OnDisable()
         {
-            if (_vista == null) return;
-            _vista.OnOpcionSeleccionada -= EvaluarOpcion;
-            _vista.OnAudioSolicitado -= ReproducirPronunciacion;
-            _vista.OnContinuarSolicitado -= Continuar;
+            if (_vista == null || _modelo == null) return;
+            _vista.OnComenzarSolicitado -= Comenzar;
+            _vista.OnTarjetaSeleccionada -= SeleccionarTarjeta;
+            _vista.OnAceptarSolicitado -= Aceptar;
+            _vista.OnIntentarloDeNuevoSolicitado -= IntentarloDeNuevo;
+            _vista.OnSiguienteSolicitado -= Siguiente;
+            _vista.OnLecturaSolicitada -= Leer;
+            _vista.OnAyudaSolicitada -= AbrirPista;
+            _vista.OnCerrarPistaSolicitado -= CerrarPista;
+            _vista.OnSenasSolicitadas -= AbrirSenas;
+            _vista.OnCerrarSenasSolicitado -= CerrarSenas;
+            _vista.OnReproducirSenasSolicitado -= _vista.AlternarVideo;
+            _vista.OnRegresarSolicitado -= Regresar;
+            _vista.OnAvanzarSolicitado -= Avanzar;
+            _vista.OnInicioSolicitado -= IrAlInicio;
+            _vista.OnConfiguracionSolicitada -= AbrirConfiguracion;
         }
 
         private void Start()
         {
-            if (RetoYaCompletado()) _vista.MostrarCorrecta(_configuracion.mensajeCorrecto);
+            if (_modelo == null) return;
+            _vista.MostrarProgreso(_configuracion.NumeroEscena, _configuracion.TotalEscenas);
+            _vista.MostrarSinSeleccion();
+            _vista.MostrarPista(false);
+            _vista.MostrarSenas(false, null);
+            _vista.MostrarBienvenida(_configuracion.MostrarBienvenida);
+            _vista.PermitirRegresar(NavegacionNiveles.HayAnterior());
+            _vista.PermitirAvanzar(RetoYaCompletado() && NavegacionNiveles.HaySiguiente(_configuracion.SiguienteEscena));
         }
 
-        private void EvaluarOpcion(int indice)
+        private void Comenzar()
         {
-            if (_modelo.Resuelto) return;
+            _vista.DetenerAudio();
+            _vista.MostrarBienvenida(false);
+        }
 
-            if (_modelo.Evaluar(indice))
+        private void SeleccionarTarjeta(int indice)
+        {
+            if (_modelo.Seleccionar(indice)) _vista.MostrarSeleccion(indice);
+        }
+
+        private void Aceptar()
+        {
+            if (!_modelo.HaySeleccion || _modelo.Resuelto) return;
+
+            int indice = _modelo.IndiceSeleccionado;
+            if (_modelo.Confirmar())
             {
                 GuardarProgreso();
-                _vista.MostrarCorrecta(_configuracion.mensajeCorrecto);
+                _vista.MostrarCorrecta(indice, _configuracion.Felicitacion);
+                _vista.PermitirAvanzar(NavegacionNiveles.HaySiguiente(_configuracion.SiguienteEscena));
             }
             else
             {
-                _vista.MostrarIncorrecta(_configuracion.pistaIncorrecta);
+                _vista.MostrarIncorrecta(indice, _configuracion.ObtenerExplicacion(indice));
             }
         }
 
-        private void ReproducirPronunciacion()
+        private void IntentarloDeNuevo()
         {
-            _vista.ReproducirPronunciacion(_vista.IndiceSeleccionado);
+            _modelo.Reintentar();
+            _vista.MostrarSinSeleccion();
+            _vista.EnfocarTarjeta(0);
         }
 
-        private void Continuar()
+        private void Siguiente()
         {
-            if (!_modelo.Resuelto && !RetoYaCompletado()) return;
-            if (!string.IsNullOrWhiteSpace(_configuracion.siguienteEscena))
+            _vista.DetenerAudio();
+            if (!NavegacionNiveles.CargarSiguiente(_configuracion.SiguienteEscena))
             {
-                SceneManager.LoadScene(_configuracion.siguienteEscena);
+                _vista.MostrarAvisoSinSiguiente(MENSAJE_SIN_SIGUIENTE);
             }
-            else
+        }
+
+        private void Leer()
+        {
+            AudioClip clip = _vista.BienvenidaVisible ? _configuracion.BienvenidaAudio : _configuracion.AudioLectura;
+            _vista.AlternarAudio(clip);
+        }
+
+        private void AbrirPista()
+        {
+            if (_vista.BienvenidaVisible || _modelo.Resuelto) return;
+            _vista.MostrarPista(true);
+        }
+
+        private void CerrarPista()
+        {
+            _vista.MostrarPista(false);
+            _vista.EnfocarTarjeta(_modelo.IndiceSeleccionado);
+        }
+
+        private void AbrirSenas()
+        {
+            string video = _vista.BienvenidaVisible ? _configuracion.BienvenidaVideoSenas : _configuracion.VideoSenas;
+            _vista.DetenerAudio();
+            _vista.MostrarSenas(true, video);
+        }
+
+        private void CerrarSenas()
+        {
+            _vista.MostrarSenas(false, null);
+            if (!_vista.BienvenidaVisible) _vista.EnfocarTarjeta(_modelo.IndiceSeleccionado);
+        }
+
+        private void Regresar()
+        {
+            NavegacionNiveles.CargarAnterior();
+        }
+
+        private void Avanzar()
+        {
+            if (_modelo.Resuelto || RetoYaCompletado())
             {
-                _vista.MostrarSiguienteEnPreparacion();
+                NavegacionNiveles.CargarSiguiente(_configuracion.SiguienteEscena);
             }
+        }
+
+        private void IrAlInicio()
+        {
+            NavegacionNiveles.CargarInicio();
+        }
+
+        private void AbrirConfiguracion()
+        {
+            Debug.Log("RetoSeleccionPresenter: la ventana de configuración se incorporará en una próxima versión.", this);
         }
 
         private void GuardarProgreso()
@@ -96,22 +197,26 @@ namespace GuardianesAmazonicos.Presenters
             try
             {
                 ProgresoEstudianteData progreso = _repositorio.Cargar();
-                if (_configuracion.Nivel == 1 && _configuracion.numeroEscena == 5)
+                int nivel = _configuracion.Nivel;
+                int escena = _configuracion.NumeroEscena;
+                if (nivel == 1 && escena == 5)
                     progreso.retoJaguarCompletado = true;
-                else if (_configuracion.Nivel == 1 && _configuracion.numeroEscena == 9)
+                else if (nivel == 1 && escena == 9)
                     progreso.retoPlatanoCompletado = true;
-                else if (_configuracion.Nivel == 2 && _configuracion.numeroEscena == 1)
-                {
+                else if (nivel == 2 && escena == 1)
                     progreso.RetoMonoCuriosoCompletado = true;
-                    progreso.ProgresoNivel2 = Math.Max(progreso.ProgresoNivel2, _configuracion.numeroEscena);
-                }
 
-                if (_configuracion.Nivel == 1)
+                if (nivel == 1)
                 {
                     progreso.aventuraIniciada = true;
-                    progreso.puntoProgresoActual = Math.Max(progreso.puntoProgresoActual, _configuracion.numeroEscena);
+                    progreso.puntoProgresoActual = Math.Max(progreso.puntoProgresoActual, escena);
                     progreso.totalPuntosProgreso = AventuraBienvenidaModel.TotalPuntosProgreso;
                 }
+                else if (nivel == 2)
+                {
+                    progreso.ProgresoNivel2 = Math.Max(progreso.ProgresoNivel2, escena);
+                }
+
                 _repositorio.Guardar(progreso);
             }
             catch (IOException excepcion)
@@ -129,12 +234,11 @@ namespace GuardianesAmazonicos.Presenters
             try
             {
                 ProgresoEstudianteData progreso = _repositorio.Cargar();
-                if (_configuracion.Nivel == 1 && _configuracion.numeroEscena == 5)
-                    return progreso.retoJaguarCompletado;
-                if (_configuracion.Nivel == 1 && _configuracion.numeroEscena == 9)
-                    return progreso.retoPlatanoCompletado;
-                return _configuracion.Nivel == 2 && _configuracion.numeroEscena == 1
-                    && progreso.RetoMonoCuriosoCompletado;
+                int nivel = _configuracion.Nivel;
+                int escena = _configuracion.NumeroEscena;
+                if (nivel == 1 && escena == 5) return progreso.retoJaguarCompletado;
+                if (nivel == 1 && escena == 9) return progreso.retoPlatanoCompletado;
+                return nivel == 2 && escena == 1 && progreso.RetoMonoCuriosoCompletado;
             }
             catch (Exception excepcion) when (excepcion is IOException || excepcion is UnauthorizedAccessException)
             {

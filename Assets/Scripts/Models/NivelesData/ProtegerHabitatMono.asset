@@ -13,25 +13,85 @@ MonoBehaviour:
   m_Name: ProtegerHabitatMono
   m_EditorClassIdentifier: Assembly-CSharp::GuardianesAmazonicos.Models.RetoSeleccionConfiguracion
   _nivel: 2
-  _atlasOpciones: {fileID: 2800000, guid: bb581b7d1dfac4d43a711b5631ff6156, type: 3}
-  _columnasAtlas: 3
-  _filasAtlas: 1
-  numeroEscena: 1
-  titulo: "Nivel 2 \xB7 Cuido a los animales"
-  pregunta: "\xBFQu\xE9 acci\xF3n ayuda a proteger el hogar del Mono Curioso?"
-  instruccion: Toca la imagen que cuida el bosque.
-  opciones:
-  - Cuidar el bosque
+  _numeroEscena: 1
+  _totalEscenas: 12
+  _tituloNivel: "Nivel 2 \u2022 Cuido los animales"
+  _siguienteEscena: 
+  _pregunta: "\xBFQu\xE9 acci\xF3n ayuda a proteger el hogar del Mono Curioso?"
+  _opciones:
   - Tirar basura
+  - Cuidar el bosque
   - "Cortar \xE1rboles"
-  imagenes: []
-  atlasDosPorDos: {fileID: 0}
-  indiceCorrecto: 0
-  pistaIncorrecta: "Esa acci\xF3n puede da\xF1ar el hogar del mono. Busca la que ayuda a cuidar las plantas y los \xE1rboles."
-  mensajeCorrecto: "\xA1Muy bien! Cuidar el bosque protege el hogar del Mono Curioso."
-  pronunciaciones: []
-  siguienteEscena: 
-  textoContinuar: SIGUIENTE ACTIVIDAD
-  fondo: {fileID: 21300000, guid: fa0e72eb2da69c546a89b49731070b3d, type: 3}
-  explorador: {fileID: 21300000, guid: 9977c2fbc037d5b4eab7f9af870b265e, type: 3}
-  fuente: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  _imagenesOpciones:
+  - {fileID: 21300000, guid: f725895b98c7f554fa9a2970e58dbe3a, type: 3}
+  - {fileID: 21300000, guid: ff47baf75c4cbf249b050cfe78e50b3b, type: 3}
+  - {fileID: 21300000, guid: e493ac98972562042a3c14cecdc9d764, type: 3}
+  _indiceCorrecto: 1
+  _explicacionesIncorrectas:
+  - "La basura ensucia el bosque y puede lastimar a los animales. Busca la acci\xF3n que cuida su hogar."
+  - 
+  - "Si cortamos los \xE1rboles, el mono pierde su casa. Busca la acci\xF3n que cuida el bosque."
+  _pista: "Piensa en lo que necesita el mono para vivir: \xE1rboles sanos y un bosque limpio."
+  _felicitacion: "\xA1Lo lograste! Cuidar el bosque protege su hogar."
+  _imagenEscena: {fileID: 21300000, guid: 2999d199e58f48348869005c2e815d0e, type: 3}
+  _elementoEscena: {fileID: 21300000, guid: 26845133233d7cadb1c648837aea4191, type: 3}
+  _rectElementoEscena:
+    serializedVersion: 2
+    x: 236
+    y: -96
+    width: 170
+    height: 226
+  _fondo: {fileID: 21300000, guid: d84eb283f1f0456bfce04484df0c7bd9, type: 3}
+  _personaje: {fileID: 21300000, guid: 2c32b3bf6bcfade558e5cfe00634d3b2, type: 3}
+  _fotogramasCelebracion:
+  - {fileID: 21300000, guid: 6c8d65da4fa7cee4121e6b6a1afcc42b, type: 3}
+  - {fileID: 21300000, guid: b1b78a5147d51d4024896495f409ec4c, type: 3}
+  - {fileID: 21300000, guid: a6590e769c306fd39b83f8e1ae51ad57, type: 3}
+  - {fileID: 21300000, guid: 07bf51e203de50d6cca1aa718d20eeae, type: 3}
+  - {fileID: 21300000, guid: 16d07f183fb12c445aa279537f194aa6, type: 3}
+  - {fileID: 21300000, guid: cd26ca1ac45c8635a6dacf75074a912d, type: 3}
+  - {fileID: 21300000, guid: 7de48cf56ef3b39134711cee966995ad, type: 3}
+  - {fileID: 21300000, guid: 8b053d56a95a8818101631e87c56f49a, type: 3}
+  - {fileID: 21300000, guid: 65b7df3dc6de6330ed521d647586e9ae, type: 3}
+  - {fileID: 21300000, guid: 2c14d70d46a046ae3ee07a4b6e5e478c, type: 3}
+  - {fileID: 21300000, guid: b0f9b466002e1d06976d1c12caf9899b, type: 3}
+  - {fileID: 21300000, guid: d296c6b0416e9e675e1d1d260434d72f, type: 3}
+  - {fileID: 21300000, guid: 2754db4152701bd0e496297c5c5e100e, type: 3}
+  - {fileID: 21300000, guid: 05686da77f47a39b063b0ebc150ca6d7, type: 3}
+  - {fileID: 21300000, guid: 7405467c0b6e6eaa58a4805bfedb4253, type: 3}
+  - {fileID: 21300000, guid: 0a5dc2f84c9b6dd419becb0f7134a8df, type: 3}
+  - {fileID: 21300000, guid: 0b265bc7f607ed9b1e9e7bb58efc1bfc, type: 3}
+  - {fileID: 21300000, guid: c9c50b551aa8bf0406b6b0d0b31e3633, type: 3}
+  - {fileID: 21300000, guid: 08f4074c0f976374efcc3100e7a29dea, type: 3}
+  - {fileID: 21300000, guid: a9477a71572bd4c0c111b37945a0bf5f, type: 3}
+  - {fileID: 21300000, guid: 49356ef9020056bd9dcea645e04d037a, type: 3}
+  - {fileID: 21300000, guid: c0ecd4ae01bf2ab89cde8e52ed3c657c, type: 3}
+  - {fileID: 21300000, guid: 67aa11fff81ca8aa9c38f68d125caab0, type: 3}
+  - {fileID: 21300000, guid: 6c8b27e83b3bfe618104f0261325def3, type: 3}
+  - {fileID: 21300000, guid: 1bbf1e673ed2b495ed347bee3b125ad0, type: 3}
+  - {fileID: 21300000, guid: d688641a4f424811bb595775492d504d, type: 3}
+  - {fileID: 21300000, guid: 5bec23f7fafed9eff0615c05eef34623, type: 3}
+  - {fileID: 21300000, guid: 638c277a151f77d018f5d7acd47f0470, type: 3}
+  - {fileID: 21300000, guid: 276216081d5f7539aae2969926b9782a, type: 3}
+  - {fileID: 21300000, guid: dc43134c18d5f4abb273f1c580dda4a1, type: 3}
+  - {fileID: 21300000, guid: aecdc194f95ad563776a9d567d975c6a, type: 3}
+  - {fileID: 21300000, guid: cf50654599883753fd41b3275e3fec61, type: 3}
+  - {fileID: 21300000, guid: 9318eff11daef0cdd6e08c210c148fca, type: 3}
+  - {fileID: 21300000, guid: cca41a3861b660f75fec29a65fa49706, type: 3}
+  - {fileID: 21300000, guid: fffe3866f8eb989cf892716523e7bad1, type: 3}
+  - {fileID: 21300000, guid: d847c166e93c32dff81855a1c69b4b36, type: 3}
+  - {fileID: 21300000, guid: c41358962f73c48dc7ad34a0ccfb8c0c, type: 3}
+  - {fileID: 21300000, guid: 460d555543aa3189e1339c6bf10de6a6, type: 3}
+  - {fileID: 21300000, guid: ebb05fd8c773ec88d78b5e433069c07f, type: 3}
+  - {fileID: 21300000, guid: b0eca3a47b2994172294ce52a6a4f4c0, type: 3}
+  _audioLectura: {fileID: 8300000, guid: 51a5baa21517f7d43a8b16db834cf17c, type: 3}
+  _videoSenas: senas_nivel_02_pregunta_01.mp4
+  _mostrarBienvenida: 1
+  _bienvenidaEtiquetaNivel: Nivel 2
+  _bienvenidaNombreNivel: "\xA1Cuido los animales!"
+  _bienvenidaSaludo: "\xA1Hola, guardi\xE1n!"
+  _bienvenidaDescripcion: "En este nivel aprender\xE1s a cuidar a los animales de la selva y a proteger su hogar."
+  _bienvenidaImagen: {fileID: 21300000, guid: 88e06cdf121f65745abe57cbfbc174b9, type: 3}
+  _bienvenidaAudio: {fileID: 8300000, guid: 1008b8fa042261145ad3deba15b6a7cc, type: 3}
+  _bienvenidaVideoSenas: senas_nivel_02_bienvenida.mp4
+  _fuente: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}

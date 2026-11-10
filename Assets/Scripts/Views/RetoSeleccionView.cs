@@ -1,339 +1,498 @@
 using System;
+using System.Collections;
+using System.IO;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.EventSystems;
-using UnityEngine.InputSystem.UI;
 using UnityEngine.UI;
-using GuardianesAmazonicos.Models;
+using UnityEngine.Video;
 
 namespace GuardianesAmazonicos.Views
 {
+    /// <summary>
+    /// Vista pasiva de la plantilla base de actividad. La jerarquía (fondo, cabecera,
+    /// globo, marco, tres tarjetas y ventanas) se construye en el editor con las
+    /// coordenadas aprobadas de la guía; aquí solo se activan los estados:
+    /// Bienvenida, Sin selección, Seleccionada, Incorrecta, Correcta, Pista y Señas.
+    /// </summary>
     public sealed class RetoSeleccionView : MonoBehaviour
     {
-        private static readonly Color Crema = new Color(1f, 0.97f, 0.86f, 0.98f);
-        private static readonly Color Verde = new Color(0.08f, 0.31f, 0.17f, 1f);
-        private static readonly Color VerdeClaro = new Color(0.78f, 0.91f, 0.61f, 1f);
-        private static readonly Color Dorado = new Color(1f, 0.68f, 0.13f, 1f);
-        private static readonly Color Tinta = new Color(0.05f, 0.17f, 0.12f, 1f);
+        private const string CARPETA_LSEC = "LSEC";
+        private const float ESPERA_CELEBRACION = 0.45f;
+        private const float DURACION_ENTRADA = 0.25f;
 
-        public event Action<int> OnOpcionSeleccionada;
-        public event Action OnAudioSolicitado;
-        public event Action OnContinuarSolicitado;
-
-        public int IndiceSeleccionado { get; private set; } = -1;
-
-        private RetoSeleccionConfiguracion _configuracion;
-        private Button[] _botonesOpciones;
-        private Outline[] _bordesOpciones;
-        private TMP_Text _textoEstado;
-        private Button _botonContinuar;
-        private Button _botonAudio;
-        private AudioSource _audioSource;
-        private Sprite[] _spritesAtlas;
-
-        public void Construir(RetoSeleccionConfiguracion configuracion)
+        [Serializable]
+        public sealed class TarjetaRespuestaVista
         {
-            _configuracion = configuracion;
-            CrearEventSystemSiHaceFalta();
-            _audioSource = gameObject.GetComponent<AudioSource>();
-            if (_audioSource == null) _audioSource = gameObject.AddComponent<AudioSource>();
-            _audioSource.playOnAwake = false;
-            _audioSource.loop = false;
-
-            Canvas canvas = CrearCanvas();
-            RectTransform root = canvas.transform as RectTransform;
-            CrearImagen("FondoSelva", root, _configuracion.fondo, Color.white, true, true,
-                Vector2.zero, new Vector2(1920f, 1080f), true);
-            CrearImagen("SombraSuave", root, null, new Color(0.01f, 0.12f, 0.07f, 0.17f),
-                true, false, Vector2.zero, new Vector2(1920f, 1080f), true);
-
-            CrearTexto("Marca", root, "GUARDIANES DE LA AMAZONÍA LECTORA", new Vector2(-690f, 430f),
-                new Vector2(500f, 54f), 23f, Tinta, TextAlignmentOptions.Left, false);
-            CrearPanel("PlacaNivel", root, new Vector2(0f, 430f), new Vector2(540f, 70f), Verde);
-            CrearTexto("TituloNivel", root, _configuracion.titulo, new Vector2(0f, 430f),
-                new Vector2(510f, 56f), 31f, Color.white, TextAlignmentOptions.Center, true);
-            CrearPanel("InsigniaProgreso", root, new Vector2(760f, 430f), new Vector2(220f, 70f), Verde);
-            CrearTexto("Progreso", root, _configuracion.numeroEscena + " de 12", new Vector2(760f, 430f),
-                new Vector2(210f, 56f), 30f, Color.white, TextAlignmentOptions.Center, true);
-
-            Image personaje = CrearImagen("Explorador", root, _configuracion.explorador, Color.white,
-                false, false, new Vector2(-710f, -105f), new Vector2(500f, 680f), false);
-            personaje.preserveAspect = true;
-
-            bool tresOpciones = _configuracion.opciones.Length == 3;
-            RectTransform panel = CrearPanel("PanelReto", root,
-                new Vector2(215f, tresOpciones ? -80f : -55f),
-                new Vector2(1240f, tresOpciones ? 710f : 760f), Crema);
-            CrearTexto("Pregunta", panel, _configuracion.pregunta,
-                new Vector2(0f, tresOpciones ? 280f : 295f),
-                new Vector2(1130f, 86f), 48f, Tinta, TextAlignmentOptions.Center, true);
-            CrearTexto("Instruccion", panel, _configuracion.instruccion,
-                new Vector2(0f, tresOpciones ? 205f : 220f),
-                new Vector2(1080f, 52f), 27f, Verde, TextAlignmentOptions.Center, true);
-
-            Texture2D atlas = _configuracion.AtlasOpciones != null
-                ? _configuracion.AtlasOpciones
-                : _configuracion.atlasDosPorDos;
-            if (atlas != null)
-            {
-                _spritesAtlas = CrearSpritesAtlas(atlas, _configuracion.ColumnasAtlas, _configuracion.FilasAtlas);
-            }
-
-            CrearTarjetas(panel);
-            _textoEstado = CrearTexto("Estado", panel, "Elige una imagen para comenzar.",
-                new Vector2(0f, tresOpciones ? -235f : -255f),
-                new Vector2(1080f, 56f), 27f, Verde, TextAlignmentOptions.Center, true);
-
-            if (_configuracion.pronunciaciones != null && _configuracion.pronunciaciones.Length > 0)
-            {
-                _botonAudio = CrearBoton("BotonAudio", panel, "AUDIO · ESCUCHAR NOMBRE",
-                    new Vector2(-255f, tresOpciones ? -310f : -340f),
-                    new Vector2(430f, 78f), VerdeClaro, Tinta);
-                _botonAudio.onClick.AddListener(() => OnAudioSolicitado?.Invoke());
-            }
-
-            _botonContinuar = CrearBoton("BotonContinuar", panel, _configuracion.textoContinuar,
-                new Vector2(310f, tresOpciones ? -310f : -340f),
-                new Vector2(450f, 78f), Dorado, Tinta);
-            _botonContinuar.interactable = false;
-            _botonContinuar.onClick.AddListener(() => OnContinuarSolicitado?.Invoke());
+            public Button boton;
+            public Image ilustracion;
+            public TMP_Text nombre;
+            public GameObject brilloSeleccion;
+            public GameObject bordeIncorrecto;
+            public GameObject bordeCorrecto;
         }
 
-        public void MostrarSeleccion(int indice)
+        [Serializable]
+        public sealed class ReferenciasActividad
         {
-            IndiceSeleccionado = indice;
-            for (int i = 0; i < _bordesOpciones.Length; i++)
-            {
-                _bordesOpciones[i].effectColor = i == indice ? Verde : new Color(0.45f, 0.34f, 0.15f, 0.4f);
-                _bordesOpciones[i].effectDistance = i == indice ? new Vector2(5f, -5f) : new Vector2(2f, -2f);
-            }
-            _textoEstado.text = "Seleccionaste: " + _configuracion.opciones[indice] + ".";
-            _textoEstado.color = Verde;
+            [Header("Cabecera")]
+            public Button botonLectura;
+            public Button botonSenas;
+            public Button botonAyuda;
+            public Button botonRegresar;
+            public Button botonAvanzar;
+            public Button botonInicio;
+            public Button botonConfiguracion;
+            public TMP_Text textoProgreso;
+
+            [Header("Actividad")]
+            public CanvasGroup capaBase;
+            public CanvasGroup capaActividad;
+            public GameObject personajeGuia;
+            public GameObject globoPregunta;
+            public GameObject globoCorreccion;
+            public TMP_Text textoCorreccion;
+            public TarjetaRespuestaVista[] tarjetas;
+            public Button botonAceptar;
+            public Button botonIntentarloDeNuevo;
+
+            [Header("Respuesta correcta")]
+            public GameObject estadoCorrecto;
+            public RectTransform contenidoCelebracion;
+            public TMP_Text textoFelicitacion;
+            public Button botonSiguiente;
+            public AnimacionPersonajePNG animacionCelebracion;
+
+            [Header("Ventana de pista")]
+            public GameObject panelPista;
+            public Button botonVoyIntentarlo;
+
+            [Header("Ventana de señas")]
+            public GameObject panelSenas;
+            public Button botonReproducirSenas;
+            public Button botonCerrarSenas;
+            public TMP_Text textoEstadoSenas;
+            public RawImage pantallaVideo;
+            public VideoPlayer reproductorSenas;
+
+            [Header("Bienvenida del nivel")]
+            public GameObject estadoBienvenida;
+            public Button botonComenzar;
+
+            [Header("Audio")]
+            public AudioSource fuenteAudio;
         }
 
-        public void MostrarIncorrecta(string pista)
+        [SerializeField] private ReferenciasActividad _ref = new ReferenciasActividad();
+
+        private UnityAction[] _accionesTarjetas;
+        private Coroutine _celebracion;
+
+        public event Action OnComenzarSolicitado;
+        public event Action<int> OnTarjetaSeleccionada;
+        public event Action OnAceptarSolicitado;
+        public event Action OnIntentarloDeNuevoSolicitado;
+        public event Action OnSiguienteSolicitado;
+        public event Action OnLecturaSolicitada;
+        public event Action OnAyudaSolicitada;
+        public event Action OnCerrarPistaSolicitado;
+        public event Action OnSenasSolicitadas;
+        public event Action OnCerrarSenasSolicitado;
+        public event Action OnReproducirSenasSolicitado;
+        public event Action OnRegresarSolicitado;
+        public event Action OnAvanzarSolicitado;
+        public event Action OnInicioSolicitado;
+        public event Action OnConfiguracionSolicitada;
+
+        public bool BienvenidaVisible => _ref.estadoBienvenida != null && _ref.estadoBienvenida.activeSelf;
+        public bool PistaVisible => _ref.panelPista != null && _ref.panelPista.activeSelf;
+        public bool SenasVisibles => _ref.panelSenas != null && _ref.panelSenas.activeSelf;
+
+        /// <summary>Usado por el constructor de escenas del editor.</summary>
+        public void Enlazar(ReferenciasActividad referencias)
         {
-            _textoEstado.text = "¡Buen intento! " + pista;
-            _textoEstado.color = new Color(0.45f, 0.25f, 0.03f, 1f);
+            _ref = referencias;
         }
 
-        public void MostrarCorrecta(string mensaje)
+        private void OnEnable()
         {
-            _textoEstado.text = mensaje;
-            _textoEstado.color = Verde;
-            _botonContinuar.interactable = true;
-            for (int i = 0; i < _botonesOpciones.Length; i++) _botonesOpciones[i].interactable = false;
-        }
-
-        public void MostrarSiguienteEnPreparacion()
-        {
-            _textoEstado.text = "¡Progreso guardado! El siguiente reto se añadirá después.";
-            _textoEstado.color = Verde;
-        }
-
-        public void ReproducirPronunciacion(int indice)
-        {
-            if (_configuracion.pronunciaciones == null || _configuracion.pronunciaciones.Length == 0) return;
-            if (indice < 0 || indice >= _configuracion.pronunciaciones.Length) indice = _configuracion.indiceCorrecto;
-            AudioClip clip = _configuracion.pronunciaciones[indice];
-            if (clip == null) return;
-            _audioSource.Stop();
-            _audioSource.PlayOneShot(clip);
-            _textoEstado.text = "Escucha: " + _configuracion.opciones[indice] + ".";
-            _textoEstado.color = Verde;
-        }
-
-        private void CrearTarjetas(RectTransform panel)
-        {
-            _botonesOpciones = new Button[_configuracion.opciones.Length];
-            _bordesOpciones = new Outline[_configuracion.opciones.Length];
-            bool tresOpciones = _configuracion.opciones.Length == 3;
-            Vector2[] posiciones = tresOpciones
-                ? new[] { new Vector2(-400f, -5f), new Vector2(0f, -5f), new Vector2(400f, -5f) }
-                : new[]
-                {
-                    new Vector2(-265f, 145f), new Vector2(265f, 145f),
-                    new Vector2(-265f, -125f), new Vector2(265f, -125f)
-                };
-            Vector2 tamanoTarjeta = tresOpciones ? new Vector2(360f, 300f) : new Vector2(480f, 245f);
-            Vector2 posicionImagen = tresOpciones ? new Vector2(0f, 28f) : new Vector2(0f, 32f);
-            Vector2 tamanoImagen = tresOpciones ? new Vector2(270f, 190f) : new Vector2(205f, 150f);
-            float posicionNombre = tresOpciones ? -112f : -88f;
-
-            for (int i = 0; i < _configuracion.opciones.Length; i++)
+            int cantidad = _ref.tarjetas != null ? _ref.tarjetas.Length : 0;
+            _accionesTarjetas = new UnityAction[cantidad];
+            for (int i = 0; i < cantidad; i++)
             {
                 int indice = i;
-                GameObject tarjeta = new GameObject("TarjetaOpcion" + (i + 1), typeof(RectTransform), typeof(CanvasRenderer));
-                tarjeta.transform.SetParent(panel, false);
-                RectTransform rect = tarjeta.transform as RectTransform;
-                PrepararRect(rect, posiciones[i], tamanoTarjeta);
-                RoundedRectangleGraphic fondo = tarjeta.AddComponent<RoundedRectangleGraphic>();
-                fondo.color = new Color(1f, 0.995f, 0.96f, 1f);
-                Button boton = tarjeta.AddComponent<Button>();
-                boton.targetGraphic = fondo;
-                boton.transition = Selectable.Transition.ColorTint;
-                boton.colors = ColoresBoton(Color.white, new Color(0.96f, 0.91f, 0.72f, 1f));
-                Outline borde = tarjeta.AddComponent<Outline>();
-                borde.effectColor = new Color(0.45f, 0.34f, 0.15f, 0.4f);
-                borde.effectDistance = new Vector2(2f, -2f);
-                _botonesOpciones[i] = boton;
-                _bordesOpciones[i] = borde;
-
-                Sprite sprite = ObtenerSprite(i);
-                Image imagen = CrearImagen("Imagen", rect, sprite, Color.white, false, false,
-                    posicionImagen, tamanoImagen, false);
-                imagen.preserveAspect = true;
-                CrearTexto("Nombre", rect, _configuracion.opciones[i], new Vector2(0f, posicionNombre),
-                    new Vector2(430f, 58f), 34f, Tinta, TextAlignmentOptions.Center, true);
-                boton.onClick.AddListener(() =>
+                _accionesTarjetas[i] = () => OnTarjetaSeleccionada?.Invoke(indice);
+                if (_ref.tarjetas[i] != null && _ref.tarjetas[i].boton != null)
                 {
-                    MostrarSeleccion(indice);
-                    OnOpcionSeleccionada?.Invoke(indice);
-                });
+                    _ref.tarjetas[i].boton.onClick.AddListener(_accionesTarjetas[i]);
+                }
             }
+
+            Escuchar(_ref.botonComenzar, EmitirComenzar);
+            Escuchar(_ref.botonAceptar, EmitirAceptar);
+            Escuchar(_ref.botonIntentarloDeNuevo, EmitirIntentarloDeNuevo);
+            Escuchar(_ref.botonSiguiente, EmitirSiguiente);
+            Escuchar(_ref.botonLectura, EmitirLectura);
+            Escuchar(_ref.botonAyuda, EmitirAyuda);
+            Escuchar(_ref.botonVoyIntentarlo, EmitirCerrarPista);
+            Escuchar(_ref.botonSenas, EmitirSenas);
+            Escuchar(_ref.botonCerrarSenas, EmitirCerrarSenas);
+            Escuchar(_ref.botonReproducirSenas, EmitirReproducirSenas);
+            Escuchar(_ref.botonRegresar, EmitirRegresar);
+            Escuchar(_ref.botonAvanzar, EmitirAvanzar);
+            Escuchar(_ref.botonInicio, EmitirInicio);
+            Escuchar(_ref.botonConfiguracion, EmitirConfiguracion);
         }
 
-        private Sprite ObtenerSprite(int indice)
+        private void OnDisable()
         {
-            if (_configuracion.imagenes != null && indice < _configuracion.imagenes.Length && _configuracion.imagenes[indice] != null)
-                return _configuracion.imagenes[indice];
-            if (_spritesAtlas != null && indice < _spritesAtlas.Length) return _spritesAtlas[indice];
-            return null;
-        }
-
-        private static Sprite[] CrearSpritesAtlas(Texture2D atlas, int columnas, int filas)
-        {
-            columnas = Mathf.Max(1, columnas);
-            filas = Mathf.Max(1, filas);
-            int ancho = atlas.width / columnas;
-            int alto = atlas.height / filas;
-            Sprite[] sprites = new Sprite[columnas * filas];
-            for (int indice = 0; indice < sprites.Length; indice++)
+            if (_ref.tarjetas != null && _accionesTarjetas != null)
             {
-                int columna = indice % columnas;
-                int filaDesdeAbajo = filas - 1 - indice / columnas;
-                sprites[indice] = Sprite.Create(atlas,
-                    new Rect(columna * ancho, filaDesdeAbajo * alto, ancho, alto),
-                    new Vector2(0.5f, 0.5f), 100f);
+                for (int i = 0; i < _ref.tarjetas.Length && i < _accionesTarjetas.Length; i++)
+                {
+                    if (_ref.tarjetas[i] != null && _ref.tarjetas[i].boton != null)
+                    {
+                        _ref.tarjetas[i].boton.onClick.RemoveListener(_accionesTarjetas[i]);
+                    }
+                }
             }
-            return sprites;
+
+            Olvidar(_ref.botonComenzar, EmitirComenzar);
+            Olvidar(_ref.botonAceptar, EmitirAceptar);
+            Olvidar(_ref.botonIntentarloDeNuevo, EmitirIntentarloDeNuevo);
+            Olvidar(_ref.botonSiguiente, EmitirSiguiente);
+            Olvidar(_ref.botonLectura, EmitirLectura);
+            Olvidar(_ref.botonAyuda, EmitirAyuda);
+            Olvidar(_ref.botonVoyIntentarlo, EmitirCerrarPista);
+            Olvidar(_ref.botonSenas, EmitirSenas);
+            Olvidar(_ref.botonCerrarSenas, EmitirCerrarSenas);
+            Olvidar(_ref.botonReproducirSenas, EmitirReproducirSenas);
+            Olvidar(_ref.botonRegresar, EmitirRegresar);
+            Olvidar(_ref.botonAvanzar, EmitirAvanzar);
+            Olvidar(_ref.botonInicio, EmitirInicio);
+            Olvidar(_ref.botonConfiguracion, EmitirConfiguracion);
+
+            DetenerAudio();
+            DetenerVideo();
         }
 
-        private Canvas CrearCanvas()
-        {
-            GameObject objeto = new GameObject("CanvasReto", typeof(RectTransform), typeof(Canvas), typeof(CanvasScaler), typeof(GraphicRaycaster));
-            Canvas canvas = objeto.GetComponent<Canvas>();
-            canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-            CanvasScaler scaler = objeto.GetComponent<CanvasScaler>();
-            scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
-            scaler.referenceResolution = new Vector2(1920f, 1080f);
-            scaler.matchWidthOrHeight = 0.5f;
-            return canvas;
-        }
+        // ----- Estados de la plantilla -----
 
-        private void CrearEventSystemSiHaceFalta()
+        public void MostrarBienvenida(bool visible)
         {
-            if (EventSystem.current != null) return;
-            GameObject objeto = new GameObject("EventSystem", typeof(EventSystem), typeof(InputSystemUIInputModule));
-            InputSystemUIInputModule modulo = objeto.GetComponent<InputSystemUIInputModule>();
-            modulo.AssignDefaultActions();
-        }
-
-        private Image CrearImagen(string nombre, RectTransform padre, Sprite sprite, Color color,
-            bool estirar, bool interceptarRaycast, Vector2 posicion, Vector2 tamano, bool fondo)
-        {
-            GameObject objeto = new GameObject(nombre, typeof(RectTransform), typeof(Image));
-            objeto.transform.SetParent(padre, false);
-            RectTransform rect = objeto.transform as RectTransform;
-            if (estirar)
+            Activar(_ref.estadoBienvenida, visible);
+            // La bienvenida no tiene pista: Ayuda solo aparece en la actividad.
+            if (_ref.botonAyuda != null) _ref.botonAyuda.gameObject.SetActive(!visible);
+            if (_ref.capaActividad != null)
             {
-                rect.anchorMin = Vector2.zero;
-                rect.anchorMax = Vector2.one;
-                rect.pivot = new Vector2(0.5f, 0.5f);
-                rect.offsetMin = Vector2.zero;
-                rect.offsetMax = Vector2.zero;
+                // Evita que el teclado llegue a las tarjetas ocultas detrás de la bienvenida.
+                _ref.capaActividad.interactable = !visible;
+                _ref.capaActividad.blocksRaycasts = !visible;
             }
-            else
+            Enfocar(visible ? _ref.botonComenzar : BotonTarjeta(0));
+        }
+
+        public void MostrarSinSeleccion()
+        {
+            PrepararTarjetas(RetoSinIndice, RetoSinIndice, RetoSinIndice, true);
+            Activar(_ref.globoPregunta, true);
+            Activar(_ref.globoCorreccion, false);
+            Activar(_ref.botonAceptar, false);
+            Activar(_ref.botonIntentarloDeNuevo, false);
+            Activar(_ref.estadoCorrecto, false);
+            Activar(_ref.personajeGuia, true);
+            BloquearCapaBase(false);
+        }
+
+        /// <summary>Destello amarillo solo en la tarjeta elegida; no revela el resultado.</summary>
+        public void MostrarSeleccion(int indice)
+        {
+            PrepararTarjetas(indice, RetoSinIndice, RetoSinIndice, true);
+            Activar(_ref.globoPregunta, true);
+            Activar(_ref.globoCorreccion, false);
+            Activar(_ref.botonIntentarloDeNuevo, false);
+            Activar(_ref.botonAceptar, true);
+        }
+
+        /// <summary>Borde rojo en la opción errónea y globo con una explicación amable.</summary>
+        public void MostrarIncorrecta(int indice, string explicacion)
+        {
+            PrepararTarjetas(RetoSinIndice, indice, RetoSinIndice, true);
+            Activar(_ref.globoPregunta, false);
+            Activar(_ref.globoCorreccion, true);
+            if (_ref.textoCorreccion != null) _ref.textoCorreccion.text = explicacion;
+            Activar(_ref.botonAceptar, false);
+            Activar(_ref.botonIntentarloDeNuevo, true);
+            Enfocar(_ref.botonIntentarloDeNuevo);
+        }
+
+        /// <summary>Tarjeta correcta en verde y felicitación centrada con «Siguiente».</summary>
+        public void MostrarCorrecta(int indice, string felicitacion)
+        {
+            PrepararTarjetas(RetoSinIndice, RetoSinIndice, indice, false);
+            Activar(_ref.globoPregunta, true);
+            Activar(_ref.globoCorreccion, false);
+            Activar(_ref.botonAceptar, false);
+            Activar(_ref.botonIntentarloDeNuevo, false);
+            if (_ref.textoFelicitacion != null) _ref.textoFelicitacion.text = felicitacion;
+
+            if (!Application.isPlaying)
             {
-                PrepararRect(rect, posicion, tamano);
+                Activar(_ref.personajeGuia, false);
+                Activar(_ref.estadoCorrecto, true);
+                BloquearCapaBase(true);
+                return;
             }
-            Image imagen = objeto.GetComponent<Image>();
-            imagen.sprite = sprite;
-            imagen.color = color;
-            imagen.preserveAspect = !fondo;
-            imagen.raycastTarget = interceptarRaycast;
-            return imagen;
+
+            if (_celebracion != null) StopCoroutine(_celebracion);
+            _celebracion = StartCoroutine(MostrarCelebracion());
         }
 
-        private RectTransform CrearPanel(string nombre, RectTransform padre, Vector2 posicion, Vector2 tamano, Color color)
+        public void MostrarAvisoSinSiguiente(string mensaje)
         {
-            GameObject objeto = new GameObject(nombre, typeof(RectTransform), typeof(CanvasRenderer));
-            objeto.transform.SetParent(padre, false);
-            RectTransform rect = objeto.transform as RectTransform;
-            PrepararRect(rect, posicion, tamano);
-            RoundedRectangleGraphic fondo = objeto.AddComponent<RoundedRectangleGraphic>();
-            fondo.color = color;
-            fondo.raycastTarget = false;
-            return rect;
+            if (_ref.textoFelicitacion != null) _ref.textoFelicitacion.text = mensaje;
         }
 
-        private TMP_Text CrearTexto(string nombre, RectTransform padre, string texto, Vector2 posicion,
-            Vector2 tamano, float tamanoFuente, Color color, TextAlignmentOptions alineacion, bool negrita)
+        public void MostrarPista(bool visible)
         {
-            GameObject objeto = new GameObject(nombre, typeof(RectTransform), typeof(TextMeshProUGUI));
-            objeto.transform.SetParent(padre, false);
-            RectTransform rect = objeto.transform as RectTransform;
-            PrepararRect(rect, posicion, tamano);
-            TMP_Text tmp = objeto.GetComponent<TextMeshProUGUI>();
-            tmp.text = texto;
-            tmp.font = _configuracion.fuente;
-            tmp.fontSize = tamanoFuente;
-            tmp.enableAutoSizing = true;
-            tmp.fontSizeMin = Mathf.Max(16f, tamanoFuente - 8f);
-            tmp.fontSizeMax = tamanoFuente;
-            tmp.color = color;
-            tmp.alignment = alineacion;
-            tmp.fontStyle = negrita ? FontStyles.Bold : FontStyles.Normal;
-            tmp.textWrappingMode = TextWrappingModes.Normal;
-            tmp.raycastTarget = false;
-            return tmp;
+            if (visible) MostrarSenas(false, null);
+            Activar(_ref.panelPista, visible);
+            BloquearCapaBase(visible);
+            if (visible) Enfocar(_ref.botonVoyIntentarlo);
         }
 
-        private Button CrearBoton(string nombre, RectTransform padre, string etiqueta,
-            Vector2 posicion, Vector2 tamano, Color fondoColor, Color textoColor)
+        public void MostrarSenas(bool visible, string archivoVideo)
         {
-            GameObject objeto = new GameObject(nombre, typeof(RectTransform), typeof(CanvasRenderer));
-            objeto.transform.SetParent(padre, false);
-            RectTransform rect = objeto.transform as RectTransform;
-            PrepararRect(rect, posicion, tamano);
-            RoundedRectangleGraphic fondo = objeto.AddComponent<RoundedRectangleGraphic>();
-            fondo.color = fondoColor;
-            Button boton = objeto.AddComponent<Button>();
-            boton.targetGraphic = fondo;
-            boton.colors = ColoresBoton(fondoColor, Color.white);
-            CrearTexto("Etiqueta", rect, etiqueta, Vector2.zero, tamano - new Vector2(16f, 12f), 27f,
-                textoColor, TextAlignmentOptions.Center, true);
-            return boton;
+            if (!visible)
+            {
+                DetenerVideo();
+                if (SenasVisibles) BloquearCapaBase(false);
+                Activar(_ref.panelSenas, false);
+                return;
+            }
+
+            Activar(_ref.panelPista, false);
+            Activar(_ref.panelSenas, true);
+            BloquearCapaBase(true);
+            bool disponible = PrepararVideo(archivoVideo);
+            if (_ref.botonReproducirSenas != null) _ref.botonReproducirSenas.interactable = disponible;
+            if (_ref.pantallaVideo != null) _ref.pantallaVideo.enabled = false;
+            if (_ref.textoEstadoSenas != null)
+            {
+                _ref.textoEstadoSenas.text = disponible
+                    ? "Toca reproducir para ver la explicación en lengua de señas."
+                    : "El video en lengua de señas de esta actividad está pendiente de grabación con la intérprete aprobada.";
+            }
+
+            Enfocar(disponible ? _ref.botonReproducirSenas : _ref.botonCerrarSenas);
         }
 
-        private static ColorBlock ColoresBoton(Color normal, Color resaltado)
+        /// <summary>Reproducir / pausar el video de señas dentro del panel.</summary>
+        public void AlternarVideo()
         {
-            ColorBlock colores = ColorBlock.defaultColorBlock;
-            colores.normalColor = normal;
-            colores.highlightedColor = resaltado;
-            colores.pressedColor = Dorado;
-            colores.selectedColor = resaltado;
-            colores.disabledColor = new Color(0.65f, 0.65f, 0.6f, 0.75f);
-            colores.colorMultiplier = 1f;
-            return colores;
+            VideoPlayer reproductor = _ref.reproductorSenas;
+            if (reproductor == null || string.IsNullOrEmpty(reproductor.url)) return;
+
+            if (reproductor.isPlaying)
+            {
+                reproductor.Pause();
+                return;
+            }
+
+            if (_ref.pantallaVideo != null) _ref.pantallaVideo.enabled = true;
+            if (_ref.textoEstadoSenas != null) _ref.textoEstadoSenas.text = string.Empty;
+            if (reproductor.isPrepared)
+            {
+                reproductor.Play();
+                return;
+            }
+
+            reproductor.prepareCompleted -= ReproducirPreparado;
+            reproductor.prepareCompleted += ReproducirPreparado;
+            reproductor.Prepare();
         }
 
-        private static void PrepararRect(RectTransform rect, Vector2 posicion, Vector2 tamano)
+        public void PermitirAvanzar(bool permitido)
         {
-            rect.anchorMin = rect.anchorMax = new Vector2(0.5f, 0.5f);
-            rect.pivot = new Vector2(0.5f, 0.5f);
-            rect.anchoredPosition = posicion;
-            rect.sizeDelta = tamano;
+            if (_ref.botonAvanzar != null) _ref.botonAvanzar.interactable = permitido;
         }
+
+        public void PermitirRegresar(bool permitido)
+        {
+            if (_ref.botonRegresar != null) _ref.botonRegresar.interactable = permitido;
+        }
+
+        public void MostrarProgreso(int escenaActual, int totalEscenas)
+        {
+            if (_ref.textoProgreso != null)
+            {
+                _ref.textoProgreso.text = FormatearProgreso(escenaActual, totalEscenas);
+            }
+        }
+
+        public static string FormatearProgreso(int escenaActual, int totalEscenas)
+        {
+            return "<color=#FFD43B>" + escenaActual + "</color> de " + totalEscenas;
+        }
+
+        /// <summary>Lectura: reproduce o detiene la locución, sin superponer audios.</summary>
+        public void AlternarAudio(AudioClip clip)
+        {
+            AudioSource fuente = _ref.fuenteAudio;
+            if (fuente == null || clip == null) return;
+
+            if (fuente.isPlaying && fuente.clip == clip)
+            {
+                fuente.Stop();
+                return;
+            }
+
+            fuente.Stop();
+            fuente.clip = clip;
+            fuente.Play();
+        }
+
+        public void DetenerAudio()
+        {
+            if (_ref.fuenteAudio != null && _ref.fuenteAudio.isPlaying) _ref.fuenteAudio.Stop();
+        }
+
+        public void EnfocarTarjeta(int indice)
+        {
+            Enfocar(BotonTarjeta(indice < 0 ? 0 : indice));
+        }
+
+        // ----- Apoyo interno -----
+
+        private const int RetoSinIndice = -1;
+
+        private void PrepararTarjetas(int brillo, int incorrecta, int correcta, bool interactuables)
+        {
+            if (_ref.tarjetas == null) return;
+            for (int i = 0; i < _ref.tarjetas.Length; i++)
+            {
+                TarjetaRespuestaVista tarjeta = _ref.tarjetas[i];
+                if (tarjeta == null) continue;
+                Activar(tarjeta.brilloSeleccion, i == brillo);
+                Activar(tarjeta.bordeIncorrecto, i == incorrecta);
+                Activar(tarjeta.bordeCorrecto, i == correcta);
+                if (tarjeta.boton != null) tarjeta.boton.interactable = interactuables;
+            }
+        }
+
+        private IEnumerator MostrarCelebracion()
+        {
+            BloquearCapaBase(true);
+            yield return new WaitForSecondsRealtime(ESPERA_CELEBRACION);
+            // El personaje celebra en la ventana de acierto; se oculta el guía para no duplicarlo.
+            Activar(_ref.personajeGuia, false);
+            Activar(_ref.estadoCorrecto, true);
+            if (_ref.animacionCelebracion != null) _ref.animacionCelebracion.ReproducirUnCiclo();
+            Enfocar(_ref.botonSiguiente);
+
+            RectTransform contenido = _ref.contenidoCelebracion;
+            if (contenido != null)
+            {
+                float tiempo = 0f;
+                while (tiempo < DURACION_ENTRADA)
+                {
+                    tiempo += Time.unscaledDeltaTime;
+                    float t = Mathf.Clamp01(tiempo / DURACION_ENTRADA);
+                    contenido.localScale = Vector3.one * Mathf.Lerp(0.85f, 1f, 1f - (1f - t) * (1f - t));
+                    yield return null;
+                }
+
+                contenido.localScale = Vector3.one;
+            }
+
+            _celebracion = null;
+        }
+
+        private bool PrepararVideo(string archivoVideo)
+        {
+            VideoPlayer reproductor = _ref.reproductorSenas;
+            if (reproductor == null || string.IsNullOrWhiteSpace(archivoVideo)) return false;
+
+            string ruta = Path.Combine(Application.streamingAssetsPath, CARPETA_LSEC, archivoVideo);
+            if (!File.Exists(ruta)) return false;
+
+            reproductor.source = VideoSource.Url;
+            reproductor.url = ruta;
+            return true;
+        }
+
+        private void DetenerVideo()
+        {
+            if (_ref.reproductorSenas == null) return;
+            _ref.reproductorSenas.prepareCompleted -= ReproducirPreparado;
+            if (_ref.reproductorSenas.isPlaying || _ref.reproductorSenas.isPaused) _ref.reproductorSenas.Stop();
+            if (_ref.pantallaVideo != null) _ref.pantallaVideo.enabled = false;
+        }
+
+        private void ReproducirPreparado(VideoPlayer reproductor)
+        {
+            reproductor.prepareCompleted -= ReproducirPreparado;
+            reproductor.Play();
+        }
+
+        private void BloquearCapaBase(bool bloquear)
+        {
+            if (_ref.capaBase == null) return;
+            _ref.capaBase.interactable = !bloquear;
+            _ref.capaBase.blocksRaycasts = !bloquear;
+        }
+
+        private Button BotonTarjeta(int indice)
+        {
+            if (_ref.tarjetas == null || indice < 0 || indice >= _ref.tarjetas.Length || _ref.tarjetas[indice] == null)
+            {
+                return null;
+            }
+
+            return _ref.tarjetas[indice].boton;
+        }
+
+        private static void Enfocar(Selectable control)
+        {
+            if (!Application.isPlaying || control == null || EventSystem.current == null) return;
+            if (!control.gameObject.activeInHierarchy || !control.interactable) return;
+            EventSystem.current.SetSelectedGameObject(control.gameObject);
+        }
+
+        private static void Activar(GameObject objeto, bool activo)
+        {
+            if (objeto != null && objeto.activeSelf != activo) objeto.SetActive(activo);
+        }
+
+        private static void Activar(Component componente, bool activo)
+        {
+            if (componente != null) Activar(componente.gameObject, activo);
+        }
+
+        private static void Escuchar(Button boton, UnityAction accion)
+        {
+            if (boton != null) boton.onClick.AddListener(accion);
+        }
+
+        private static void Olvidar(Button boton, UnityAction accion)
+        {
+            if (boton != null) boton.onClick.RemoveListener(accion);
+        }
+
+        private void EmitirComenzar() { OnComenzarSolicitado?.Invoke(); }
+        private void EmitirAceptar() { OnAceptarSolicitado?.Invoke(); }
+        private void EmitirIntentarloDeNuevo() { OnIntentarloDeNuevoSolicitado?.Invoke(); }
+        private void EmitirSiguiente() { OnSiguienteSolicitado?.Invoke(); }
+        private void EmitirLectura() { OnLecturaSolicitada?.Invoke(); }
+        private void EmitirAyuda() { OnAyudaSolicitada?.Invoke(); }
+        private void EmitirCerrarPista() { OnCerrarPistaSolicitado?.Invoke(); }
+        private void EmitirSenas() { OnSenasSolicitadas?.Invoke(); }
+        private void EmitirCerrarSenas() { OnCerrarSenasSolicitado?.Invoke(); }
+        private void EmitirReproducirSenas() { OnReproducirSenasSolicitado?.Invoke(); }
+        private void EmitirRegresar() { OnRegresarSolicitado?.Invoke(); }
+        private void EmitirAvanzar() { OnAvanzarSolicitado?.Invoke(); }
+        private void EmitirInicio() { OnInicioSolicitado?.Invoke(); }
+        private void EmitirConfiguracion() { OnConfiguracionSolicitada?.Invoke(); }
     }
 }

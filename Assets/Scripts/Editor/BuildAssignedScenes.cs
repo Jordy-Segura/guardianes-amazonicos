@@ -3,194 +3,202 @@ using System.Linq;
 using GuardianesAmazonicos.Models;
 using GuardianesAmazonicos.Presenters;
 using GuardianesAmazonicos.Views;
-using TMPro;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.InputSystem.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 namespace GuardianesAmazonicos.Editor
 {
+    /// <summary>
+    /// Genera SOLO las actividades asignadas a Jordy con la plantilla base aprobada:
+    /// Nivel 1 – Escena 5 (jaguar), Nivel 1 – Escena 9 (plátano) y
+    /// Nivel 2 – Escena 1 (bienvenida del nivel + Mono Curioso).
+    /// No abre ni modifica las escenas de otros integrantes.
+    /// </summary>
     public static class BuildAssignedScenes
     {
         private const string ConfigJaguarPath = "Assets/Scripts/Models/NivelesData/RetoJaguar.asset";
         private const string ConfigPlatanoPath = "Assets/Scripts/Models/NivelesData/RetoPlatano.asset";
         private const string ConfigMonoCuriosoPath = "Assets/Scripts/Models/NivelesData/ProtegerHabitatMono.asset";
-        private const string SceneJaguarPath = "Assets/Scenes/Niveles/Nivel01/Escena05_IdentificarJaguar.unity";
-        private const string ScenePlatanoPath = "Assets/Scenes/Niveles/Nivel01/Escena09_IdentificarPlatano.unity";
-        private const string SceneMonoCuriosoPath = "Assets/Scenes/Niveles/Nivel02/Escena01_ProtegerHabitatMono.unity";
+        public const string SceneJaguarPath = "Assets/Scenes/Niveles/Nivel01/Escena05_IdentificarJaguar.unity";
+        public const string ScenePlatanoPath = "Assets/Scenes/Niveles/Nivel01/Escena09_IdentificarPlatano.unity";
+        public const string SceneMonoCuriosoPath = "Assets/Scenes/Niveles/Nivel02/Escena01_ProtegerHabitatMono.unity";
 
-        [MenuItem("Guardianes/Generar actividad del Mono Curioso")]
-        public static void GenerarActividadMonoCurioso()
+        private const string FondoNivel1 = "Assets/Art/Backgrounds/Niveles/N1_Conozco_la_selva.png";
+        private const string FondoNivel2 = "Assets/Art/Backgrounds/Niveles/N2_Cuido_los_animales.png";
+        private const string Explorador = "Assets/Art/Characters/Explorador.png";
+        private const string CarpetaFotogramasExplorador = "Assets/Art/Animaciones/Explorador/Fotogramas";
+        private const string Escenas = "Assets/Art/Escenas/";
+        private const string Respuestas = "Assets/Art/Items/Respuestas/";
+        private const string Lectura = "Assets/Audio/Voice/Lectura/";
+
+        private static readonly string[] RecursosNuevos =
         {
-            AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
-            ConfigurarImportadoresNivelDos();
-            AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
+            Escenas + "pregunta_01_05_escena.png", Escenas + "pregunta_01_09_escena.png",
+            Escenas + "pregunta_02_01_escena.png", Escenas + "bienvenida_nivel_01.png", Escenas + "bienvenida_nivel_02.png",
+            Respuestas + "respuesta_01_09_a.png", Respuestas + "respuesta_01_09_b.png", Respuestas + "respuesta_01_09_c.png",
+            Respuestas + "respuesta_02_01_a.png", Respuestas + "respuesta_02_01_b.png", Respuestas + "respuesta_02_01_c.png"
+        };
 
-            RetoSeleccionConfiguracion configuracion = CrearConfiguracion(ConfigMonoCuriosoPath);
-            configuracion.Nivel = 2;
-            configuracion.numeroEscena = 1;
-            configuracion.titulo = "Nivel 2 · Cuido a los animales";
-            configuracion.pregunta = "¿Qué acción ayuda a proteger el hogar del Mono Curioso?";
-            configuracion.instruccion = "Toca la imagen que cuida el bosque.";
-            configuracion.opciones = new[] { "Cuidar el bosque", "Tirar basura", "Cortar árboles" };
-            configuracion.imagenes = null;
-            configuracion.atlasDosPorDos = null;
-            configuracion.AtlasOpciones = Cargar<Texture2D>("Assets/Art/Items/AccionesProteccionMono.png");
-            configuracion.ColumnasAtlas = 3;
-            configuracion.FilasAtlas = 1;
-            configuracion.indiceCorrecto = 0;
-            configuracion.pistaIncorrecta = "Esa acción puede dañar el hogar del mono. Busca la que ayuda a cuidar las plantas y los árboles.";
-            configuracion.mensajeCorrecto = "¡Muy bien! Cuidar el bosque protege el hogar del Mono Curioso.";
-            configuracion.pronunciaciones = null;
-            configuracion.siguienteEscena = string.Empty;
-            configuracion.textoContinuar = "SIGUIENTE ACTIVIDAD";
-            configuracion.fondo = Cargar<Sprite>("Assets/Art/Backgrounds/N2_CuidoLosAnimales.png");
-            configuracion.explorador = Cargar<Sprite>("Assets/Art/Characters/Mono.png");
-            configuracion.fuente = Cargar<TMP_FontAsset>("Assets/Fonts/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF.asset");
-            EditorUtility.SetDirty(configuracion);
-
-            CrearEscena(SceneMonoCuriosoPath, configuracion);
-            List<EditorBuildSettingsScene> escenas = EditorBuildSettings.scenes.ToList();
-            AgregarEscenaBuild(escenas, SceneMonoCuriosoPath);
-            EditorBuildSettings.scenes = escenas.ToArray();
-            AssetDatabase.SaveAssets();
-            AssetDatabase.Refresh();
-            Debug.Log("Actividad del Mono Curioso generada en el segundo nivel.");
+        [MenuItem("Guardianes/Generar mis escenas con la plantilla (Bienvenida N1, Escenas 5 y 9, Nivel 2 Escena 1)")]
+        public static void GenerarTodas()
+        {
+            BuildWelcomeScene.Build();
+            Generar();
+            GenerarActividadMonoCurioso();
         }
 
-        private static void ConfigurarImportadoresNivelDos()
-        {
-            TextureImporter fondo = AssetImporter.GetAtPath("Assets/Art/Backgrounds/N2_CuidoLosAnimales.png") as TextureImporter;
-            if (fondo != null)
-            {
-                fondo.textureType = TextureImporterType.Sprite;
-                fondo.spriteImportMode = SpriteImportMode.Single;
-                fondo.alphaIsTransparency = true;
-                fondo.mipmapEnabled = false;
-                fondo.textureCompression = TextureImporterCompression.Uncompressed;
-                fondo.maxTextureSize = 2048;
-                fondo.SaveAndReimport();
-            }
-
-            TextureImporter atlas = AssetImporter.GetAtPath("Assets/Art/Items/AccionesProteccionMono.png") as TextureImporter;
-            if (atlas != null)
-            {
-                atlas.textureType = TextureImporterType.Default;
-                atlas.isReadable = true;
-                atlas.alphaIsTransparency = true;
-                atlas.mipmapEnabled = false;
-                atlas.textureCompression = TextureImporterCompression.Uncompressed;
-                atlas.maxTextureSize = 4096;
-                atlas.SaveAndReimport();
-            }
-        }
-
+        [MenuItem("Guardianes/Generar retos del jaguar y del plátano")]
         public static void Generar()
         {
-            ConfigurarImportadores();
-            AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
-
-            TMP_FontAsset fuente = Cargar<TMP_FontAsset>("Assets/Fonts/OpenDyslexic3-Regular SDF.asset");
-            Sprite fondo = Cargar<Sprite>("Assets/Art/Backgrounds/N1_ConozcoLaSelva.png");
-            Sprite explorador = Cargar<Sprite>("Assets/Art/Characters/Explorador.png");
-
+            PrepararRecursos();
             RetoSeleccionConfiguracion jaguar = CrearConfiguracion(ConfigJaguarPath);
-            jaguar.numeroEscena = 5;
-            jaguar.titulo = "Nivel 1 · Conozco la selva";
-            jaguar.pregunta = "¿Cuál de estos animales es el jaguar?";
-            jaguar.instruccion = "Toca la imagen del jaguar.";
-            jaguar.opciones = new[] { "Jaguar", "Guacamayo", "Mono", "Tortuga" };
-            jaguar.imagenes = new[]
+            jaguar.Nivel = 1;
+            jaguar.NumeroEscena = 5;
+            jaguar.TituloNivel = "Nivel 1 • Conozco la selva";
+            jaguar.Pregunta = "Observa la selva. ¿Cuál de estos animales es el jaguar?";
+            jaguar.Opciones = new[] { "Mono", "Jaguar", "Guacamayo" };
+            jaguar.ImagenesOpciones = new[]
             {
-                Cargar<Sprite>("Assets/Art/Characters/Jaguar.png"),
-                Cargar<Sprite>("Assets/Art/Characters/Guacamayo.png"),
-                Cargar<Sprite>("Assets/Art/Characters/Mono.png"),
-                Cargar<Sprite>("Assets/Art/Characters/Tortuga.png")
+                PlantillaUIBuilder.S("Assets/Art/Characters/Mono.png"),
+                PlantillaUIBuilder.S("Assets/Art/Characters/Jaguar.png"),
+                PlantillaUIBuilder.S("Assets/Art/Characters/Guacamayo.png")
             };
-            jaguar.atlasDosPorDos = null;
-            jaguar.indiceCorrecto = 0;
-            jaguar.pistaIncorrecta = "Busca un felino amarillo con manchas oscuras.";
-            jaguar.mensajeCorrecto = "¡Muy bien! Encontraste al jaguar.";
-            jaguar.pronunciaciones = null;
-            jaguar.siguienteEscena = string.Empty;
-            jaguar.textoContinuar = "SIGUIENTE RETO";
-            jaguar.fondo = fondo;
-            jaguar.explorador = explorador;
-            jaguar.fuente = fuente;
+            jaguar.IndiceCorrecto = 1;
+            jaguar.ExplicacionesIncorrectas = new[]
+            {
+                "El mono trepa los árboles y tiene una cola larga. El jaguar es un felino con manchas.",
+                string.Empty,
+                "El guacamayo es un ave de plumas de colores. El jaguar es un felino con manchas."
+            };
+            jaguar.Pista = "Busca un animal parecido a un gato grande, de pelaje amarillo con manchas oscuras.";
+            jaguar.Felicitacion = "¡Lo lograste! Encontraste al jaguar.";
+            jaguar.ImagenEscena = PlantillaUIBuilder.S(Escenas + "pregunta_01_05_escena.png");
+            jaguar.ElementoEscena = null;
+            jaguar.Fondo = PlantillaUIBuilder.S(FondoNivel1);
+            jaguar.Personaje = PlantillaUIBuilder.S(Explorador);
+            jaguar.FotogramasCelebracion = CargarFotogramasExplorador();
+            jaguar.AudioLectura = PlantillaUIBuilder.Cargar<AudioClip>(Lectura + "lectura_01_05.wav");
+            jaguar.VideoSenas = "senas_nivel_01_pregunta_05.mp4";
+            jaguar.MostrarBienvenida = false;
+            jaguar.SiguienteEscena = string.Empty;
+            jaguar.Fuente = PlantillaUIBuilder.Cargar<TMPro.TMP_FontAsset>(PlantillaUIBuilder.FUENTE);
             EditorUtility.SetDirty(jaguar);
 
             RetoSeleccionConfiguracion platano = CrearConfiguracion(ConfigPlatanoPath);
-            platano.numeroEscena = 9;
-            platano.titulo = "Nivel 1 · Conozco la selva";
-            platano.pregunta = "¿Cuál de estos elementos es un plátano?";
-            platano.instruccion = "Toca una imagen. Después puedes escuchar su nombre.";
-            platano.opciones = new[] { "Plátano", "Manzana", "Cacao", "Hoja" };
-            platano.imagenes = null;
-            platano.atlasDosPorDos = Cargar<Texture2D>("Assets/Art/Items/FrutasJungla.png");
-            platano.indiceCorrecto = 0;
-            platano.pistaIncorrecta = "Busca la fruta amarilla y curva.";
-            platano.mensajeCorrecto = "¡Excelente! Identificaste el plátano.";
-            platano.pronunciaciones = new[]
+            platano.Nivel = 1;
+            platano.NumeroEscena = 9;
+            platano.TituloNivel = "Nivel 1 • Conozco la selva";
+            platano.Pregunta = "Observa la selva. ¿Cuál de estos frutos es el plátano?";
+            platano.Opciones = new[] { "Manzana", "Cacao", "Plátano" };
+            platano.ImagenesOpciones = new[]
             {
-                Cargar<AudioClip>("Assets/Audio/Voice/Retos/Pronunciacion_Platano.wav"),
-                Cargar<AudioClip>("Assets/Audio/Voice/Retos/Pronunciacion_Manzana.wav"),
-                Cargar<AudioClip>("Assets/Audio/Voice/Retos/Pronunciacion_Cacao.wav"),
-                Cargar<AudioClip>("Assets/Audio/Voice/Retos/Pronunciacion_Hoja.wav")
+                PlantillaUIBuilder.S(Respuestas + "respuesta_01_09_a.png"),
+                PlantillaUIBuilder.S(Respuestas + "respuesta_01_09_b.png"),
+                PlantillaUIBuilder.S(Respuestas + "respuesta_01_09_c.png")
             };
-            platano.siguienteEscena = string.Empty;
-            platano.textoContinuar = "CONTINUAR";
-            platano.fondo = fondo;
-            platano.explorador = explorador;
-            platano.fuente = fuente;
+            platano.IndiceCorrecto = 2;
+            platano.ExplicacionesIncorrectas = new[]
+            {
+                "La manzana es redonda y roja. El plátano es largo, curvo y amarillo.",
+                "El cacao es un fruto morado con semillas blancas. El plátano es largo, curvo y amarillo.",
+                string.Empty
+            };
+            platano.Pista = "Busca una fruta larga y curva que se vuelve amarilla cuando está madura.";
+            platano.Felicitacion = "¡Lo lograste! Identificaste el plátano.";
+            platano.ImagenEscena = PlantillaUIBuilder.S(Escenas + "pregunta_01_09_escena.png");
+            platano.ElementoEscena = null;
+            platano.Fondo = PlantillaUIBuilder.S(FondoNivel1);
+            platano.Personaje = PlantillaUIBuilder.S(Explorador);
+            platano.FotogramasCelebracion = CargarFotogramasExplorador();
+            platano.AudioLectura = PlantillaUIBuilder.Cargar<AudioClip>(Lectura + "lectura_01_09.wav");
+            platano.VideoSenas = "senas_nivel_01_pregunta_09.mp4";
+            platano.MostrarBienvenida = false;
+            platano.SiguienteEscena = string.Empty;
+            platano.Fuente = jaguar.Fuente;
             EditorUtility.SetDirty(platano);
 
             AssetDatabase.SaveAssets();
             CrearEscena(SceneJaguarPath, jaguar);
             CrearEscena(ScenePlatanoPath, platano);
-            ActualizarBuildSettings();
-            AssetDatabase.SaveAssets();
-            AssetDatabase.Refresh();
-            Debug.Log("Escenas de selección generadas y añadidas a Build Settings.");
+            AgregarEscenasBuild(SceneJaguarPath, ScenePlatanoPath);
+            Debug.Log("Escenas 5 y 9 del Nivel 1 generadas con la plantilla base.");
         }
 
-        private static void ConfigurarImportadores()
+        [MenuItem("Guardianes/Generar actividad del Mono Curioso")]
+        public static void GenerarActividadMonoCurioso()
         {
-            string[] sprites =
+            PrepararRecursos();
+            RetoSeleccionConfiguracion mono = CrearConfiguracion(ConfigMonoCuriosoPath);
+            mono.Nivel = 2;
+            mono.NumeroEscena = 1;
+            mono.TituloNivel = "Nivel 2 • Cuido los animales";
+            mono.Pregunta = "¿Qué acción ayuda a proteger el hogar del Mono Curioso?";
+            mono.Opciones = new[] { "Tirar basura", "Cuidar el bosque", "Cortar árboles" };
+            mono.ImagenesOpciones = new[]
             {
-                "Assets/Art/Backgrounds/N1_ConozcoLaSelva.png",
-                "Assets/Art/Characters/Explorador.png",
-                "Assets/Art/Characters/Guacamayo.png",
-                "Assets/Art/Characters/Mono.png",
-                "Assets/Art/Characters/Tortuga.png",
-                "Assets/Art/Characters/Jaguar.png"
+                PlantillaUIBuilder.S(Respuestas + "respuesta_02_01_a.png"),
+                PlantillaUIBuilder.S(Respuestas + "respuesta_02_01_b.png"),
+                PlantillaUIBuilder.S(Respuestas + "respuesta_02_01_c.png")
             };
-            foreach (string ruta in sprites)
+            mono.IndiceCorrecto = 1;
+            mono.ExplicacionesIncorrectas = new[]
             {
-                TextureImporter importer = AssetImporter.GetAtPath(ruta) as TextureImporter;
-                if (importer == null) continue;
-                importer.textureType = TextureImporterType.Sprite;
-                importer.spriteImportMode = SpriteImportMode.Single;
-                importer.alphaIsTransparency = true;
-                importer.mipmapEnabled = false;
-                importer.textureCompression = TextureImporterCompression.Uncompressed;
-                importer.maxTextureSize = 2048;
-                importer.SaveAndReimport();
-            }
+                "La basura ensucia el bosque y puede lastimar a los animales. Busca la acción que cuida su hogar.",
+                string.Empty,
+                "Si cortamos los árboles, el mono pierde su casa. Busca la acción que cuida el bosque."
+            };
+            mono.Pista = "Piensa en lo que necesita el mono para vivir: árboles sanos y un bosque limpio.";
+            mono.Felicitacion = "¡Lo lograste! Cuidar el bosque protege su hogar.";
+            mono.ImagenEscena = PlantillaUIBuilder.S(Escenas + "pregunta_02_01_escena.png");
+            mono.ElementoEscena = PlantillaUIBuilder.S("Assets/Art/Characters/Mono.png");
+            mono.RectElementoEscena = new Rect(236f, -96f, 170f, 226f);
+            mono.Fondo = PlantillaUIBuilder.S(FondoNivel2);
+            mono.Personaje = PlantillaUIBuilder.S(Explorador);
+            mono.FotogramasCelebracion = CargarFotogramasExplorador();
+            mono.AudioLectura = PlantillaUIBuilder.Cargar<AudioClip>(Lectura + "lectura_02_01.wav");
+            mono.VideoSenas = "senas_nivel_02_pregunta_01.mp4";
+            mono.MostrarBienvenida = true;
+            mono.BienvenidaEtiquetaNivel = "Nivel 2";
+            mono.BienvenidaNombreNivel = "¡Cuido los animales!";
+            mono.BienvenidaSaludo = "¡Hola, guardián!";
+            mono.BienvenidaDescripcion = "En este nivel aprenderás a cuidar a los animales de la selva y a proteger su hogar.";
+            mono.BienvenidaImagen = PlantillaUIBuilder.S(Escenas + "bienvenida_nivel_02.png");
+            mono.BienvenidaAudio = PlantillaUIBuilder.Cargar<AudioClip>(Lectura + "lectura_02_00_bienvenida.wav");
+            mono.BienvenidaVideoSenas = "senas_nivel_02_bienvenida.mp4";
+            mono.SiguienteEscena = string.Empty;
+            mono.Fuente = PlantillaUIBuilder.Cargar<TMPro.TMP_FontAsset>(PlantillaUIBuilder.FUENTE);
+            EditorUtility.SetDirty(mono);
 
-            TextureImporter atlas = AssetImporter.GetAtPath("Assets/Art/Items/FrutasJungla.png") as TextureImporter;
-            if (atlas != null)
-            {
-                atlas.textureType = TextureImporterType.Default;
-                atlas.isReadable = true;
-                atlas.alphaIsTransparency = true;
-                atlas.mipmapEnabled = false;
-                atlas.textureCompression = TextureImporterCompression.Uncompressed;
-                atlas.maxTextureSize = 2048;
-                atlas.SaveAndReimport();
-            }
+            AssetDatabase.SaveAssets();
+            CrearEscena(SceneMonoCuriosoPath, mono);
+            AgregarEscenasBuild(SceneMonoCuriosoPath);
+            Debug.Log("Escena 1 del Nivel 2 generada: bienvenida del nivel y actividad del Mono Curioso.");
+        }
+
+        public static void PrepararRecursos()
+        {
+            PlantillaUIBuilder.Preparar();
+            foreach (string ruta in RecursosNuevos) PlantillaUIBuilder.ImportarComoSprite(ruta);
+            AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
+        }
+
+        /// <summary>Fotograma central del saludo (brazo levantado) para la bienvenida.</summary>
+        public static Sprite FotogramaSaludo(Sprite[] fotogramas, Sprite respaldo)
+        {
+            return fotogramas != null && fotogramas.Length > 0 ? fotogramas[fotogramas.Length / 2] : respaldo;
+        }
+
+        public static Sprite[] CargarFotogramasExplorador()
+        {
+            string[] guids = AssetDatabase.FindAssets("t:Sprite", new[] { CarpetaFotogramasExplorador });
+            return guids.Select(AssetDatabase.GUIDToAssetPath)
+                .OrderBy(ruta => ruta, System.StringComparer.Ordinal)
+                .Select(AssetDatabase.LoadAssetAtPath<Sprite>)
+                .Where(sprite => sprite != null)
+                .ToArray();
         }
 
         private static RetoSeleccionConfiguracion CrearConfiguracion(string ruta)
@@ -201,19 +209,72 @@ namespace GuardianesAmazonicos.Editor
                 configuracion = ScriptableObject.CreateInstance<RetoSeleccionConfiguracion>();
                 AssetDatabase.CreateAsset(configuracion, ruta);
             }
+
             return configuracion;
         }
 
-        private static void CrearEscena(string ruta, RetoSeleccionConfiguracion configuracion)
+        private static void CrearEscena(string ruta, RetoSeleccionConfiguracion c)
         {
             Scene escena = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
-            CrearCamara();
-            CrearEventSystem();
+            PlantillaUIBuilder.CrearCamaraYEventos();
 
-            GameObject actividad = new GameObject("RetoSeleccion");
-            RetoSeleccionView vista = actividad.AddComponent<RetoSeleccionView>();
-            RetoSeleccionPresenter presenter = actividad.AddComponent<RetoSeleccionPresenter>();
-            presenter.Configurar(configuracion, vista);
+            Canvas canvas = PlantillaUIBuilder.CrearCanvas("CanvasActividad");
+            RetoSeleccionView.ReferenciasActividad r = new RetoSeleccionView.ReferenciasActividad();
+
+            // Capa base: fondo → actividad → bienvenida (si corresponde) → cabecera.
+            RectTransform capaBase = PlantillaUIBuilder.Capa("CapaBase", canvas.transform);
+            r.capaBase = capaBase.gameObject.AddComponent<CanvasGroup>();
+            PlantillaUIBuilder.Imagen("FondoNivel", capaBase, c.Fondo, 0f, 0f, PlantillaUIBuilder.ANCHO, PlantillaUIBuilder.ALTO);
+            PlantillaUIBuilder.ConstruirActividad(capaBase, c.Pregunta, c.Opciones, c.ImagenesOpciones, c.Personaje,
+                c.ImagenEscena, c.ElementoEscena, c.RectElementoEscena, r);
+
+            if (c.MostrarBienvenida)
+            {
+                PlantillaUIBuilder.Bienvenida b = PlantillaUIBuilder.ConstruirBienvenida(capaBase, new PlantillaUIBuilder.DatosBienvenida
+                {
+                    etiquetaNivel = c.BienvenidaEtiquetaNivel,
+                    nombreNivel = c.BienvenidaNombreNivel,
+                    saludo = c.BienvenidaSaludo,
+                    descripcion = c.BienvenidaDescripcion,
+                    fondo = c.Fondo,
+                    imagen = c.BienvenidaImagen,
+                    personaje = FotogramaSaludo(c.FotogramasCelebracion, c.Personaje)
+                });
+                r.estadoBienvenida = b.raiz;
+                r.botonComenzar = b.comenzar;
+            }
+
+            PlantillaUIBuilder.Cabecera cabecera = PlantillaUIBuilder.ConstruirCabecera(capaBase, c.TituloNivel, c.NumeroEscena, c.TotalEscenas, true);
+            r.botonLectura = cabecera.lectura;
+            r.botonSenas = cabecera.senas;
+            r.botonAyuda = cabecera.ayuda;
+            r.botonRegresar = cabecera.regresar;
+            r.botonAvanzar = cabecera.avanzar;
+            r.botonInicio = cabecera.inicio;
+            r.botonConfiguracion = cabecera.configuracion;
+            r.textoProgreso = cabecera.progreso;
+            if (c.MostrarBienvenida && r.botonAyuda != null) r.botonAyuda.gameObject.SetActive(false);
+
+            // Ventanas independientes: nunca se muestran dos a la vez.
+            PlantillaUIBuilder.ConstruirEstadoCorrecto(canvas.transform, c.Personaje, c.FotogramasCelebracion, c.Felicitacion, r);
+            PlantillaUIBuilder.ConstruirPanelPista(canvas.transform, c.Pista, c.Personaje, r);
+            PlantillaUIBuilder.PanelSenas senas = PlantillaUIBuilder.ConstruirPanelSenas(canvas.transform);
+            r.panelSenas = senas.raiz;
+            r.botonReproducirSenas = senas.reproducir;
+            r.botonCerrarSenas = senas.cerrar;
+            r.textoEstadoSenas = senas.estado;
+            r.pantallaVideo = senas.pantalla;
+            r.reproductorSenas = senas.reproductor;
+
+            GameObject controlador = new GameObject("RetoSeleccion");
+            r.fuenteAudio = controlador.AddComponent<AudioSource>();
+            r.fuenteAudio.playOnAwake = false;
+            r.fuenteAudio.loop = false;
+            RetoSeleccionView vista = controlador.AddComponent<RetoSeleccionView>();
+            vista.Enlazar(r);
+            RetoSeleccionPresenter presenter = controlador.AddComponent<RetoSeleccionPresenter>();
+            presenter.Configurar(c, vista);
+            EditorUtility.SetDirty(vista);
             EditorUtility.SetDirty(presenter);
 
             EditorSceneManager.MarkSceneDirty(escena);
@@ -230,50 +291,30 @@ namespace GuardianesAmazonicos.Editor
             if (presenter == null)
                 throw new System.InvalidOperationException("No se guardó el presenter en la escena: " + ruta);
 
-            SerializedObject serialized = new SerializedObject(presenter);
-            serialized.Update();
-            if (serialized.FindProperty("_configuracion").objectReferenceValue == null ||
-                serialized.FindProperty("_vista").objectReferenceValue == null)
+            SerializedObject datos = new SerializedObject(presenter);
+            if (datos.FindProperty("_configuracion").objectReferenceValue == null ||
+                datos.FindProperty("_vista").objectReferenceValue == null)
                 throw new System.InvalidOperationException("La escena quedó sin referencias del reto: " + ruta);
+
+            int tarjetas = escena.GetRootGameObjects()
+                .SelectMany(objeto => objeto.GetComponentsInChildren<Button>(true))
+                .Count(boton => boton.name.StartsWith("Respuesta"));
+            if (tarjetas != RetoSeleccionConfiguracion.CANTIDAD_OPCIONES)
+                throw new System.InvalidOperationException("La plantilla debe tener tres tarjetas de respuesta: " + ruta);
         }
 
-        private static void CrearCamara()
-        {
-            GameObject objeto = new GameObject("Main Camera", typeof(Camera), typeof(AudioListener));
-            objeto.tag = "MainCamera";
-            objeto.transform.position = new Vector3(0f, 0f, -10f);
-            Camera camara = objeto.GetComponent<Camera>();
-            camara.clearFlags = CameraClearFlags.SolidColor;
-            camara.backgroundColor = new Color(0.04f, 0.16f, 0.1f, 1f);
-            camara.orthographic = true;
-        }
-
-        private static void CrearEventSystem()
-        {
-            GameObject objeto = new GameObject("EventSystem", typeof(EventSystem), typeof(InputSystemUIInputModule));
-            objeto.GetComponent<InputSystemUIInputModule>().AssignDefaultActions();
-        }
-
-        private static void ActualizarBuildSettings()
+        public static void AgregarEscenasBuild(params string[] rutas)
         {
             List<EditorBuildSettingsScene> escenas = EditorBuildSettings.scenes.ToList();
-            AgregarEscenaBuild(escenas, "Assets/Scenes/Niveles/Nivel01/BienvenidaDelGuardian.unity");
-            AgregarEscenaBuild(escenas, SceneJaguarPath);
-            AgregarEscenaBuild(escenas, ScenePlatanoPath);
-            EditorBuildSettings.scenes = escenas.ToArray();
-        }
+            bool cambio = false;
+            foreach (string ruta in rutas)
+            {
+                if (escenas.Any(escena => escena.path == ruta)) continue;
+                escenas.Add(new EditorBuildSettingsScene(ruta, true));
+                cambio = true;
+            }
 
-        private static void AgregarEscenaBuild(List<EditorBuildSettingsScene> escenas, string ruta)
-        {
-            if (escenas.Any(escena => escena.path == ruta)) return;
-            escenas.Add(new EditorBuildSettingsScene(ruta, true));
-        }
-
-        private static T Cargar<T>(string ruta) where T : UnityEngine.Object
-        {
-            T asset = AssetDatabase.LoadAssetAtPath<T>(ruta);
-            if (asset == null) throw new System.InvalidOperationException("No se encontró el recurso: " + ruta);
-            return asset;
+            if (cambio) EditorBuildSettings.scenes = escenas.ToArray();
         }
     }
 }

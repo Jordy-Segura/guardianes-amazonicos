@@ -9,8 +9,13 @@ namespace GuardianesAmazonicos.Views
         event Action OnSenasSolicitadas;
         event Action OnCerrarSenasSolicitado;
         event Action OnReproducirSenasSolicitado;
+        event Action OnRegresarSolicitado;
+        event Action OnAvanzarSolicitado;
+        event Action OnInicioSolicitado;
+        event Action OnConfiguracionSolicitada;
 
-        void MostrarProgreso(int puntoActual, int totalPuntos, bool aventuraIniciada);
+        void MostrarProgreso(int escenaActual, int totalEscenas);
+        void PermitirNavegacion(bool regresar, bool avanzar);
         void ReproducirBienvenida();
         void MostrarPanelSenas();
         void CerrarPanelSenas();

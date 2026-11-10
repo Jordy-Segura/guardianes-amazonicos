@@ -1,9 +1,9 @@
 fileFormatVersion: 2
-guid: 2b33f77735e58b64ab39ee0b4f798c2d
+guid: acd2eed8bcafe3be1dc73f15d82d1936
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -2753784056895142579
+      213: 2362775992891292409
     second: Tortuga_0
   externalObjects: {}
   serializedVersion: 13
@@ -74,10 +74,10 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 2048
+    maxTextureSize: 4096
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 0
+    textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -87,7 +87,7 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 4
     buildTarget: Standalone
-    maxTextureSize: 2048
+    maxTextureSize: 4096
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -100,7 +100,7 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 4
     buildTarget: WebGL
-    maxTextureSize: 2048
+    maxTextureSize: 4096
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -130,8 +130,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: d4581ac8df798c9d0800000000000000
-      internalID: -2753784056895142579
+      spriteID: d07cf45d42a9c2eb0800000000000000
+      internalID: 2362775992891292409
       vertices: []
       indices: 
       edges: []
@@ -140,7 +140,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 5e97eb03825dee720800000000000000
+    spriteID: 33d09de3f83bac100800000000000000
     internalID: 0
     vertices: []
     indices: 
