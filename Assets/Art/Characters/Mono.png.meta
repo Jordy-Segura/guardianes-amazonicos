@@ -1,9 +1,17 @@
 fileFormatVersion: 2
+<<<<<<< HEAD
 guid: 9977c2fbc037d5b4eab7f9af870b265e
 TextureImporter:
   internalIDToNameTable:
   - first:
       213: 593761992941134638
+=======
+guid: 26845133233d7cadb1c648837aea4191
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -4635479266340871037
+>>>>>>> jir
     second: Mono_0
   externalObjects: {}
   serializedVersion: 13
@@ -74,10 +82,17 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
+<<<<<<< HEAD
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 0
+=======
+    maxTextureSize: 4096
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+>>>>>>> jir
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -87,7 +102,11 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 4
     buildTarget: Standalone
+<<<<<<< HEAD
     maxTextureSize: 2048
+=======
+    maxTextureSize: 4096
+>>>>>>> jir
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -100,7 +119,11 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 4
     buildTarget: WebGL
+<<<<<<< HEAD
     maxTextureSize: 2048
+=======
+    maxTextureSize: 4096
+>>>>>>> jir
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -130,8 +153,13 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
+<<<<<<< HEAD
       spriteID: e23626ef2677d3800800000000000000
       internalID: 593761992941134638
+=======
+      spriteID: 6d20784aaba39de00800000000000000
+      internalID: -4635479266340871037
+>>>>>>> jir
       vertices: []
       indices: 
       edges: []
@@ -140,7 +168,11 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
+<<<<<<< HEAD
     spriteID: 5e97eb03825dee720800000000000000
+=======
+    spriteID: 4bcda29e449c2aeb0800000000000000
+>>>>>>> jir
     internalID: 0
     vertices: []
     indices: 
@@ -154,4 +186,8 @@ TextureImporter:
   pSDRemoveMatte: 0
   userData: 
   assetBundleName: 
+<<<<<<< HEAD
   assetBundleVariant: 
+=======
+  assetBundleVariant: 
+>>>>>>> jir

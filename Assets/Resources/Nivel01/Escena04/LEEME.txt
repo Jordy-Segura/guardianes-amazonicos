@@ -1,0 +1,20 @@
+RECURSOS DE LA ESCENA 4 DEL NIVEL 1 (HU-04: reconocer la PLANTA)
+
+La Escena 4 funciona sin arte (muestra marcadores con el nombre de cada opción),
+pero al agregar estos archivos aquí la escena los usa automáticamente:
+
+  pregunta_01_04_escena.png   -> ilustración grande de apoyo (marco derecho).
+  respuesta_01_04_a.png       -> tarjeta 1 (PLANTA, respuesta correcta). PENDIENTE.
+  respuesta_01_04_b.png       -> tarjeta 2 (JAGUAR, distractor). PENDIENTE.
+  respuesta_01_04_c.png       -> tarjeta 3 (MONO, distractor). YA EXISTE
+                                 (ilustración Mono.png del paquete de personajes).
+  audio_01_04.wav (o .ogg)    -> locución de la palabra PLANTA (botón LECTURA). PENDIENTE.
+
+También se pueden asignar manualmente en el Inspector (componente
+ActividadPlantasView del objeto PanelActividadPlantas) y en el AudioSource
+AudioPalabra.
+
+Video LSEC: colocar PlantasLSEC.mp4 en Assets/StreamingAssets/LSEC/.
+
+Convención de nombres del proyecto: pregunta/respuesta + nivel (2 dígitos) +
+escena (2 dígitos) + letra de la tarjeta. Ejemplo: respuesta_01_04_a.png.
