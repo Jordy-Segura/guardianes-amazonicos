@@ -595,7 +595,8 @@ namespace GuardianesAmazonicos.Views
             _ref.botonConfiguracion = CrearBotonTopLeft("BotonConfiguracion", capaBase, CargarSprite("BotonConfiguracion"), new Vector2(1794f, -12f), new Vector2(84f, 84f));
 
             // Personaje Guía a nivel del suelo
-            Image guia = CrearImagenTopLeft("PersonajeGuia", capaActividad, c.Personaje, Color.white, new Vector2(147f, -495f), new Vector2(390f, 562f));
+            Sprite spritePersonaje = c.Personaje != null ? c.Personaje : CargarSprite("Explorador");
+            Image guia = CrearImagenTopLeft("PersonajeGuia", capaActividad, spritePersonaje, Color.white, new Vector2(147f, -495f), new Vector2(390f, 562f));
             guia.preserveAspect = true;
             guia.raycastTarget = false;
             _ref.personajeGuia = guia.gameObject;
@@ -655,7 +656,11 @@ namespace GuardianesAmazonicos.Views
                 _ref.tarjetas[i].bordeCorrecto = bordeCor.gameObject;
 
                 // Ilustración de la opción centrada horizontal y verticalmente
-                Sprite sp = (c.ImagenesOpciones != null && i < c.ImagenesOpciones.Length) ? c.ImagenesOpciones[i] : null;
+                Sprite sp = (c.ImagenesOpciones != null && i < c.ImagenesOpciones.Length && c.ImagenesOpciones[i] != null)
+                    ? c.ImagenesOpciones[i]
+                    : ((c.imagenes != null && i < c.imagenes.Length && c.imagenes[i] != null)
+                        ? c.imagenes[i]
+                        : (c.Opciones != null && i < c.Opciones.Length ? CargarSprite(c.Opciones[i]) : null));
                 GameObject goIlustracion = new GameObject("Ilustracion", typeof(RectTransform), typeof(Image));
                 goIlustracion.transform.SetParent(rectTarjeta, false);
                 RectTransform rectIlustracion = goIlustracion.transform as RectTransform;
@@ -746,11 +751,15 @@ namespace GuardianesAmazonicos.Views
             s = Resources.Load<Sprite>(nombre);
             if (s != null) return s;
 #if UNITY_EDITOR
+            s = UnityEditor.AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Art/Characters/" + nombre + ".png");
+            if (s != null) return s;
             s = UnityEditor.AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Art/UI/Sprites/" + nombre + ".png");
             if (s != null) return s;
             s = UnityEditor.AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Resources/UI/Sprites/" + nombre + ".png");
             if (s != null) return s;
             s = UnityEditor.AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Art/Backgrounds/" + nombre + ".png");
+            if (s != null) return s;
+            s = UnityEditor.AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Art/Backgrounds/Niveles/" + nombre + ".png");
             if (s != null) return s;
 #endif
             return null;
