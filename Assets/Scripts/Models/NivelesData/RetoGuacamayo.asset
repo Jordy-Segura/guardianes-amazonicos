@@ -12,29 +12,46 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a8f2a5d201d22a45aa80d23b5277c59, type: 3}
   m_Name: RetoGuacamayo
   m_EditorClassIdentifier: Assembly-CSharp::GuardianesAmazonicos.Models.RetoSeleccionConfiguracion
-  numeroEscena: 3
-  totalRetos: 12
-  titulo: "Nivel 1 \xB7 Conozco la selva"
-  pregunta: "Escucha: guacamayo.\n\xBFCu\xE1l es el guacamayo?"
-  instruccion: Escucha, selecciona y pulsa Aceptar.
-  opciones:
+  _nivel: 1
+  _numeroEscena: 3
+  _totalEscenas: 12
+  _tituloNivel: "Nivel 1 \xB7 Conozco la selva"
+  _siguienteEscena: Escena04_HU04_Plantas
+  _pregunta: "Escucha: guacamayo.\n\xBFCu\xE1l es el guacamayo?"
+  _opciones:
   - Mono
   - Guacamayo
   - Tortuga
-  imagenes:
-  - {fileID: 21300000, guid: 9977c2fbc037d5b4eab7f9af870b265e, type: 3}
-  - {fileID: 21300000, guid: 2bada71e16fe9ed4a837e1ce171b5c7c, type: 3}
-  - {fileID: 21300000, guid: 2b33f77735e58b64ab39ee0b4f798c2d, type: 3}
-  imagenEscena: {fileID: 21300000, guid: 1b6eda37b3364fc4389888ef5ca1247d, type: 3}
-  insigniaProgreso: {fileID: 21300000, guid: 4afc0ee37f0ee0046875a0be6c46ab9e, type: 3}
-  atlasDosPorDos: {fileID: 0}
-  indiceCorrecto: 1
-  pistaIncorrecta: Busca el ave de plumas rojas, amarillas y azules y pico curvo.
-  mensajeCorrecto: "\xA1Muy bien! Identificaste al guacamayo."
-  pronunciaciones:
-  - {fileID: 8300000, guid: 527be3595612bf94ba3f2004fc9463c9, type: 3}
-  siguienteEscena: Escena04_HU04_Plantas
-  textoContinuar: SIGUIENTE RETO
-  fondo: {fileID: 21300000, guid: a0f6dac1207b6d54da220ea11d03640a, type: 3}
-  explorador: {fileID: 21300000, guid: a81643ec7d4969547b69939d11fa69ca, type: 3}
-  fuente: {fileID: 11400000, guid: 767ffc8669e62e144951bc56a822d1e6, type: 2}
+  _imagenesOpciones:
+  - {fileID: 21300000, guid: 26845133233d7cadb1c648837aea4191, type: 3}
+  - {fileID: 21300000, guid: 7569f8d56b7c7c8ad11e7960c854d1e1, type: 3}
+  - {fileID: 21300000, guid: acd2eed8bcafe3be1dc73f15d82d1936, type: 3}
+  _indiceCorrecto: 1
+  _explicacionesIncorrectas:
+  - 
+  - 
+  - 
+  _pista: Busca el ave de plumas rojas, amarillas y azules y pico curvo.
+  _felicitacion: "\xA1Lo lograste!"
+  _imagenEscena: {fileID: 21300000, guid: 1b6eda37b3364fc4389888ef5ca1247d, type: 3}
+  _elementoEscena: {fileID: 0}
+  _rectElementoEscena:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 0
+    height: 0
+  _fondo: {fileID: 21300000, guid: a0f6dac1207b6d54da220ea11d03640a, type: 3}
+  _personaje: {fileID: 21300000, guid: 2c32b3bf6bcfade558e5cfe00634d3b2, type: 3}
+  _fotogramasCelebracion: []
+  _audioLectura: {fileID: 8300000, guid: 527be3595612bf94ba3f2004fc9463c9, type: 3}
+  _videoSenas: 
+  _mostrarBienvenida: 0
+  _bienvenidaEtiquetaNivel: 
+  _bienvenidaNombreNivel: 
+  _bienvenidaSaludo: "\xA1Hola, guardi\xE1n!"
+  _bienvenidaDescripcion: 
+  _bienvenidaImagen: {fileID: 0}
+  _bienvenidaAudio: {fileID: 0}
+  _bienvenidaVideoSenas: 
+  _fuente: {fileID: 11400000, guid: 767ffc8669e62e144951bc56a822d1e6, type: 2}
