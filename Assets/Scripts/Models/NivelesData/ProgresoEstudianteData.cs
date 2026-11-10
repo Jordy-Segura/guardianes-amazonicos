@@ -16,7 +16,8 @@ namespace GuardianesAmazonicos.Models
         [SerializeField] private int _progresoNivel2;
 
         public int puntoProgresoActual;
-        public int totalPuntosProgreso;
+        public int totalPuntosProgreso = 12;
+        public string fechaInicioUtc;
 
         public bool RetoMonoCuriosoCompletado
         {
