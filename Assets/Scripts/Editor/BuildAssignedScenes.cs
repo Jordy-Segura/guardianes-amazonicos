@@ -18,8 +18,8 @@ namespace GuardianesAmazonicos.Editor
         private const string ConfigJaguarPath = "Assets/Scripts/Models/NivelesData/RetoJaguar.asset";
         private const string ConfigPlatanoPath = "Assets/Scripts/Models/NivelesData/RetoPlatano.asset";
         private const string ConfigMonoCuriosoPath = "Assets/Scripts/Models/NivelesData/ProtegerHabitatMono.asset";
-        private const string SceneJaguarPath = "Assets/Scenes/Niveles/Nivel01/Escena05_HU05_Jaguar.unity";
-        private const string ScenePlatanoPath = "Assets/Scenes/Niveles/Nivel01/Escena09_HU09_Platano.unity";
+        private const string SceneJaguarPath = "Assets/Scenes/Niveles/Nivel01/Escena05_IdentificarJaguar.unity";
+        private const string ScenePlatanoPath = "Assets/Scenes/Niveles/Nivel01/Escena09_IdentificarPlatano.unity";
         private const string SceneMonoCuriosoPath = "Assets/Scenes/Niveles/Nivel02/Escena01_ProtegerHabitatMono.unity";
 
         [MenuItem("Guardianes/Generar actividad del Mono Curioso")]
@@ -153,7 +153,7 @@ namespace GuardianesAmazonicos.Editor
             ActualizarBuildSettings();
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
-            Debug.Log("Escenas de selección HU-05 y HU-09 generadas y añadidas a Build Settings.");
+            Debug.Log("Escenas de selección generadas y añadidas a Build Settings.");
         }
 
         private static void ConfigurarImportadores()
@@ -257,7 +257,7 @@ namespace GuardianesAmazonicos.Editor
         private static void ActualizarBuildSettings()
         {
             List<EditorBuildSettingsScene> escenas = EditorBuildSettings.scenes.ToList();
-            AgregarEscenaBuild(escenas, "Assets/Scenes/Niveles/Nivel01/Nivel1_ConozcoLaSelva.unity");
+            AgregarEscenaBuild(escenas, "Assets/Scenes/Niveles/Nivel01/BienvenidaDelGuardian.unity");
             AgregarEscenaBuild(escenas, SceneJaguarPath);
             AgregarEscenaBuild(escenas, ScenePlatanoPath);
             EditorBuildSettings.scenes = escenas.ToArray();

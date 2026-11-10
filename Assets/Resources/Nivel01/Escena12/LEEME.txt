@@ -1,0 +1,23 @@
+RECURSOS DE LA ESCENA 12 DEL NIVEL 1 (HU-12: reconocer la TORTUGA)
+
+La Escena 12 funciona sin arte (muestra marcadores con el nombre de cada opción),
+pero al agregar estos archivos aquí la escena los usa automáticamente:
+
+  pregunta_01_12_escena.png   -> ilustración grande de apoyo (marco derecho). PENDIENTE.
+  respuesta_01_12_a.png       -> tarjeta 1 (TORTUGA, respuesta correcta). YA EXISTE
+                                 (ilustración Tortuga.png del paquete de personajes).
+  respuesta_01_12_b.png       -> tarjeta 2 (RÍO, distractor). PENDIENTE.
+  respuesta_01_12_c.png       -> tarjeta 3 (ÁRBOL, distractor). PENDIENTE.
+  audio_01_12.wav (o .ogg)    -> locución de la palabra TORTUGA (botón LECTURA). PENDIENTE.
+
+También se pueden asignar manualmente en el Inspector (componente
+ActividadTortugasView del objeto PanelActividadTortugas) y en el AudioSource
+AudioPalabra.
+
+Video LSEC: colocar TortugasLSEC.mp4 en Assets/StreamingAssets/LSEC/.
+
+Nota: la Escena 12 es la última del Nivel 1 (progreso 12 de 12). El botón
+SIGUIENTE apunta a Nivel2_CuidoLosAnimales, que se creará más adelante.
+
+Convención de nombres del proyecto: pregunta/respuesta + nivel (2 dígitos) +
+escena (2 dígitos) + letra de la tarjeta. Ejemplo: respuesta_01_12_a.png.

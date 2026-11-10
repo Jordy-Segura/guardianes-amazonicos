@@ -1,0 +1,20 @@
+RECURSOS DE LA ESCENA 8 DEL NIVEL 1 (HU-08: reconocer el GUACAMAYO)
+
+La Escena 8 funciona sin arte (muestra marcadores con el nombre de cada opción),
+pero al agregar estos archivos aquí la escena los usa automáticamente:
+
+  pregunta_01_08_escena.png   -> ilustración grande de apoyo (marco derecho). PENDIENTE.
+  respuesta_01_08_a.png       -> tarjeta 1 (GUACAMAYO, respuesta correcta). YA EXISTE
+                                 (ilustración Guacamayo.png del paquete de personajes).
+  respuesta_01_08_b.png       -> tarjeta 2 (TUCÁN, distractor). PENDIENTE.
+  respuesta_01_08_c.png       -> tarjeta 3 (LORO, distractor). PENDIENTE.
+  audio_01_08.wav (o .ogg)    -> locución de la palabra GUACAMAYO (botón LECTURA). PENDIENTE.
+
+También se pueden asignar manualmente en el Inspector (componente
+ActividadAvesView del objeto PanelActividadAves) y en el AudioSource
+AudioPalabra.
+
+Video LSEC: colocar AvesLSEC.mp4 en Assets/StreamingAssets/LSEC/.
+
+Convención de nombres del proyecto: pregunta/respuesta + nivel (2 dígitos) +
+escena (2 dígitos) + letra de la tarjeta. Ejemplo: respuesta_01_08_a.png.
