@@ -15,7 +15,7 @@ Las dependencias se registran en `Packages/manifest.json` y `Packages/packages-l
 
 ```text
 Assets/
-├── Scenes/Niveles/       Escenas organizadas en seis niveles
+├── Scenes/Niveles/       Cinco niveles con doce escenas cada uno
 ├── Art/                  Fondos, personajes e ilustraciones 2D
 ├── Audio/                Locuciones, efectos y música
 ├── Fonts/                Fuentes y recursos de TextMesh Pro
@@ -29,7 +29,7 @@ Assets/
     └── Persistence/         Persistencia local
 ```
 
-Cada carpeta de nivel contiene sus escenas. Las pantallas usan Canvas con `Scale With Screen Size`, resolución de referencia 1920×1080 y proporción 16:9. Los textos se renderizan sobre la plantilla para que puedan ajustarse y traducirse sin volver a editar las ilustraciones.
+La aventura se organiza en cinco niveles, cada uno con doce escenas (60 escenas en total). Dentro de cada nivel, las historias de usuario se implementan en orden: HU-01 corresponde a la escena 01, HU-02 a la escena 02 y así sucesivamente hasta la escena 12. La primera escena implementada está en `Assets/Scenes/Niveles/Nivel01/Nivel1_ConozcoLaSelva.unity`; las demás se incorporarán conforme se implementen sus historias. Las pantallas usan Canvas con `Scale With Screen Size`, resolución de referencia 1920×1080 y proporción 16:9. Los textos se renderizan sobre la plantilla para que puedan ajustarse y traducirse sin volver a editar las ilustraciones.
 
 ## Arquitectura y accesibilidad
 
