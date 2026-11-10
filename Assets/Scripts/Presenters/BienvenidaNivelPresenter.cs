@@ -82,27 +82,27 @@ namespace GuardianesAmazonicos.Presenters
 
         private void IniciarAventura()
         {
-            if (_modelo.AventuraIniciada)
+            if (!_modelo.AventuraIniciada)
             {
-                return;
+                _modelo.IniciarAventura();
+
+                try
+                {
+                    _repositorio.Guardar(_modelo.Progreso);
+                    _modelo.NotificarProgresoActualizado();
+                    Debug.Log("BienvenidaNivelPresenter: aventura iniciada y primer punto de progreso guardado.", this);
+                }
+                catch (IOException excepcion)
+                {
+                    Debug.LogError("BienvenidaNivelPresenter: no se pudo guardar el progreso. " + excepcion.Message, this);
+                }
+                catch (UnauthorizedAccessException excepcion)
+                {
+                    Debug.LogError("BienvenidaNivelPresenter: no hay permisos para guardar el progreso. " + excepcion.Message, this);
+                }
             }
 
-            _modelo.IniciarAventura();
-
-            try
-            {
-                _repositorio.Guardar(_modelo.Progreso);
-                _modelo.NotificarProgresoActualizado();
-                Debug.Log("BienvenidaNivelPresenter: aventura iniciada y primer punto de progreso guardado.", this);
-            }
-            catch (IOException excepcion)
-            {
-                Debug.LogError("BienvenidaNivelPresenter: no se pudo guardar el progreso. " + excepcion.Message, this);
-            }
-            catch (UnauthorizedAccessException excepcion)
-            {
-                Debug.LogError("BienvenidaNivelPresenter: no hay permisos para guardar el progreso. " + excepcion.Message, this);
-            }
+            UnityEngine.SceneManagement.SceneManager.LoadScene("Escena02_HU02_Mono");
         }
 
         private void ReproducirBienvenida()

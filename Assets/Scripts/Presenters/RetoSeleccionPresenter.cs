@@ -55,7 +55,7 @@ namespace GuardianesAmazonicos.Presenters
 
         private void Start()
         {
-            if (RetoYaCompletado()) _vista.MostrarCorrecta(_configuracion.mensajeCorrecto);
+            // El reto siempre inicia en estado interactivo para permitir que el estudiante responda activamente
         }
 
         private void EvaluarOpcion(int indice)

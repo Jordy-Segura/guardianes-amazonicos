@@ -83,12 +83,12 @@ namespace GuardianesAmazonicos.Views
 
             if (_textoComenzar != null)
             {
-                _textoComenzar.text = aventuraIniciada ? "¡AVENTURA INICIADA!" : "¡COMENZAR!";
+                _textoComenzar.text = "¡COMENZAR!";
             }
 
             if (_botonComenzar != null)
             {
-                _botonComenzar.interactable = !aventuraIniciada;
+                _botonComenzar.interactable = true;
             }
         }
 

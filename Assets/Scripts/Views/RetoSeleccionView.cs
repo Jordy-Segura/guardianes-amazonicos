@@ -35,7 +35,7 @@ namespace GuardianesAmazonicos.Views
         private AudioSource _audioSource;
         private Sprite[] _spritesAtlas;
 
-        // Sprites cacheados de Resources
+        // Sprites cacheados de Resources / Editor
         private Sprite _spriteTarjeta;
         private Sprite _spriteMarco;
         private Sprite _spriteGlobo;
@@ -86,7 +86,14 @@ namespace GuardianesAmazonicos.Views
         private static Sprite CargarSprite(string nombre)
         {
             Sprite s = Resources.Load<Sprite>("UI/Sprites/" + nombre);
-            return s;
+            if (s != null) return s;
+#if UNITY_EDITOR
+            s = UnityEditor.AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Art/UI/Sprites/" + nombre + ".png");
+            if (s != null) return s;
+            s = UnityEditor.AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Resources/UI/Sprites/" + nombre + ".png");
+            if (s != null) return s;
+#endif
+            return null;
         }
 
         public void Construir(RetoSeleccionConfiguracion configuracion)
@@ -106,7 +113,7 @@ namespace GuardianesAmazonicos.Views
             // 1. Fondo de selva (0, 0, 1920, 1080)
             CrearImagenTopLeft("FondoSelva", root, _configuracion.fondo, Color.white, new Vector2(0f, 0f), new Vector2(1920f, 1080f), false);
 
-            // 2. Cabecera fija (Valores oficiales de la guía técnica, pág 3)
+            // 2. Cabecera fija (Valores de la guía oficial, pág 3)
             CrearBotonTopLeft("BotonLectura", root, _spriteLectura, new Vector2(30f, -16f), new Vector2(132f, 114f), () =>
             {
                 if (_configuracion.pronunciaciones != null && _configuracion.pronunciaciones.Length > 0)
@@ -151,8 +158,8 @@ namespace GuardianesAmazonicos.Views
             // 4. Columna Derecha Superior: Marco de Escena e Ilustración
             // Marco de escena (921, -188, 800, 425)
             CrearImagenTopLeft("MarcoEscena", root, _spriteMarco, Color.white, new Vector2(921f, -188f), new Vector2(800f, 425f), false);
-            // Ilustración dentro del marco (942, -206, 758, 390)
-            Sprite ilustracionEscena = ObtenerSprite(0); // Muestra el animal/elemento central de la misión
+            // Ilustración temática de escena
+            Sprite ilustracionEscena = ObtenerSprite(0);
             if (ilustracionEscena != null)
             {
                 Image imagenEscena = CrearImagenTopLeft("ImagenEscena", root, ilustracionEscena, Color.white, new Vector2(942f, -206f), new Vector2(758f, 390f), true);
@@ -171,17 +178,17 @@ namespace GuardianesAmazonicos.Views
 
             CrearTarjetas(root);
 
-            // 6. Botón Aceptar (centrado bajo las tarjetas: X = 1193, Y = -985, 256 x 76)
-            _botonAceptar = CrearBotonTopLeft("BotonAceptar", root, _spriteBotonAceptar, new Vector2(1193f, -985f), new Vector2(256f, 76f), () =>
+            // 6. Botón Aceptar (centrado bajo las tarjetas: X = 1191, Y = -980, 260 x 74)
+            _botonAceptar = CrearBotonTopLeft("BotonAceptar", root, _spriteBotonAceptar, new Vector2(1191f, -980f), new Vector2(260f, 74f), () =>
             {
                 if (IndiceSeleccionado >= 0)
                 {
                     OnOpcionSeleccionada?.Invoke(IndiceSeleccionado);
                 }
             });
-            _botonAceptar.gameObject.SetActive(false); // Oculto hasta que se seleccione una opción
+            _botonAceptar.gameObject.SetActive(false);
 
-            // 7. Modales de Ayuda, Señas y Felicitación
+            // 7. Modales y Paneles
             CrearModalPista(root);
             CrearModalSenas(root);
             CrearPanelVictoria(root);
@@ -212,13 +219,14 @@ namespace GuardianesAmazonicos.Views
                 imgFondo.sprite = _spriteTarjeta;
                 imgFondo.color = Color.white;
                 imgFondo.type = Image.Type.Simple;
+                imgFondo.raycastTarget = true;
 
                 Button btn = goTarjeta.AddComponent<Button>();
                 btn.targetGraphic = imgFondo;
 
                 Outline borde = goTarjeta.AddComponent<Outline>();
-                borde.effectColor = new Color(0.85f, 0.7f, 0.2f, 0.5f);
-                borde.effectDistance = new Vector2(3f, -3f);
+                borde.effectColor = AmarilloSeleccion;
+                borde.effectDistance = new Vector2(4f, -4f);
                 borde.enabled = false;
 
                 // Brillo de selección sobre la tarjeta
@@ -229,7 +237,7 @@ namespace GuardianesAmazonicos.Views
                     _brillosOpciones[i] = brillo;
                 }
 
-                // Imagen de la opción (18, -22, 220, 188)
+                // Ilustración de la opción (18, -22, 220, 188)
                 Sprite sp = ObtenerSprite(i);
                 Image imgOpcion = CrearImagenRelativa("Ilustracion", rectTarjeta, sp, Color.white, new Vector2(18f, -22f), new Vector2(220f, 188f), false);
                 imgOpcion.preserveAspect = true;
@@ -239,7 +247,15 @@ namespace GuardianesAmazonicos.Views
 
                 btn.onClick.AddListener(() =>
                 {
-                    MostrarSeleccion(indice);
+                    if (IndiceSeleccionado == indice)
+                    {
+                        // Pulsar sobre la ya seleccionada valida directamente
+                        OnOpcionSeleccionada?.Invoke(indice);
+                    }
+                    else
+                    {
+                        MostrarSeleccion(indice);
+                    }
                 });
 
                 _botonesOpciones[i] = btn;
@@ -256,12 +272,12 @@ namespace GuardianesAmazonicos.Views
             {
                 bool esSeleccionado = (i == indice);
 
-                if (_brillosOpciones[i] != null)
+                if (_brillosOpciones != null && i < _brillosOpciones.Length && _brillosOpciones[i] != null)
                 {
                     _brillosOpciones[i].gameObject.SetActive(esSeleccionado);
                 }
 
-                if (_bordesOpciones[i] != null)
+                if (_bordesOpciones != null && i < _bordesOpciones.Length && _bordesOpciones[i] != null)
                 {
                     _bordesOpciones[i].enabled = esSeleccionado;
                     _bordesOpciones[i].effectColor = AmarilloSeleccion;
@@ -269,7 +285,6 @@ namespace GuardianesAmazonicos.Views
                 }
             }
 
-            // Habilitar botón Aceptar
             if (_botonAceptar != null)
             {
                 _botonAceptar.gameObject.SetActive(true);
@@ -278,7 +293,7 @@ namespace GuardianesAmazonicos.Views
 
         public void MostrarIncorrecta(string pista)
         {
-            if (IndiceSeleccionado >= 0 && IndiceSeleccionado < _bordesOpciones.Length)
+            if (IndiceSeleccionado >= 0 && _bordesOpciones != null && IndiceSeleccionado < _bordesOpciones.Length)
             {
                 if (_bordesOpciones[IndiceSeleccionado] != null)
                 {
@@ -292,11 +307,17 @@ namespace GuardianesAmazonicos.Views
             {
                 _textoPregunta.text = "¡Buen intento! " + pista;
             }
+
+            if (_botonAceptar != null)
+            {
+                _botonAceptar.gameObject.SetActive(false);
+            }
+            IndiceSeleccionado = -1;
         }
 
         public void MostrarCorrecta(string mensaje)
         {
-            if (IndiceSeleccionado >= 0 && IndiceSeleccionado < _bordesOpciones.Length)
+            if (IndiceSeleccionado >= 0 && _bordesOpciones != null && IndiceSeleccionado < _bordesOpciones.Length)
             {
                 if (_bordesOpciones[IndiceSeleccionado] != null)
                 {
@@ -319,6 +340,11 @@ namespace GuardianesAmazonicos.Views
             if (_panelVictoria != null)
             {
                 _panelVictoria.SetActive(true);
+            }
+
+            if (_textoPregunta != null)
+            {
+                _textoPregunta.text = mensaje;
             }
         }
 
@@ -345,15 +371,13 @@ namespace GuardianesAmazonicos.Views
             _panelVictoria = new GameObject("PanelVictoria", typeof(RectTransform));
             _panelVictoria.transform.SetParent(root, false);
             RectTransform rect = _panelVictoria.transform as RectTransform;
-            rect.anchorMin = Vector2.zero;
-            rect.anchorMax = Vector2.one;
-            rect.sizeDelta = Vector2.zero;
+            PrepararRectTopLeft(rect, Vector2.zero, new Vector2(1920f, 1080f));
 
-            // Rótulo ¡MUY BIEN! (centrado en la derecha)
-            CrearImagenTopLeft("LetreroMuyBien", rect, _spriteLetreroMuyBien, Color.white, new Vector2(1096f, -360f), new Vector2(450f, 180f), false);
+            // Rótulo ¡MUY BIEN!
+            CrearImagenTopLeft("LetreroMuyBien", rect, _spriteLetreroMuyBien, Color.white, new Vector2(1091f, -340f), new Vector2(460f, 180f), false);
 
             // Botón Siguiente
-            CrearBotonTopLeft("BotonSiguiente", rect, _spriteBotonSiguiente, new Vector2(1191f, -560f), new Vector2(260f, 76f), () =>
+            CrearBotonTopLeft("BotonSiguiente", rect, _spriteBotonSiguiente, new Vector2(1191f, -540f), new Vector2(260f, 76f), () =>
             {
                 OnContinuarSolicitado?.Invoke();
             });
@@ -366,13 +390,11 @@ namespace GuardianesAmazonicos.Views
             _modalPista = new GameObject("ModalPista", typeof(RectTransform));
             _modalPista.transform.SetParent(root, false);
             RectTransform rect = _modalPista.transform as RectTransform;
-            rect.anchorMin = Vector2.zero;
-            rect.anchorMax = Vector2.one;
-            rect.sizeDelta = Vector2.zero;
+            PrepararRectTopLeft(rect, Vector2.zero, new Vector2(1920f, 1080f));
 
-            // Bloqueador oscuro semi-transparente
             Image oscurecedor = _modalPista.AddComponent<Image>();
             oscurecedor.color = new Color(0f, 0f, 0f, 0.45f);
+            oscurecedor.raycastTarget = true;
 
             // Panel de Pista (centrado)
             RectTransform panel = CrearImagenTopLeft("CartaPista", rect, _spritePanelPista, Color.white, new Vector2(620f, -280f), new Vector2(680f, 520f), false).rectTransform;
@@ -392,12 +414,11 @@ namespace GuardianesAmazonicos.Views
             _modalSenas = new GameObject("ModalSenas", typeof(RectTransform));
             _modalSenas.transform.SetParent(root, false);
             RectTransform rect = _modalSenas.transform as RectTransform;
-            rect.anchorMin = Vector2.zero;
-            rect.anchorMax = Vector2.one;
-            rect.sizeDelta = Vector2.zero;
+            PrepararRectTopLeft(rect, Vector2.zero, new Vector2(1920f, 1080f));
 
             Image oscurecedor = _modalSenas.AddComponent<Image>();
             oscurecedor.color = new Color(0f, 0f, 0f, 0.45f);
+            oscurecedor.raycastTarget = true;
 
             // Panel de video señas
             RectTransform panel = CrearImagenTopLeft("PanelSenas", rect, _spritePanelSenas, Color.white, new Vector2(560f, -240f), new Vector2(800f, 600f), false).rectTransform;
@@ -456,13 +477,12 @@ namespace GuardianesAmazonicos.Views
 
         private void CrearEventSystemSiHaceFalta()
         {
-            if (EventSystem.current != null) return;
+            if (EventSystem.current != null || UnityEngine.Object.FindFirstObjectByType<EventSystem>() != null) return;
             GameObject objeto = new GameObject("EventSystem", typeof(EventSystem), typeof(InputSystemUIInputModule));
             InputSystemUIInputModule modulo = objeto.GetComponent<InputSystemUIInputModule>();
             modulo.AssignDefaultActions();
         }
 
-        // Helpers de posicionamiento oficial (Anchor (0, 1), Pivot (0, 1))
         private static void PrepararRectTopLeft(RectTransform rect, Vector2 posicion, Vector2 tamano)
         {
             rect.anchorMin = new Vector2(0f, 1f);
@@ -509,6 +529,7 @@ namespace GuardianesAmazonicos.Views
             Image imagen = objeto.GetComponent<Image>();
             imagen.sprite = sprite;
             imagen.color = Color.white;
+            imagen.raycastTarget = true;
             Button boton = objeto.GetComponent<Button>();
             boton.targetGraphic = imagen;
             if (alPulsar != null) boton.onClick.AddListener(() => alPulsar());
@@ -524,6 +545,7 @@ namespace GuardianesAmazonicos.Views
             Image imagen = objeto.GetComponent<Image>();
             imagen.sprite = sprite;
             imagen.color = Color.white;
+            imagen.raycastTarget = true;
             Button boton = objeto.GetComponent<Button>();
             boton.targetGraphic = imagen;
             if (alPulsar != null) boton.onClick.AddListener(() => alPulsar());

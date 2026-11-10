@@ -17,8 +17,8 @@ MonoBehaviour:
   _columnasAtlas: 3
   _filasAtlas: 1
   numeroEscena: 2
-  titulo: "Nivel 1 · Conozco la selva"
-  pregunta: "¿Cuál de estos animales es el mono?"
+  titulo: "Nivel 1 \xB7 Conozco la selva"
+  pregunta: "\xBFCu\xE1l de estos animales es el mono?"
   instruccion: Toca la imagen del mono.
   opciones:
   - Mono
@@ -30,8 +30,8 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 2b33f77735e58b64ab39ee0b4f798c2d, type: 3}
   atlasDosPorDos: {fileID: 0}
   indiceCorrecto: 0
-  pistaIncorrecta: "Busca al animal de cola larga que trepa y salta entre las ramas."
-  mensajeCorrecto: "¡Muy bien! Reconociste al mono."
+  pistaIncorrecta: Busca al animal de cola larga que trepa y salta entre las ramas.
+  mensajeCorrecto: "\xA1Muy bien! Reconociste al mono."
   pronunciaciones: []
   siguienteEscena: Escena05_HU05_Jaguar
   textoContinuar: SIGUIENTE RETO
