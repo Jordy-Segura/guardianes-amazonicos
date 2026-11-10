@@ -17,8 +17,76 @@ namespace GuardianesAmazonicos.Editor
     {
         private const string ConfigJaguarPath = "Assets/Scripts/Models/NivelesData/RetoJaguar.asset";
         private const string ConfigPlatanoPath = "Assets/Scripts/Models/NivelesData/RetoPlatano.asset";
+        private const string ConfigMonoCuriosoPath = "Assets/Scripts/Models/NivelesData/ProtegerHabitatMono.asset";
         private const string SceneJaguarPath = "Assets/Scenes/Niveles/Nivel01/Escena05_HU05_Jaguar.unity";
         private const string ScenePlatanoPath = "Assets/Scenes/Niveles/Nivel01/Escena09_HU09_Platano.unity";
+        private const string SceneMonoCuriosoPath = "Assets/Scenes/Niveles/Nivel02/Escena01_ProtegerHabitatMono.unity";
+
+        [MenuItem("Guardianes/Generar actividad del Mono Curioso")]
+        public static void GenerarActividadMonoCurioso()
+        {
+            AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
+            ConfigurarImportadoresNivelDos();
+            AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
+
+            RetoSeleccionConfiguracion configuracion = CrearConfiguracion(ConfigMonoCuriosoPath);
+            configuracion.Nivel = 2;
+            configuracion.numeroEscena = 1;
+            configuracion.titulo = "Nivel 2 · Cuido a los animales";
+            configuracion.pregunta = "¿Qué acción ayuda a proteger el hogar del Mono Curioso?";
+            configuracion.instruccion = "Toca la imagen que cuida el bosque.";
+            configuracion.opciones = new[] { "Cuidar el bosque", "Tirar basura", "Cortar árboles" };
+            configuracion.imagenes = null;
+            configuracion.atlasDosPorDos = null;
+            configuracion.AtlasOpciones = Cargar<Texture2D>("Assets/Art/Items/AccionesProteccionMono.png");
+            configuracion.ColumnasAtlas = 3;
+            configuracion.FilasAtlas = 1;
+            configuracion.indiceCorrecto = 0;
+            configuracion.pistaIncorrecta = "Esa acción puede dañar el hogar del mono. Busca la que ayuda a cuidar las plantas y los árboles.";
+            configuracion.mensajeCorrecto = "¡Muy bien! Cuidar el bosque protege el hogar del Mono Curioso.";
+            configuracion.pronunciaciones = null;
+            configuracion.siguienteEscena = string.Empty;
+            configuracion.textoContinuar = "SIGUIENTE ACTIVIDAD";
+            configuracion.fondo = Cargar<Sprite>("Assets/Art/Backgrounds/N2_CuidoLosAnimales.png");
+            configuracion.explorador = Cargar<Sprite>("Assets/Art/Characters/Mono.png");
+            configuracion.fuente = Cargar<TMP_FontAsset>("Assets/Fonts/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF.asset");
+            EditorUtility.SetDirty(configuracion);
+
+            CrearEscena(SceneMonoCuriosoPath, configuracion);
+            List<EditorBuildSettingsScene> escenas = EditorBuildSettings.scenes.ToList();
+            AgregarEscenaBuild(escenas, SceneMonoCuriosoPath);
+            EditorBuildSettings.scenes = escenas.ToArray();
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+            Debug.Log("Actividad del Mono Curioso generada en el segundo nivel.");
+        }
+
+        private static void ConfigurarImportadoresNivelDos()
+        {
+            TextureImporter fondo = AssetImporter.GetAtPath("Assets/Art/Backgrounds/N2_CuidoLosAnimales.png") as TextureImporter;
+            if (fondo != null)
+            {
+                fondo.textureType = TextureImporterType.Sprite;
+                fondo.spriteImportMode = SpriteImportMode.Single;
+                fondo.alphaIsTransparency = true;
+                fondo.mipmapEnabled = false;
+                fondo.textureCompression = TextureImporterCompression.Uncompressed;
+                fondo.maxTextureSize = 2048;
+                fondo.SaveAndReimport();
+            }
+
+            TextureImporter atlas = AssetImporter.GetAtPath("Assets/Art/Items/AccionesProteccionMono.png") as TextureImporter;
+            if (atlas != null)
+            {
+                atlas.textureType = TextureImporterType.Default;
+                atlas.isReadable = true;
+                atlas.alphaIsTransparency = true;
+                atlas.mipmapEnabled = false;
+                atlas.textureCompression = TextureImporterCompression.Uncompressed;
+                atlas.maxTextureSize = 4096;
+                atlas.SaveAndReimport();
+            }
+        }
 
         public static void Generar()
         {

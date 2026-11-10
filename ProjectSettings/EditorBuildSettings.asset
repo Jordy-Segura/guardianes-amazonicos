@@ -14,5 +14,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Niveles/Nivel01/Escena09_HU09_Platano.unity
     guid: dddbcd5243e5cb24e8fa34001a24f0df
+  - enabled: 1
+    path: Assets/Scenes/Niveles/Nivel02/Escena01_ProtegerHabitatMono.unity
+    guid: d7b24872672795d4cbed7c78d3c8595a
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}

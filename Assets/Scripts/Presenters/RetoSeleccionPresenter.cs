@@ -96,11 +96,22 @@ namespace GuardianesAmazonicos.Presenters
             try
             {
                 ProgresoEstudianteData progreso = _repositorio.Cargar();
-                if (_configuracion.numeroEscena == 5) progreso.retoJaguarCompletado = true;
-                if (_configuracion.numeroEscena == 9) progreso.retoPlatanoCompletado = true;
-                progreso.aventuraIniciada = true;
-                progreso.puntoProgresoActual = Math.Max(progreso.puntoProgresoActual, _configuracion.numeroEscena);
-                progreso.totalPuntosProgreso = AventuraBienvenidaModel.TotalPuntosProgreso;
+                if (_configuracion.Nivel == 1 && _configuracion.numeroEscena == 5)
+                    progreso.retoJaguarCompletado = true;
+                else if (_configuracion.Nivel == 1 && _configuracion.numeroEscena == 9)
+                    progreso.retoPlatanoCompletado = true;
+                else if (_configuracion.Nivel == 2 && _configuracion.numeroEscena == 1)
+                {
+                    progreso.RetoMonoCuriosoCompletado = true;
+                    progreso.ProgresoNivel2 = Math.Max(progreso.ProgresoNivel2, _configuracion.numeroEscena);
+                }
+
+                if (_configuracion.Nivel == 1)
+                {
+                    progreso.aventuraIniciada = true;
+                    progreso.puntoProgresoActual = Math.Max(progreso.puntoProgresoActual, _configuracion.numeroEscena);
+                    progreso.totalPuntosProgreso = AventuraBienvenidaModel.TotalPuntosProgreso;
+                }
                 _repositorio.Guardar(progreso);
             }
             catch (IOException excepcion)
@@ -118,9 +129,12 @@ namespace GuardianesAmazonicos.Presenters
             try
             {
                 ProgresoEstudianteData progreso = _repositorio.Cargar();
-                return _configuracion.numeroEscena == 5
-                    ? progreso.retoJaguarCompletado
-                    : _configuracion.numeroEscena == 9 && progreso.retoPlatanoCompletado;
+                if (_configuracion.Nivel == 1 && _configuracion.numeroEscena == 5)
+                    return progreso.retoJaguarCompletado;
+                if (_configuracion.Nivel == 1 && _configuracion.numeroEscena == 9)
+                    return progreso.retoPlatanoCompletado;
+                return _configuracion.Nivel == 2 && _configuracion.numeroEscena == 1
+                    && progreso.RetoMonoCuriosoCompletado;
             }
             catch (Exception excepcion) when (excepcion is IOException || excepcion is UnauthorizedAccessException)
             {

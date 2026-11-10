@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a8f2a5d201d22a45aa80d23b5277c59, type: 3}
+  m_Name: ProtegerHabitatMono
+  m_EditorClassIdentifier: Assembly-CSharp::GuardianesAmazonicos.Models.RetoSeleccionConfiguracion
+  _nivel: 2
+  _atlasOpciones: {fileID: 2800000, guid: bb581b7d1dfac4d43a711b5631ff6156, type: 3}
+  _columnasAtlas: 3
+  _filasAtlas: 1
+  numeroEscena: 1
+  titulo: "Nivel 2 \xB7 Cuido a los animales"
+  pregunta: "\xBFQu\xE9 acci\xF3n ayuda a proteger el hogar del Mono Curioso?"
+  instruccion: Toca la imagen que cuida el bosque.
+  opciones:
+  - Cuidar el bosque
+  - Tirar basura
+  - "Cortar \xE1rboles"
+  imagenes: []
+  atlasDosPorDos: {fileID: 0}
+  indiceCorrecto: 0
+  pistaIncorrecta: "Esa acci\xF3n puede da\xF1ar el hogar del mono. Busca la que ayuda a cuidar las plantas y los \xE1rboles."
+  mensajeCorrecto: "\xA1Muy bien! Cuidar el bosque protege el hogar del Mono Curioso."
+  pronunciaciones: []
+  siguienteEscena: 
+  textoContinuar: SIGUIENTE ACTIVIDAD
+  fondo: {fileID: 21300000, guid: fa0e72eb2da69c546a89b49731070b3d, type: 3}
+  explorador: {fileID: 21300000, guid: 9977c2fbc037d5b4eab7f9af870b265e, type: 3}
+  fuente: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}

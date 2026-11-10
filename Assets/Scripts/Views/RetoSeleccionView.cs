@@ -47,43 +47,54 @@ namespace GuardianesAmazonicos.Views
             CrearImagen("SombraSuave", root, null, new Color(0.01f, 0.12f, 0.07f, 0.17f),
                 true, false, Vector2.zero, new Vector2(1920f, 1080f), true);
 
-            CrearTexto("Marca", root, "GUARDIANES DE LA AMAZONÍA LECTORA", new Vector2(-690f, 485f),
+            CrearTexto("Marca", root, "GUARDIANES DE LA AMAZONÍA LECTORA", new Vector2(-690f, 430f),
                 new Vector2(500f, 54f), 23f, Tinta, TextAlignmentOptions.Left, false);
-            CrearPanel("PlacaNivel", root, new Vector2(0f, 480f), new Vector2(540f, 70f), Verde);
-            CrearTexto("TituloNivel", root, _configuracion.titulo, new Vector2(0f, 480f),
+            CrearPanel("PlacaNivel", root, new Vector2(0f, 430f), new Vector2(540f, 70f), Verde);
+            CrearTexto("TituloNivel", root, _configuracion.titulo, new Vector2(0f, 430f),
                 new Vector2(510f, 56f), 31f, Color.white, TextAlignmentOptions.Center, true);
-            CrearPanel("InsigniaProgreso", root, new Vector2(760f, 480f), new Vector2(220f, 70f), Verde);
-            CrearTexto("Progreso", root, _configuracion.numeroEscena + " de 12", new Vector2(760f, 480f),
+            CrearPanel("InsigniaProgreso", root, new Vector2(760f, 430f), new Vector2(220f, 70f), Verde);
+            CrearTexto("Progreso", root, _configuracion.numeroEscena + " de 12", new Vector2(760f, 430f),
                 new Vector2(210f, 56f), 30f, Color.white, TextAlignmentOptions.Center, true);
 
             Image personaje = CrearImagen("Explorador", root, _configuracion.explorador, Color.white,
                 false, false, new Vector2(-710f, -105f), new Vector2(500f, 680f), false);
             personaje.preserveAspect = true;
 
-            RectTransform panel = CrearPanel("PanelReto", root, new Vector2(215f, -5f), new Vector2(1240f, 850f), Crema);
-            CrearTexto("Pregunta", panel, _configuracion.pregunta, new Vector2(0f, 352f),
+            bool tresOpciones = _configuracion.opciones.Length == 3;
+            RectTransform panel = CrearPanel("PanelReto", root,
+                new Vector2(215f, tresOpciones ? -80f : -55f),
+                new Vector2(1240f, tresOpciones ? 710f : 760f), Crema);
+            CrearTexto("Pregunta", panel, _configuracion.pregunta,
+                new Vector2(0f, tresOpciones ? 280f : 295f),
                 new Vector2(1130f, 86f), 48f, Tinta, TextAlignmentOptions.Center, true);
-            CrearTexto("Instruccion", panel, _configuracion.instruccion, new Vector2(0f, 293f),
+            CrearTexto("Instruccion", panel, _configuracion.instruccion,
+                new Vector2(0f, tresOpciones ? 205f : 220f),
                 new Vector2(1080f, 52f), 27f, Verde, TextAlignmentOptions.Center, true);
 
-            if (_configuracion.atlasDosPorDos != null)
+            Texture2D atlas = _configuracion.AtlasOpciones != null
+                ? _configuracion.AtlasOpciones
+                : _configuracion.atlasDosPorDos;
+            if (atlas != null)
             {
-                _spritesAtlas = CrearSpritesAtlas(_configuracion.atlasDosPorDos);
+                _spritesAtlas = CrearSpritesAtlas(atlas, _configuracion.ColumnasAtlas, _configuracion.FilasAtlas);
             }
 
             CrearTarjetas(panel);
-            _textoEstado = CrearTexto("Estado", panel, "Elige una imagen para comenzar.", new Vector2(0f, -290f),
+            _textoEstado = CrearTexto("Estado", panel, "Elige una imagen para comenzar.",
+                new Vector2(0f, tresOpciones ? -235f : -255f),
                 new Vector2(1080f, 56f), 27f, Verde, TextAlignmentOptions.Center, true);
 
             if (_configuracion.pronunciaciones != null && _configuracion.pronunciaciones.Length > 0)
             {
                 _botonAudio = CrearBoton("BotonAudio", panel, "AUDIO · ESCUCHAR NOMBRE",
-                    new Vector2(-255f, -368f), new Vector2(430f, 78f), VerdeClaro, Tinta);
+                    new Vector2(-255f, tresOpciones ? -310f : -340f),
+                    new Vector2(430f, 78f), VerdeClaro, Tinta);
                 _botonAudio.onClick.AddListener(() => OnAudioSolicitado?.Invoke());
             }
 
             _botonContinuar = CrearBoton("BotonContinuar", panel, _configuracion.textoContinuar,
-                new Vector2(310f, -368f), new Vector2(450f, 78f), Dorado, Tinta);
+                new Vector2(310f, tresOpciones ? -310f : -340f),
+                new Vector2(450f, 78f), Dorado, Tinta);
             _botonContinuar.interactable = false;
             _botonContinuar.onClick.AddListener(() => OnContinuarSolicitado?.Invoke());
         }
@@ -136,11 +147,18 @@ namespace GuardianesAmazonicos.Views
         {
             _botonesOpciones = new Button[_configuracion.opciones.Length];
             _bordesOpciones = new Outline[_configuracion.opciones.Length];
-            Vector2[] posiciones =
-            {
-                new Vector2(-265f, 145f), new Vector2(265f, 145f),
-                new Vector2(-265f, -125f), new Vector2(265f, -125f)
-            };
+            bool tresOpciones = _configuracion.opciones.Length == 3;
+            Vector2[] posiciones = tresOpciones
+                ? new[] { new Vector2(-400f, -5f), new Vector2(0f, -5f), new Vector2(400f, -5f) }
+                : new[]
+                {
+                    new Vector2(-265f, 145f), new Vector2(265f, 145f),
+                    new Vector2(-265f, -125f), new Vector2(265f, -125f)
+                };
+            Vector2 tamanoTarjeta = tresOpciones ? new Vector2(360f, 300f) : new Vector2(480f, 245f);
+            Vector2 posicionImagen = tresOpciones ? new Vector2(0f, 28f) : new Vector2(0f, 32f);
+            Vector2 tamanoImagen = tresOpciones ? new Vector2(270f, 190f) : new Vector2(205f, 150f);
+            float posicionNombre = tresOpciones ? -112f : -88f;
 
             for (int i = 0; i < _configuracion.opciones.Length; i++)
             {
@@ -148,7 +166,7 @@ namespace GuardianesAmazonicos.Views
                 GameObject tarjeta = new GameObject("TarjetaOpcion" + (i + 1), typeof(RectTransform), typeof(CanvasRenderer));
                 tarjeta.transform.SetParent(panel, false);
                 RectTransform rect = tarjeta.transform as RectTransform;
-                PrepararRect(rect, posiciones[i], new Vector2(480f, 245f));
+                PrepararRect(rect, posiciones[i], tamanoTarjeta);
                 RoundedRectangleGraphic fondo = tarjeta.AddComponent<RoundedRectangleGraphic>();
                 fondo.color = new Color(1f, 0.995f, 0.96f, 1f);
                 Button boton = tarjeta.AddComponent<Button>();
@@ -163,9 +181,9 @@ namespace GuardianesAmazonicos.Views
 
                 Sprite sprite = ObtenerSprite(i);
                 Image imagen = CrearImagen("Imagen", rect, sprite, Color.white, false, false,
-                    new Vector2(0f, 32f), new Vector2(205f, 150f), false);
+                    posicionImagen, tamanoImagen, false);
                 imagen.preserveAspect = true;
-                CrearTexto("Nombre", rect, _configuracion.opciones[i], new Vector2(0f, -88f),
+                CrearTexto("Nombre", rect, _configuracion.opciones[i], new Vector2(0f, posicionNombre),
                     new Vector2(430f, 58f), 34f, Tinta, TextAlignmentOptions.Center, true);
                 boton.onClick.AddListener(() =>
                 {
@@ -183,17 +201,22 @@ namespace GuardianesAmazonicos.Views
             return null;
         }
 
-        private static Sprite[] CrearSpritesAtlas(Texture2D atlas)
+        private static Sprite[] CrearSpritesAtlas(Texture2D atlas, int columnas, int filas)
         {
-            int ancho = atlas.width / 2;
-            int alto = atlas.height / 2;
-            return new[]
+            columnas = Mathf.Max(1, columnas);
+            filas = Mathf.Max(1, filas);
+            int ancho = atlas.width / columnas;
+            int alto = atlas.height / filas;
+            Sprite[] sprites = new Sprite[columnas * filas];
+            for (int indice = 0; indice < sprites.Length; indice++)
             {
-                Sprite.Create(atlas, new Rect(0, alto, ancho, alto), new Vector2(0.5f, 0.5f), 100f),
-                Sprite.Create(atlas, new Rect(ancho, alto, ancho, alto), new Vector2(0.5f, 0.5f), 100f),
-                Sprite.Create(atlas, new Rect(0, 0, ancho, alto), new Vector2(0.5f, 0.5f), 100f),
-                Sprite.Create(atlas, new Rect(ancho, 0, ancho, alto), new Vector2(0.5f, 0.5f), 100f)
-            };
+                int columna = indice % columnas;
+                int filaDesdeAbajo = filas - 1 - indice / columnas;
+                sprites[indice] = Sprite.Create(atlas,
+                    new Rect(columna * ancho, filaDesdeAbajo * alto, ancho, alto),
+                    new Vector2(0.5f, 0.5f), 100f);
+            }
+            return sprites;
         }
 
         private Canvas CrearCanvas()
