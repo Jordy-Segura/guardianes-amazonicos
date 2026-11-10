@@ -16,6 +16,8 @@ namespace GuardianesAmazonicos.Presenters
     /// </summary>
     public sealed class ActividadPlantasPresenter : MonoBehaviour
     {
+        
+
         [Header("Vista de la actividad")]
         [SerializeField] private ActividadPlantasView _vista;
 
@@ -70,6 +72,7 @@ namespace GuardianesAmazonicos.Presenters
             _vista.OnConfiguracionSolicitada += ManejarConfiguracionSolicitada;
 
             _modelo.OnRespuestaCorrecta += ManejarRespuestaCorrecta;
+            _modelo.OnOpcionSeleccionada += ManejarOpcionSeleccionadaEnModelo;
             _modelo.OnRespuestaIncorrecta += ManejarRespuestaIncorrecta;
 
             InicializarVista();
@@ -92,7 +95,13 @@ namespace GuardianesAmazonicos.Presenters
             _vista.OnConfiguracionSolicitada -= ManejarConfiguracionSolicitada;
 
             _modelo.OnRespuestaCorrecta -= ManejarRespuestaCorrecta;
+            _modelo.OnOpcionSeleccionada -= ManejarOpcionSeleccionadaEnModelo;
             _modelo.OnRespuestaIncorrecta -= ManejarRespuestaIncorrecta;
+        }
+
+        private void ManejarOpcionSeleccionadaEnModelo(int indice)
+        {
+            _vista.ResaltarOpcion(indice);
         }
 
         private void InicializarVista()

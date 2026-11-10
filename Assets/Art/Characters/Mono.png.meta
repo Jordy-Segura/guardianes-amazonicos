@@ -1,9 +1,17 @@
 fileFormatVersion: 2
+<<<<<<< HEAD
 guid: 26845133233d7cadb1c648837aea4191
 TextureImporter:
   internalIDToNameTable:
   - first:
       213: -4635479266340871037
+=======
+guid: 9977c2fbc037d5b4eab7f9af870b265e
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 593761992941134638
+>>>>>>> jir
     second: Mono_0
   externalObjects: {}
   serializedVersion: 13
@@ -74,11 +82,19 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
+<<<<<<< HEAD
     maxTextureSize: 4096
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 0
     compressionQuality: 100
+=======
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+>>>>>>> jir
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
@@ -87,6 +103,7 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 4
     buildTarget: Standalone
+<<<<<<< HEAD
     maxTextureSize: 4096
     resizeAlgorithm: 0
     textureFormat: -1
@@ -101,6 +118,9 @@ TextureImporter:
   - serializedVersion: 4
     buildTarget: WebGL
     maxTextureSize: 4096
+=======
+    maxTextureSize: 2048
+>>>>>>> jir
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -112,8 +132,13 @@ TextureImporter:
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 4
+<<<<<<< HEAD
     buildTarget: Android
     maxTextureSize: 4096
+=======
+    buildTarget: WebGL
+    maxTextureSize: 2048
+>>>>>>> jir
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 0
@@ -156,8 +181,13 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
+<<<<<<< HEAD
       spriteID: 6d20784aaba39de00800000000000000
       internalID: -4635479266340871037
+=======
+      spriteID: e23626ef2677d3800800000000000000
+      internalID: 593761992941134638
+>>>>>>> jir
       vertices: []
       indices: 
       edges: []
@@ -166,7 +196,11 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
+<<<<<<< HEAD
     spriteID: 4bcda29e449c2aeb0800000000000000
+=======
+    spriteID: 5e97eb03825dee720800000000000000
+>>>>>>> jir
     internalID: 0
     vertices: []
     indices: 

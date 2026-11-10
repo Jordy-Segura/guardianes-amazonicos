@@ -576,7 +576,12 @@ namespace GuardianesAmazonicos.Views
             }
         }
 
-        private void EmitirOpcion(int indice) { OnOpcionSeleccionada?.Invoke(indice); }
+        private void EmitirOpcion(int indice)
+        {
+            Debug.Log("CLIC DETECTADO EN TARJETA: " + indice);
+            OnOpcionSeleccionada?.Invoke(indice);
+        }
+
         private void EmitirAceptar() { OnAceptarSolicitado?.Invoke(); }
         private void EmitirSiguiente() { OnSiguienteSolicitado?.Invoke(); }
         private void EmitirLectura() { OnLecturaSolicitada?.Invoke(); }

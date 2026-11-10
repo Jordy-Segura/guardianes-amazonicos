@@ -3,7 +3,7 @@ using System;
 namespace GuardianesAmazonicos.Models
 {
     /// <summary>
-    /// HU-04 - Escena 4 del Nivel 1. Asignada a: Jirleidy Raquel Santos Muentes (Sprint 1).
+    /// HU-04 - Escena 4 del Nivel 1. 
     /// POCO de dominio que describe una opcion de respuesta de la actividad de plantas.
     /// </summary>
     [Serializable]
