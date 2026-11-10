@@ -4,26 +4,5 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes:
-  - enabled: 1
-    path: Assets/Scenes/Niveles/Nivel01/Nivel1_ConozcoLaSelva.unity
-    guid: 3656bff73b2ff7148863290ef1d28c27
-  - enabled: 1
-<<<<<<< HEAD
-    path: Assets/Scenes/Niveles/Nivel01/Escena05_HU05_Jaguar.unity
-    guid: 5d5ac1fced6cfa24a8a490795437e6c5
-  - enabled: 1
-    path: Assets/Scenes/Niveles/Nivel01/Escena09_HU09_Platano.unity
-    guid: dddbcd5243e5cb24e8fa34001a24f0df
-=======
-    path: Assets/Scenes/Niveles/Nivel01/Escena4_.unity
-    guid: 475fc4065473a894d857ab24404f8eda
-  - enabled: 1
-    path: Assets/Scenes/Niveles/Nivel01/Escena8.unity
-    guid: a3b8a4f507fb6404ba095851b35166ad
-  - enabled: 1
-    path: Assets/Scenes/Niveles/Nivel01/Escena12.unity
-    guid: 2c4733ccb91723c40bbc33bcc7f110f1
->>>>>>> jir
-  m_configObjects:
-    com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  m_Scenes: []
+  m_configObjects: {}

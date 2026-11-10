@@ -3,7 +3,7 @@ using System;
 namespace GuardianesAmazonicos.Models
 {
     /// <summary>
-    /// HU-04 - Escena 4 del Nivel 1. Asignada a: Jirleidy Raquel Santos Muentes (Sprint 1).
+    /// HU-04 - Escena 4 del Nivel 1.
     /// "Como estudiante, quiero reconocer una planta entre varias imagenes,
     /// para asociar la palabra con un elemento de la selva."
     /// Modelo de dominio (POCO observador): valida la respuesta, registra intentos
@@ -25,11 +25,11 @@ namespace GuardianesAmazonicos.Models
         public ActividadPlantasModel(ProgresoEstudianteData progreso)
         {
             _progreso = progreso ?? new ProgresoEstudianteData();
+            Enunciado = "¿Cuál de estas imágenes representa una planta?";
             _progreso.totalPuntosProgreso = TotalPuntosProgreso;
             _progreso.puntoProgresoActual = Math.Max(0, Math.Min(_progreso.puntoProgresoActual, TotalPuntosProgreso));
 
             PalabraObjetivo = "PLANTA";
-            Enunciado = "El guardián trae un reto: toca la PLANTA de la selva y luego toca ACEPTAR.";
             _opciones = new[]
             {
                 new OpcionSelvaData(
