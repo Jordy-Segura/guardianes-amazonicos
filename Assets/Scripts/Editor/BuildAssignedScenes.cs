@@ -229,6 +229,28 @@ namespace GuardianesAmazonicos.Editor
                 importer.SaveAndReimport();
             }
 
+                        string[] carpetasUI = { "Assets/Art/UI/Sprites", "Assets/Resources/UI/Sprites" };
+            foreach (string carpeta in carpetasUI)
+            {
+                if (!AssetDatabase.IsValidFolder(carpeta)) continue;
+                string[] guids = AssetDatabase.FindAssets("t:Texture2D", new[] { carpeta });
+                foreach (string guid in guids)
+                {
+                    string path = AssetDatabase.GUIDToAssetPath(guid);
+                    TextureImporter uiImporter = AssetImporter.GetAtPath(path) as TextureImporter;
+                    if (uiImporter != null && uiImporter.textureType != TextureImporterType.Sprite)
+                    {
+                        uiImporter.textureType = TextureImporterType.Sprite;
+                        uiImporter.spriteImportMode = SpriteImportMode.Single;
+                        uiImporter.alphaIsTransparency = true;
+                        uiImporter.mipmapEnabled = false;
+                        uiImporter.textureCompression = TextureImporterCompression.Uncompressed;
+                        uiImporter.maxTextureSize = 2048;
+                        uiImporter.SaveAndReimport();
+                    }
+                }
+            }
+
             TextureImporter atlas = AssetImporter.GetAtPath("Assets/Art/Items/FrutasJungla.png") as TextureImporter;
             if (atlas != null)
             {
