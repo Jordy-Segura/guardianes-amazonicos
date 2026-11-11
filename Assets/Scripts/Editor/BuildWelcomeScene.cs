@@ -40,7 +40,8 @@ namespace GuardianesAmazonicos.Editor
                 descripcion = "En este nivel conocerás los animales, las plantas y los ríos de la selva amazónica.",
                 fondo = PlantillaUIBuilder.S(BackgroundPath),
                 imagen = PlantillaUIBuilder.S(ImagePath),
-                personaje = BuildAssignedScenes.FotogramaSaludo(saludo, PlantillaUIBuilder.S(BoyPath))
+                personaje = BuildAssignedScenes.FotogramaSaludo(saludo, PlantillaUIBuilder.S(BoyPath)),
+                fotogramas = saludo
             });
 
             // La bienvenida no tiene pista: la cabecera muestra Lectura y Señas, como en la captura aprobada.
@@ -71,6 +72,7 @@ namespace GuardianesAmazonicos.Editor
             SetReference(view, "_pantallaVideo", senas.pantalla);
             SetReference(view, "_panelSenas", senas.raiz);
             SetReference(view, "_capaBase", grupoBase);
+            SetReference(view, "_animacionPersonaje", bienvenida.animacion);
 
             BienvenidaNivelPresenter presenter = controlador.AddComponent<BienvenidaNivelPresenter>();
             SetReference(presenter, "_vista", view);

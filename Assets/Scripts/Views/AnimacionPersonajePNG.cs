@@ -19,6 +19,8 @@ namespace GuardianesAmazonicos.Views
         [SerializeField] private Sprite[] _fotogramas;
         [SerializeField, Min(1)] private float _imagenesPorSegundo = 16f;
         [SerializeField] private bool _reducirMovimiento = true;
+        [SerializeField] private bool _reproducirAlActivar;
+        [SerializeField] private bool _enBucle = true;
 
         private bool _reproduciendo;
         private bool _repetir;
@@ -27,8 +29,14 @@ namespace GuardianesAmazonicos.Views
 
         private void OnEnable()
         {
-            _reproduciendo = false;
             _ultimo = -1;
+            if (_reproducirAlActivar && !_reducirMovimiento && _fotogramas != null && _fotogramas.Length > 0)
+            {
+                Iniciar(_enBucle);
+                return;
+            }
+
+            _reproduciendo = false;
             Mostrar(0);
         }
 

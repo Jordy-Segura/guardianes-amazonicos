@@ -29,6 +29,7 @@ namespace GuardianesAmazonicos.Editor
         private const string FondoNivel1 = "Assets/Art/Backgrounds/Niveles/N1_Conozco_la_selva.png";
         private const string FondoNivel2 = "Assets/Art/Backgrounds/Niveles/N2_Cuido_los_animales.png";
         private const string Explorador = "Assets/Art/Characters/Explorador.png";
+        private const string ExploradorPreocupado = "Assets/Art/Characters/ExploradorPreocupado.png";
         private const string CarpetaFotogramasExplorador = "Assets/Art/Animaciones/Explorador/Fotogramas";
         private const string Escenas = "Assets/Art/Escenas/";
         private const string Respuestas = "Assets/Art/Items/Respuestas/";
@@ -36,6 +37,7 @@ namespace GuardianesAmazonicos.Editor
 
         private static readonly string[] RecursosNuevos =
         {
+            ExploradorPreocupado,
             Escenas + "pregunta_01_05_escena.png", Escenas + "pregunta_01_09_escena.png",
             Escenas + "pregunta_02_01_escena.png", Escenas + "bienvenida_nivel_01.png", Escenas + "bienvenida_nivel_02.png",
             Respuestas + "respuesta_01_09_a.png", Respuestas + "respuesta_01_09_b.png", Respuestas + "respuesta_01_09_c.png",
@@ -79,6 +81,7 @@ namespace GuardianesAmazonicos.Editor
             jaguar.ElementoEscena = null;
             jaguar.Fondo = PlantillaUIBuilder.S(FondoNivel1);
             jaguar.Personaje = PlantillaUIBuilder.S(Explorador);
+            jaguar.PersonajeIncorrecto = PlantillaUIBuilder.S(ExploradorPreocupado);
             jaguar.FotogramasCelebracion = CargarFotogramasExplorador();
             jaguar.AudioLectura = PlantillaUIBuilder.Cargar<AudioClip>(Lectura + "lectura_01_05.wav");
             jaguar.VideoSenas = "senas_nivel_01_pregunta_05.mp4";
@@ -112,6 +115,7 @@ namespace GuardianesAmazonicos.Editor
             platano.ElementoEscena = null;
             platano.Fondo = PlantillaUIBuilder.S(FondoNivel1);
             platano.Personaje = PlantillaUIBuilder.S(Explorador);
+            platano.PersonajeIncorrecto = PlantillaUIBuilder.S(ExploradorPreocupado);
             platano.FotogramasCelebracion = CargarFotogramasExplorador();
             platano.AudioLectura = PlantillaUIBuilder.Cargar<AudioClip>(Lectura + "lectura_01_09.wav");
             platano.VideoSenas = "senas_nivel_01_pregunta_09.mp4";
@@ -153,10 +157,11 @@ namespace GuardianesAmazonicos.Editor
             mono.Pista = "Piensa en lo que necesita el mono para vivir: árboles sanos y un bosque limpio.";
             mono.Felicitacion = "¡Lo lograste! Cuidar el bosque protege su hogar.";
             mono.ImagenEscena = PlantillaUIBuilder.S(Escenas + "pregunta_02_01_escena.png");
-            mono.ElementoEscena = PlantillaUIBuilder.S("Assets/Art/Characters/Mono.png");
-            mono.RectElementoEscena = new Rect(236f, -96f, 170f, 226f);
+            mono.ElementoEscena = null;
+            mono.RectElementoEscena = Rect.zero;
             mono.Fondo = PlantillaUIBuilder.S(FondoNivel2);
             mono.Personaje = PlantillaUIBuilder.S(Explorador);
+            mono.PersonajeIncorrecto = PlantillaUIBuilder.S(ExploradorPreocupado);
             mono.FotogramasCelebracion = CargarFotogramasExplorador();
             mono.AudioLectura = PlantillaUIBuilder.Cargar<AudioClip>(Lectura + "lectura_02_01.wav");
             mono.VideoSenas = "senas_nivel_02_pregunta_01.mp4";
@@ -226,7 +231,7 @@ namespace GuardianesAmazonicos.Editor
             r.capaBase = capaBase.gameObject.AddComponent<CanvasGroup>();
             PlantillaUIBuilder.Imagen("FondoNivel", capaBase, c.Fondo, 0f, 0f, PlantillaUIBuilder.ANCHO, PlantillaUIBuilder.ALTO);
             PlantillaUIBuilder.ConstruirActividad(capaBase, c.Pregunta, c.Opciones, c.ImagenesOpciones, c.Personaje,
-                c.ImagenEscena, c.ElementoEscena, c.RectElementoEscena, r);
+                c.PersonajeIncorrecto, c.FotogramasCelebracion, c.ImagenEscena, c.ElementoEscena, c.RectElementoEscena, r);
 
             if (c.MostrarBienvenida)
             {
@@ -238,10 +243,12 @@ namespace GuardianesAmazonicos.Editor
                     descripcion = c.BienvenidaDescripcion,
                     fondo = c.Fondo,
                     imagen = c.BienvenidaImagen,
-                    personaje = FotogramaSaludo(c.FotogramasCelebracion, c.Personaje)
+                    personaje = FotogramaSaludo(c.FotogramasCelebracion, c.Personaje),
+                    fotogramas = c.FotogramasCelebracion
                 });
                 r.estadoBienvenida = b.raiz;
                 r.botonComenzar = b.comenzar;
+                r.animacionBienvenida = b.animacion;
             }
 
             PlantillaUIBuilder.Cabecera cabecera = PlantillaUIBuilder.ConstruirCabecera(capaBase, c.TituloNivel, c.NumeroEscena, c.TotalEscenas, true);
@@ -257,7 +264,7 @@ namespace GuardianesAmazonicos.Editor
 
             // Ventanas independientes: nunca se muestran dos a la vez.
             PlantillaUIBuilder.ConstruirEstadoCorrecto(canvas.transform, c.Personaje, c.FotogramasCelebracion, c.Felicitacion, r);
-            PlantillaUIBuilder.ConstruirPanelPista(canvas.transform, c.Pista, c.Personaje, r);
+            PlantillaUIBuilder.ConstruirPanelPista(canvas.transform, c.Pista, c.Personaje, c.FotogramasCelebracion, r);
             PlantillaUIBuilder.PanelSenas senas = PlantillaUIBuilder.ConstruirPanelSenas(canvas.transform);
             r.panelSenas = senas.raiz;
             r.botonReproducirSenas = senas.reproducir;
@@ -305,8 +312,10 @@ namespace GuardianesAmazonicos.Editor
 
         public static void AgregarEscenasBuild(params string[] rutas)
         {
-            List<EditorBuildSettingsScene> escenas = EditorBuildSettings.scenes.ToList();
-            bool cambio = false;
+            List<EditorBuildSettingsScene> escenas = EditorBuildSettings.scenes
+                .Where(escena => System.IO.File.Exists(escena.path))
+                .ToList();
+            bool cambio = escenas.Count != EditorBuildSettings.scenes.Length;
             foreach (string ruta in rutas)
             {
                 if (escenas.Any(escena => escena.path == ruta)) continue;

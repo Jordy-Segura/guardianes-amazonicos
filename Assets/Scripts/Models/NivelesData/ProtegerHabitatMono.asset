@@ -34,15 +34,16 @@ MonoBehaviour:
   _pista: "Piensa en lo que necesita el mono para vivir: \xE1rboles sanos y un bosque limpio."
   _felicitacion: "\xA1Lo lograste! Cuidar el bosque protege su hogar."
   _imagenEscena: {fileID: 21300000, guid: 2999d199e58f48348869005c2e815d0e, type: 3}
-  _elementoEscena: {fileID: 21300000, guid: 26845133233d7cadb1c648837aea4191, type: 3}
+  _elementoEscena: {fileID: 0}
   _rectElementoEscena:
     serializedVersion: 2
-    x: 236
-    y: -96
-    width: 170
-    height: 226
+    x: 0
+    y: 0
+    width: 0
+    height: 0
   _fondo: {fileID: 21300000, guid: d84eb283f1f0456bfce04484df0c7bd9, type: 3}
   _personaje: {fileID: 21300000, guid: 2c32b3bf6bcfade558e5cfe00634d3b2, type: 3}
+  _personajeIncorrecto: {fileID: 21300000, guid: da6c6836ecaa8b84f9b90e49883c0601, type: 3}
   _fotogramasCelebracion:
   - {fileID: 21300000, guid: 6c8d65da4fa7cee4121e6b6a1afcc42b, type: 3}
   - {fileID: 21300000, guid: b1b78a5147d51d4024896495f409ec4c, type: 3}

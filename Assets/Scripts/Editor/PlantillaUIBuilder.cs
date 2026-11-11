@@ -57,6 +57,7 @@ namespace GuardianesAmazonicos.Editor
 
         public const string FUENTE = "Assets/Fonts/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF.asset";
         public const string RENDER_TEXTURE_LSEC = "Assets/Art/LSEC_RenderTexture.renderTexture";
+        public const string AUDIO_AMBIENTE_SELVA = "Assets/Audio/SFX/ambiente_selva_suave.wav";
 
         public static readonly string[] SPRITES_NUEVOS =
         {
@@ -82,6 +83,7 @@ namespace GuardianesAmazonicos.Editor
         {
             public GameObject raiz;
             public Button comenzar;
+            public AnimacionPersonajePNG animacion;
         }
 
         public sealed class PanelSenas
@@ -102,6 +104,7 @@ namespace GuardianesAmazonicos.Editor
             public Sprite fondo;
             public Sprite imagen;
             public Sprite personaje;
+            public Sprite[] fotogramas;
         }
 
         // ---------- Preparación ----------
@@ -158,6 +161,18 @@ namespace GuardianesAmazonicos.Editor
 
             GameObject eventos = new GameObject("EventSystem", typeof(EventSystem), typeof(InputSystemUIInputModule));
             eventos.GetComponent<InputSystemUIInputModule>().AssignDefaultActions();
+
+            AudioClip clipAmbiente = AssetDatabase.LoadAssetAtPath<AudioClip>(AUDIO_AMBIENTE_SELVA);
+            if (clipAmbiente != null)
+            {
+                GameObject ambiente = new GameObject("AmbienteSelva", typeof(AudioSource));
+                AudioSource fuenteAmbiente = ambiente.GetComponent<AudioSource>();
+                fuenteAmbiente.clip = clipAmbiente;
+                fuenteAmbiente.playOnAwake = true;
+                fuenteAmbiente.loop = true;
+                fuenteAmbiente.volume = 0.22f;
+                fuenteAmbiente.spatialBlend = 0f;
+            }
         }
 
         public static Canvas CrearCanvas(string nombre)
@@ -318,15 +333,20 @@ namespace GuardianesAmazonicos.Editor
         /// Capas: personaje → globo + texto → escena + marco → tres tarjetas → Aceptar / Intentarlo.
         /// </summary>
         public static void ConstruirActividad(Transform padre, string pregunta, string[] opciones, Sprite[] imagenes,
-            Sprite personaje, Sprite imagenEscena, Sprite elementoEscena, Rect rectElemento,
+            Sprite personaje, Sprite personajeIncorrecto, Sprite[] fotogramas, Sprite imagenEscena, Sprite elementoEscena, Rect rectElemento,
             RetoSeleccionView.ReferenciasActividad r)
         {
             RectTransform capa = Capa("Actividad", padre);
             r.capaActividad = capa.gameObject.AddComponent<CanvasGroup>();
 
-            Image guia = Imagen("Personaje", capa, personaje, 147f, -428f, 390f, 562f, true);
+            Sprite spriteInicial = fotogramas != null && fotogramas.Length > 0 ? fotogramas[0] : personaje;
+            Image guia = Imagen("Personaje", capa, spriteInicial, 147f, -428f, 390f, 562f, true);
             guia.raycastTarget = false;
             r.personajeGuia = guia.gameObject;
+            r.imagenPersonajeGuia = guia;
+            r.spritePersonajeNormal = spriteInicial;
+            r.spritePersonajeIncorrecto = personajeIncorrecto != null ? personajeIncorrecto : personaje;
+            r.animacionPersonajeGuia = ConfigurarAnimacionPersonaje(guia, fotogramas, 24f, true);
 
             r.globoPregunta = Imagen("GloboPregunta", capa, S(SPRITE_GLOBO), 158f, -174f, 684f, 240f).gameObject;
             Texto("TextoPregunta", r.globoPregunta.transform, pregunta, 201f - 158f, -208f + 174f, 598f, 150f, 40f, TINTA);
@@ -400,7 +420,9 @@ namespace GuardianesAmazonicos.Editor
             b.raiz = capa.gameObject;
 
             Imagen("FondoBienvenida", capa, d.fondo, 0f, 0f, ANCHO, ALTO, false, true);
-            Imagen("PersonajeBienvenida", capa, d.personaje, 100f, -320f, 480f, 720f, true);
+            Sprite spriteBienvenida = d.fotogramas != null && d.fotogramas.Length > 0 ? d.fotogramas[0] : d.personaje;
+            Image personajeBienvenida = Imagen("PersonajeBienvenida", capa, spriteBienvenida, 100f, -320f, 480f, 720f, true);
+            b.animacion = ConfigurarAnimacionPersonaje(personajeBienvenida, d.fotogramas, 24f, true);
 
             // La ventana transparente de la tarjeta (PNG 668 × 653, hueco 80-595 × 252-486)
             // deja ver la imagen de presentación del nivel.
@@ -434,19 +456,7 @@ namespace GuardianesAmazonicos.Editor
 
             Image celebracion = Imagen("PersonajeCelebracion", capa, fotogramas != null && fotogramas.Length > 0 ? fotogramas[0] : personaje,
                 300f, -290f, 470f, 705f, true);
-            if (fotogramas != null && fotogramas.Length > 0)
-            {
-                AnimacionPersonajePNG animacion = celebracion.gameObject.AddComponent<AnimacionPersonajePNG>();
-                SerializedObject datos = new SerializedObject(animacion);
-                datos.FindProperty("_destinoCanvas").objectReferenceValue = celebracion;
-                datos.FindProperty("_imagenesPorSegundo").floatValue = 24f;
-                datos.FindProperty("_reducirMovimiento").boolValue = false;
-                SerializedProperty lista = datos.FindProperty("_fotogramas");
-                lista.arraySize = fotogramas.Length;
-                for (int i = 0; i < fotogramas.Length; i++) lista.GetArrayElementAtIndex(i).objectReferenceValue = fotogramas[i];
-                datos.ApplyModifiedPropertiesWithoutUndo();
-                r.animacionCelebracion = animacion;
-            }
+            r.animacionCelebracion = ConfigurarAnimacionPersonaje(celebracion, fotogramas, 24f, true);
 
             RectTransform contenido = Rect("Felicitacion", capa, 820f, -260f, 880f, 560f);
             // Pivote al centro para que la entrada breve escale desde el centro del mensaje.
@@ -461,17 +471,36 @@ namespace GuardianesAmazonicos.Editor
         }
 
         /// <summary>Ayuda: ventana de pista centrada; bloquea las tarjetas mientras está abierta.</summary>
-        public static void ConstruirPanelPista(Transform padre, string pista, Sprite personaje, RetoSeleccionView.ReferenciasActividad r)
+        public static void ConstruirPanelPista(Transform padre, string pista, Sprite personaje, Sprite[] fotogramas, RetoSeleccionView.ReferenciasActividad r)
         {
             RectTransform capa = Capa("PanelPista", padre);
             r.panelPista = capa.gameObject;
             Bloqueador("FondoLuz", capa, S(SPRITE_FONDO_PISTA), new Color(1f, 1f, 1f, 0.55f));
-            Imagen("PersonajePista", capa, personaje, 147f, -428f, 390f, 562f, true);
+            Sprite spritePista = fotogramas != null && fotogramas.Length > 0 ? fotogramas[0] : personaje;
+            Image personajePista = Imagen("PersonajePista", capa, spritePista, 147f, -428f, 390f, 562f, true);
+            r.animacionPista = ConfigurarAnimacionPersonaje(personajePista, fotogramas, 24f, true);
             ImagenVisible("CartaPista", capa, S(SPRITE_CARTA_PISTA), 45, 110, 1414, 965, 560f, -245f, 880f);
             Texto("TextoPista", capa, pista, 640f, -440f, 720f, 150f, 40f, VERDE_OSCURO);
             r.botonVoyIntentarlo = Boton(ImagenVisible("VoyAIntentarlo", capa, S(SPRITE_VOY_INTENTARLO), 164, 108, 2005, 570, 750f, -610f, 500f),
                 "BotonVoyAIntentarlo");
             capa.gameObject.SetActive(false);
+        }
+
+        public static AnimacionPersonajePNG ConfigurarAnimacionPersonaje(Image destino, Sprite[] fotogramas, float fps = 24f, bool enBucle = true)
+        {
+            if (destino == null || fotogramas == null || fotogramas.Length == 0) return null;
+            AnimacionPersonajePNG animacion = destino.gameObject.AddComponent<AnimacionPersonajePNG>();
+            SerializedObject datos = new SerializedObject(animacion);
+            datos.FindProperty("_destinoCanvas").objectReferenceValue = destino;
+            datos.FindProperty("_imagenesPorSegundo").floatValue = fps;
+            datos.FindProperty("_reducirMovimiento").boolValue = false;
+            datos.FindProperty("_reproducirAlActivar").boolValue = true;
+            datos.FindProperty("_enBucle").boolValue = enBucle;
+            SerializedProperty lista = datos.FindProperty("_fotogramas");
+            lista.arraySize = fotogramas.Length;
+            for (int i = 0; i < fotogramas.Length; i++) lista.GetArrayElementAtIndex(i).objectReferenceValue = fotogramas[i];
+            datos.ApplyModifiedPropertiesWithoutUndo();
+            return animacion;
         }
 
         /// <summary>Señas: VideoPlayer → RenderTexture → RawImage dentro del panel, con reproducir/pausar y X.</summary>

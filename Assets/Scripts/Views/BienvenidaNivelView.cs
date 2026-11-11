@@ -39,6 +39,7 @@ namespace GuardianesAmazonicos.Views
         [SerializeField] private RawImage _pantallaVideo;
         [SerializeField] private GameObject _panelSenas;
         [SerializeField] private CanvasGroup _capaBase;
+        [SerializeField] private AnimacionPersonajePNG _animacionPersonaje;
 
         public event Action OnComenzarSolicitado;
         public event Action OnAudioSolicitado;
@@ -85,6 +86,7 @@ namespace GuardianesAmazonicos.Views
 
         private void Start()
         {
+            if (_animacionPersonaje != null) _animacionPersonaje.ReproducirContinuo();
             Enfocar(_botonComenzar);
         }
 

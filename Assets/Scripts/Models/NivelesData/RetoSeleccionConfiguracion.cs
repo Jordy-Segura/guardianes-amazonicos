@@ -40,6 +40,7 @@ namespace GuardianesAmazonicos.Models
         [Header("Fondo y personaje guía")]
         [SerializeField] private Sprite _fondo;
         [SerializeField] private Sprite _personaje;
+        [SerializeField] private Sprite _personajeIncorrecto;
         [SerializeField] private Sprite[] _fotogramasCelebracion;
 
         [Header("Accesibilidad")]
@@ -77,6 +78,7 @@ namespace GuardianesAmazonicos.Models
         public Rect RectElementoEscena { get => _rectElementoEscena; set => _rectElementoEscena = value; }
         public Sprite Fondo { get => _fondo; set => _fondo = value; }
         public Sprite Personaje { get => _personaje; set => _personaje = value; }
+        public Sprite PersonajeIncorrecto { get => _personajeIncorrecto; set => _personajeIncorrecto = value; }
         public Sprite[] FotogramasCelebracion { get => _fotogramasCelebracion; set => _fotogramasCelebracion = value; }
         public AudioClip AudioLectura { get => _audioLectura; set => _audioLectura = value; }
         public string VideoSenas { get => _videoSenas; set => _videoSenas = value; }

@@ -50,6 +50,10 @@ namespace GuardianesAmazonicos.Views
             public CanvasGroup capaBase;
             public CanvasGroup capaActividad;
             public GameObject personajeGuia;
+            public Image imagenPersonajeGuia;
+            public AnimacionPersonajePNG animacionPersonajeGuia;
+            public Sprite spritePersonajeNormal;
+            public Sprite spritePersonajeIncorrecto;
             public GameObject globoPregunta;
             public GameObject globoCorreccion;
             public TMP_Text textoCorreccion;
@@ -67,6 +71,7 @@ namespace GuardianesAmazonicos.Views
             [Header("Ventana de pista")]
             public GameObject panelPista;
             public Button botonVoyIntentarlo;
+            public AnimacionPersonajePNG animacionPista;
 
             [Header("Ventana de señas")]
             public GameObject panelSenas;
@@ -79,6 +84,7 @@ namespace GuardianesAmazonicos.Views
             [Header("Bienvenida del nivel")]
             public GameObject estadoBienvenida;
             public Button botonComenzar;
+            public AnimacionPersonajePNG animacionBienvenida;
 
             [Header("Audio")]
             public AudioSource fuenteAudio;
@@ -88,6 +94,8 @@ namespace GuardianesAmazonicos.Views
 
         private UnityAction[] _accionesTarjetas;
         private Coroutine _celebracion;
+        private Coroutine _reaccionIncorrecta;
+        private bool _enEstadoIncorrecto;
 
         public event Action OnComenzarSolicitado;
         public event Action<int> OnTarjetaSeleccionada;
@@ -182,6 +190,11 @@ namespace GuardianesAmazonicos.Views
         public void MostrarBienvenida(bool visible)
         {
             Activar(_ref.estadoBienvenida, visible);
+            if (_ref.animacionBienvenida != null)
+            {
+                if (visible) _ref.animacionBienvenida.ReproducirContinuo();
+                else _ref.animacionBienvenida.Pausar();
+            }
             // La bienvenida no tiene pista: Ayuda solo aparece en la actividad.
             if (_ref.botonAyuda != null) _ref.botonAyuda.gameObject.SetActive(!visible);
             if (_ref.capaActividad != null)
@@ -202,6 +215,7 @@ namespace GuardianesAmazonicos.Views
             Activar(_ref.botonIntentarloDeNuevo, false);
             Activar(_ref.estadoCorrecto, false);
             Activar(_ref.personajeGuia, true);
+            MostrarPersonajeGuiaNormal();
             BloquearCapaBase(false);
         }
 
@@ -213,9 +227,10 @@ namespace GuardianesAmazonicos.Views
             Activar(_ref.globoCorreccion, false);
             Activar(_ref.botonIntentarloDeNuevo, false);
             Activar(_ref.botonAceptar, true);
+            MostrarPersonajeGuiaNormal();
         }
 
-        /// <summary>Borde rojo en la opción errónea y globo con una explicación amable.</summary>
+        /// <summary>Borde rojo en la opción errónea, cambio de reacción del personaje y globo con explicación amable.</summary>
         public void MostrarIncorrecta(int indice, string explicacion)
         {
             PrepararTarjetas(RetoSinIndice, indice, RetoSinIndice, true);
@@ -224,6 +239,7 @@ namespace GuardianesAmazonicos.Views
             if (_ref.textoCorreccion != null) _ref.textoCorreccion.text = explicacion;
             Activar(_ref.botonAceptar, false);
             Activar(_ref.botonIntentarloDeNuevo, true);
+            MostrarPersonajeGuiaIncorrecto();
             Enfocar(_ref.botonIntentarloDeNuevo);
         }
 
@@ -258,6 +274,20 @@ namespace GuardianesAmazonicos.Views
         {
             if (visible) MostrarSenas(false, null);
             Activar(_ref.panelPista, visible);
+            if (_ref.estadoCorrecto == null || !_ref.estadoCorrecto.activeSelf)
+            {
+                Activar(_ref.personajeGuia, !visible);
+                if (!visible)
+                {
+                    if (_enEstadoIncorrecto) MostrarPersonajeGuiaIncorrecto();
+                    else MostrarPersonajeGuiaNormal();
+                }
+            }
+            if (_ref.animacionPista != null)
+            {
+                if (visible) _ref.animacionPista.ReproducirContinuo();
+                else _ref.animacionPista.Pausar();
+            }
             BloquearCapaBase(visible);
             if (visible) Enfocar(_ref.botonVoyIntentarlo);
         }
@@ -367,6 +397,76 @@ namespace GuardianesAmazonicos.Views
 
         private const int RetoSinIndice = -1;
 
+        private void MostrarPersonajeGuiaNormal()
+        {
+            _enEstadoIncorrecto = false;
+            if (_reaccionIncorrecta != null)
+            {
+                StopCoroutine(_reaccionIncorrecta);
+                _reaccionIncorrecta = null;
+            }
+
+            if (_ref.imagenPersonajeGuia != null)
+            {
+                RectTransform rect = _ref.imagenPersonajeGuia.rectTransform;
+                rect.localEulerAngles = Vector3.zero;
+                rect.localScale = Vector3.one;
+                if (_ref.spritePersonajeNormal != null)
+                {
+                    _ref.imagenPersonajeGuia.sprite = _ref.spritePersonajeNormal;
+                }
+            }
+
+            if (_ref.animacionPersonajeGuia != null && Application.isPlaying)
+            {
+                _ref.animacionPersonajeGuia.ReproducirContinuo();
+            }
+        }
+
+        private void MostrarPersonajeGuiaIncorrecto()
+        {
+            _enEstadoIncorrecto = true;
+            if (_ref.animacionPersonajeGuia != null)
+            {
+                _ref.animacionPersonajeGuia.Pausar();
+            }
+
+            if (_ref.imagenPersonajeGuia != null && _ref.spritePersonajeIncorrecto != null)
+            {
+                _ref.imagenPersonajeGuia.sprite = _ref.spritePersonajeIncorrecto;
+            }
+
+            if (!Application.isPlaying || _ref.imagenPersonajeGuia == null) return;
+
+            if (_reaccionIncorrecta != null) StopCoroutine(_reaccionIncorrecta);
+            _reaccionIncorrecta = StartCoroutine(AnimarReaccionIncorrecta(_ref.imagenPersonajeGuia.rectTransform));
+        }
+
+        private IEnumerator AnimarReaccionIncorrecta(RectTransform rect)
+        {
+            const float duracion = 0.36f;
+            float tiempo = 0f;
+            while (tiempo < duracion && rect != null)
+            {
+                tiempo += Time.unscaledDeltaTime;
+                float t = Mathf.Clamp01(tiempo / duracion);
+                float amortiguacion = 1f - t;
+                float angulo = Mathf.Sin(t * Mathf.PI * 3f) * 4.5f * amortiguacion;
+                float escala = 1f + Mathf.Sin(t * Mathf.PI) * 0.035f;
+                rect.localEulerAngles = new Vector3(0f, 0f, angulo);
+                rect.localScale = new Vector3(escala, escala, 1f);
+                yield return null;
+            }
+
+            if (rect != null)
+            {
+                rect.localEulerAngles = Vector3.zero;
+                rect.localScale = Vector3.one;
+            }
+
+            _reaccionIncorrecta = null;
+        }
+
         private void PrepararTarjetas(int brillo, int incorrecta, int correcta, bool interactuables)
         {
             if (_ref.tarjetas == null) return;
@@ -388,7 +488,7 @@ namespace GuardianesAmazonicos.Views
             // El personaje celebra en la ventana de acierto; se oculta el guía para no duplicarlo.
             Activar(_ref.personajeGuia, false);
             Activar(_ref.estadoCorrecto, true);
-            if (_ref.animacionCelebracion != null) _ref.animacionCelebracion.ReproducirUnCiclo();
+            if (_ref.animacionCelebracion != null) _ref.animacionCelebracion.ReproducirContinuo();
             Enfocar(_ref.botonSiguiente);
 
             RectTransform contenido = _ref.contenidoCelebracion;
