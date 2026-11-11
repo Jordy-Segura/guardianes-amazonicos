@@ -1,0 +1,54 @@
+{
+  "animaciones": [
+    {
+      "personaje": "Explorador",
+      "fotogramas": 40,
+      "imagenes_por_segundo": 24,
+      "duracion": 1.6666666666666667,
+      "tamano": [
+        512,
+        768
+      ],
+      "transparencia": true
+    },
+    {
+      "personaje": "Mono",
+      "fotogramas": 48,
+      "imagenes_por_segundo": 16,
+      "duracion": 3.0,
+      "tamano": [
+        512,
+        768
+      ],
+      "transparencia": true
+    },
+    {
+      "personaje": "Tortuga",
+      "fotogramas": 48,
+      "imagenes_por_segundo": 16,
+      "duracion": 3.0,
+      "tamano": [
+        512,
+        768
+      ],
+      "transparencia": true
+    },
+    {
+      "personaje": "Guacamayo",
+      "fotogramas": 48,
+      "imagenes_por_segundo": 16,
+      "duracion": 3.0,
+      "tamano": [
+        512,
+        768
+      ],
+      "transparencia": true
+    }
+  ],
+  "botones_bases": 12,
+  "botones_ejemplos": 52,
+  "iconos_png": 26,
+  "iconos_svg": 26,
+  "diseno": "formas e iconos vectoriales propios; PNG exportados mediante navegador; personajes originales reutilizados",
+  "certificacion_accesibilidad": false
+}

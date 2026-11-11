@@ -65,3 +65,6 @@ secrets.json
 *~
 *.swp
 *.swo
+
+.vsconfig
+docs/

@@ -110,7 +110,14 @@ namespace GuardianesAmazonicos.Presenters
 
             if (!NavegacionNiveles.CargarSiguiente(_siguienteEscena))
             {
-                Debug.Log("BienvenidaNivelPresenter: aún no hay una actividad siguiente en Build Profiles.", this);
+                if (Application.CanStreamedLevelBeLoaded("Escena02_HU02_Mono"))
+                {
+                    UnityEngine.SceneManagement.SceneManager.LoadScene("Escena02_HU02_Mono");
+                }
+                else
+                {
+                    Debug.Log("BienvenidaNivelPresenter: aún no hay una actividad siguiente en Build Profiles.", this);
+                }
             }
         }
 

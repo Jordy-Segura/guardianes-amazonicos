@@ -1,0 +1,27 @@
+GUARDIANES DE LA AMAZONÍA — MATERIALES CON CRITERIOS DE ACCESIBILIDAD, V1
+
+1. Abre Demostracion.html para revisar la actividad, los cuatro personajes y los controles.
+2. Abre Guia/Guia_rapida.html para ver colores, tamaños y pasos de Unity.
+3. Los PNG de personajes están en Personajes. Los fotogramas están en Animaciones/nombre/Fotogramas.
+4. Botones contiene bases sin texto para Unity. Ejemplos_con_texto son muestras: se recomienda mantener las etiquetas como texto editable dentro de Unity.
+5. Iconos contiene PNG transparentes y los SVG originales.
+
+IMPORTANTE
+Descomprime TODA la carpeta antes de abrir la demostración. No abras el HTML directamente dentro del ZIP.
+La demo empieza sin movimiento. Desmarca «Reducir movimiento» y pulsa uno de los botones Reproducir para ver un ciclo breve, o usa el control general para activar el movimiento continuo.
+El audio de la demo utiliza la voz española disponible en el dispositivo; para la aplicación final conviene preparar narración y verificar su reproducción en el equipo destino.
+El icono de Señas es un acceso visual, NO una traducción a lengua de señas. Ese botón está deshabilitado en la demo hasta tener videos verificados.
+
+ANIMACIONES INCLUIDAS
+Explorador: saludo corregido, 40 fotogramas a 24 imágenes/s.
+Mono: balanceo suave del dibujo completo, 48 fotogramas a 16 imágenes/s.
+Tortuga: respiración suave del dibujo completo, 48 fotogramas a 16 imágenes/s.
+Guacamayo: flotación suave del dibujo completo, 48 fotogramas a 16 imágenes/s. No incluye aleteo.
+Todas las secuencias tienen lienzos PNG transparentes de 512 × 768 píxeles.
+No se redibujaron los personajes en cada fotograma. Se conservaron los originales y se animó su posición/escala; en el explorador se reutilizó el brazo separado corregido.
+
+ALCANCE
+Es un paquete de materiales y una demostración funcional. No se ha modificado el proyecto Unity.
+La revisión comprueba archivos, contrastes planos e interacción de la demo; no certifica accesibilidad universal ni sustituye pruebas con niños y docentes. La compatibilidad con lectores de pantalla y dispositivos de apoyo debe implementarse y probarse en la aplicación Unity final.
+
+Conserva tus originales. La primera secuencia del explorador de 5 imágenes no se utiliza en este paquete.

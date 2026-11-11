@@ -1,0 +1,81 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a8f2a5d201d22a45aa80d23b5277c59, type: 3}
+  m_Name: RetoMono
+  m_EditorClassIdentifier: Assembly-CSharp::GuardianesAmazonicos.Models.RetoSeleccionConfiguracion
+  _nivel: 1
+  _numeroEscena: 2
+  _totalEscenas: 12
+  _tituloNivel: "Nivel 1 \xB7 Conozco la selva"
+  _siguienteEscena: Escena03_HU03_Guacamayo
+  _pregunta: "\xBFCu\xE1l de estos animales es el mono?"
+  _opciones:
+  - Mono
+  - Guacamayo
+  - Tortuga
+  _imagenesOpciones:
+  - {fileID: 21300000, guid: 26845133233d7cadb1c648837aea4191, type: 3}
+  - {fileID: 21300000, guid: 7569f8d56b7c7c8ad11e7960c854d1e1, type: 3}
+  - {fileID: 21300000, guid: acd2eed8bcafe3be1dc73f15d82d1936, type: 3}
+  _indiceCorrecto: 0
+  _explicacionesIncorrectas:
+  - ''
+  - El guacamayo es un ave con plumas de colores que vuela por el cielo.
+  - La tortuga camina despacio y lleva un caparaz\xF3n duro en su espalda.
+  _pista: Busca al animal de cola larga que trepa y salta entre las ramas.
+  _felicitacion: "\xA1Muy bien! Reconociste al mono."
+  _imagenEscena: {fileID: 21300000, guid: ccce58d83f2c4195b99c451d7f2a53e8, type: 3}
+  _elementoEscena: {fileID: 0}
+  _rectElementoEscena:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 0
+    height: 0
+  _fondo: {fileID: 21300000, guid: b6a590ffb5b48f412f32db0b1482e1b9, type: 3}
+  _personaje: {fileID: 21300000, guid: 2c32b3bf6bcfade558e5cfe00634d3b2, type: 3}
+  _fotogramasCelebracion: []
+  _audioLectura: {fileID: 0}
+  _videoSenas: ''
+  _mostrarBienvenida: 0
+  _bienvenidaEtiquetaNivel: ''
+  _bienvenidaNombreNivel: ''
+  _bienvenidaSaludo: "\xA1Hola, guardi\xE1n!"
+  _bienvenidaDescripcion: ''
+  _bienvenidaImagen: {fileID: 0}
+  _bienvenidaAudio: {fileID: 0}
+  _bienvenidaVideoSenas: ''
+  _fuente: {fileID: 11400000, guid: 767ffc8669e62e144951bc56a822d1e6, type: 2}
+  numeroEscena: 2
+  titulo: "Nivel 1 \xB7 Conozco la selva"
+  textoProgreso: 2 de 12
+  pregunta: "\xBFCu\xE1l de estos animales es el mono?"
+  instruccion: Toca la imagen del mono.
+  opciones:
+  - Mono
+  - Guacamayo
+  - Tortuga
+  imagenes:
+  - {fileID: 21300000, guid: 26845133233d7cadb1c648837aea4191, type: 3}
+  - {fileID: 21300000, guid: 7569f8d56b7c7c8ad11e7960c854d1e1, type: 3}
+  - {fileID: 21300000, guid: acd2eed8bcafe3be1dc73f15d82d1936, type: 3}
+  atlasDosPorDos: {fileID: 0}
+  indiceCorrecto: 0
+  pistaIncorrecta: Busca al animal de cola larga que trepa y salta entre las ramas.
+  mensajeCorrecto: "\xA1Muy bien! Reconociste al mono."
+  pronunciaciones: []
+  siguienteEscena: Escena03_HU03_Guacamayo
+  textoContinuar: SIGUIENTE RETO
+  fondo: {fileID: 21300000, guid: b6a590ffb5b48f412f32db0b1482e1b9, type: 3}
+  imagenEscena: {fileID: 21300000, guid: ccce58d83f2c4195b99c451d7f2a53e8, type: 3}
+  explorador: {fileID: 21300000, guid: 2c32b3bf6bcfade558e5cfe00634d3b2, type: 3}
+  fuente: {fileID: 11400000, guid: 767ffc8669e62e144951bc56a822d1e6, type: 2}

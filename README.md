@@ -29,7 +29,7 @@ Assets/
     └── Persistence/         Persistencia local
 ```
 
-La aventura se organiza en cinco niveles, cada uno con doce escenas (60 escenas en total). Dentro de cada nivel, las actividades se implementan en orden. El segundo nivel comienza con la actividad de protección del hábitat del Mono Curioso. Las demás escenas se incorporarán conforme se implementen sus actividades. Las pantallas usan Canvas con `Scale With Screen Size`, resolución de referencia 1920×1080 y proporción 16:9. Los textos se renderizan sobre la plantilla para que puedan ajustarse y traducirse sin volver a editar las ilustraciones.
+La aventura se organiza en cinco niveles, cada uno con doce escenas (60 escenas en total). Dentro de cada nivel, las actividades se implementan en orden. En el Nivel 1 se implementa la bienvenida (Escena 01), el reconocimiento del mono (Escena 02, HU-02), el jaguar (Escena 05, HU-05) y el plátano (Escena 09, HU-09). El segundo nivel comienza con la actividad de protección del hábitat del Mono Curioso (Escena 01). Las demás escenas se incorporarán conforme se implementen sus actividades. Las pantallas usan Canvas con `Scale With Screen Size`, resolución de referencia 1920×1080 y proporción 16:9. Los textos se renderizan sobre la plantilla para que puedan ajustarse y traducirse sin volver a editar las ilustraciones.
 
 ## Plantilla de actividades (Guía Unity)
 

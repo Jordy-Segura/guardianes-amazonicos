@@ -1,0 +1,22 @@
+EXPLORADOR — SALUDO EN 5 FOTOGRAMAS
+
+Incluye 5 PNG transparentes de 1024 × 1536 píxeles.
+Abre Vista_animada.html para ver la secuencia y ajustar la velocidad.
+Orden: 01 → 02 → 03 → 04 → 05 → repetir.
+Propuesta inicial: 6 imágenes por segundo.
+
+UNITY (personaje en una escena con Sprite Renderer)
+1. Copia la carpeta Fotogramas dentro de Assets.
+2. Selecciona los 5 PNG: Texture Type = Sprite (2D and UI), Sprite Mode = Single. Usa el mismo Pixels Per Unit y Pivot en los cinco; aplica.
+3. Selecciona los cinco sprites en orden y arrástralos a Scene. Guarda el clip como Explorador_Saludo.anim.
+4. En Animation, comienza con Samples = 6. Activa Loop Time en el clip para repetir.
+5. Reproduce y ajusta el ritmo.
+
+Nota: estos pasos son para Sprite Renderer. Un personaje dentro de Canvas con componente Image requiere animar su propiedad Source Image.
+Las imágenes generadas presentan pequeñas variaciones de contorno y postura. Son una primera prueba de animación; no se garantiza que el cuerpo permanezca inmóvil píxel a píxel.
+
+Fuentes oficiales:
+https://learn.unity.com/tutorial/introduction-to-sprite-animations?uv=2019.4
+https://docs.unity.com/en-us/engine/6000.5/manual/unity2d/sprite/import-images-sprites
+
+Generados con image_gen integrada. Prompts completos en Prompts.json.

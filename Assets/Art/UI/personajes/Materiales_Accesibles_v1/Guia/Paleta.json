@@ -1,0 +1,11 @@
+{
+  "panel": "#FFF8E8",
+  "texto": "#173F35",
+  "principal": "#1565C0",
+  "blanco": "#FFFFFF",
+  "pista": "#FFD54F",
+  "acierto": "#2E7D32",
+  "error": "#B3261E",
+  "foco": "#173F35",
+  "deshabilitado": "#DDE3DF"
+}

@@ -96,3 +96,27 @@ MonoBehaviour:
   _bienvenidaAudio: {fileID: 0}
   _bienvenidaVideoSenas: 
   _fuente: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  numeroEscena: 5
+  titulo: "Nivel 1 \u2022 Conozco la selva"
+  textoProgreso: 2 de 2
+  pregunta: "Observa la selva. \xBFCu\xE1l de estos animales es el jaguar?"
+  instruccion: 
+  opciones:
+  - Mono
+  - Jaguar
+  - Guacamayo
+  imagenes:
+  - {fileID: 21300000, guid: 26845133233d7cadb1c648837aea4191, type: 3}
+  - {fileID: 21300000, guid: 0718976d469672745aeec3eb306a6dc7, type: 3}
+  - {fileID: 21300000, guid: 7569f8d56b7c7c8ad11e7960c854d1e1, type: 3}
+  atlasDosPorDos: {fileID: 0}
+  indiceCorrecto: 1
+  pistaIncorrecta: Busca un animal parecido a un gato grande, de pelaje amarillo con manchas oscuras.
+  mensajeCorrecto: "\xA1Lo lograste! Encontraste al jaguar."
+  pronunciaciones: []
+  siguienteEscena: 
+  textoContinuar: SIGUIENTE RETO
+  fondo: {fileID: 21300000, guid: b6a590ffb5b48f412f32db0b1482e1b9, type: 3}
+  imagenEscena: {fileID: 21300000, guid: 8e5d29d3ef5986148b3f371a2c2a5249, type: 3}
+  explorador: {fileID: 21300000, guid: 2c32b3bf6bcfade558e5cfe00634d3b2, type: 3}
+  fuente: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}

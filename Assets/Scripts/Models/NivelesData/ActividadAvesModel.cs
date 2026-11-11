@@ -3,7 +3,7 @@ using System;
 namespace GuardianesAmazonicos.Models
 {
     /// <summary>
-    /// HU-08 - Escena 8 del Nivel 1. Asignada a: Jirleidy Raquel Santos Muentes (Sprint 1).
+    /// HU-08 - Escena 8 del Nivel 1
     /// "Como estudiante, quiero reconocer un guacamayo entre varias imagenes,
     /// para asociar la palabra con un elemento de la selva."
     /// Modelo de dominio (POCO observador): valida la respuesta, registra intentos
