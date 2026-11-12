@@ -2212,7 +2212,7 @@ MonoBehaviour:
     estadoBienvenida: {fileID: 0}
     botonComenzar: {fileID: 0}
     animacionBienvenida: {fileID: 0}
-    fuenteAudio: {fileID: 0}
+    fuenteAudio: {fileID: 403309999}
 --- !u!82 &403309999
 AudioSource:
   m_ObjectHideFlags: 0

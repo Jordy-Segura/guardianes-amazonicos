@@ -81,6 +81,7 @@ namespace GuardianesAmazonicos.Editor
             AudioSource audio = controlador.AddComponent<AudioSource>();
             audio.playOnAwake = false;
             audio.loop = false;
+            referencias.fuenteAudio = audio;
             RetoSeleccionView vista = controlador.AddComponent<RetoSeleccionView>();
             vista.Enlazar(referencias);
             GuacamayoPresenter presenter = controlador.AddComponent<GuacamayoPresenter>();
@@ -155,6 +156,10 @@ namespace GuardianesAmazonicos.Editor
                 .SelectMany(objeto => objeto.GetComponentsInChildren<GuacamayoPresenter>(true)).FirstOrDefault();
             if (vista == null || presenter == null || vista.GetComponent<AudioSource>() == null)
                 throw new InvalidOperationException("La escena HU-03 no guardó sus componentes principales.");
+            SerializedProperty referenciaAudio = new SerializedObject(vista)
+                .FindProperty("_ref").FindPropertyRelative("fuenteAudio");
+            if (referenciaAudio == null || referenciaAudio.objectReferenceValue != vista.GetComponent<AudioSource>())
+                throw new InvalidOperationException("La escena HU-03 no enlazó la fuente de audio del botón Lectura.");
             if (escena.GetRootGameObjects().SelectMany(objeto => objeto.GetComponentsInChildren<Button>(true)).Count() < 12)
                 throw new InvalidOperationException("La escena HU-03 no guardó los controles de la plantilla.");
         }
