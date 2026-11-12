@@ -1,0 +1,122 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a8f2a5d201d22a45aa80d23b5277c59, type: 3}
+  m_Name: RetoReconocerArbol
+  m_EditorClassIdentifier: Assembly-CSharp::GuardianesAmazonicos.Models.RetoSeleccionConfiguracion
+  _nivel: 1
+  _numeroEscena: 11
+  _totalEscenas: 12
+  _tituloNivel: "Nivel 1 \xB7 Conozco la selva"
+  _siguienteEscena: 
+  _pregunta: "Escucha la descripci\xF3n. \xBFCu\xE1l es el \xE1rbol?"
+  _opciones:
+  - "\xC1rbol"
+  - "R\xEDo"
+  - Piedra
+  _imagenesOpciones:
+  - {fileID: 21300000, guid: 4359f42f366c83249bd05a0d23c1191b, type: 3}
+  - {fileID: 21300000, guid: ff8011b12aeda344bab244317a256e54, type: 3}
+  - {fileID: 21300000, guid: 1f7b70e6973e583488a00eb8e9c6bf63, type: 3}
+  _indiceCorrecto: 0
+  _explicacionesIncorrectas:
+  - 
+  - "El r\xEDo lleva agua entre sus orillas. Escucha las pistas y busca el \xE1rbol."
+  - "La piedra es dura y no tiene tronco ni hojas. Busca el \xE1rbol de la selva."
+  _pista: Busca el ser vivo alto con tronco, ramas y muchas hojas.
+  _felicitacion: "\xA1Muy bien! El \xE1rbol forma parte importante de la selva. Da sombra y hogar a muchos animales."
+  _imagenEscena: {fileID: 21300000, guid: 9530085e48f072840876ec894727b269, type: 3}
+  _elementoEscena: {fileID: 0}
+  _rectElementoEscena:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 0
+    height: 0
+  _fondo: {fileID: 21300000, guid: b6a590ffb5b48f412f32db0b1482e1b9, type: 3}
+  _personaje: {fileID: 21300000, guid: 2c32b3bf6bcfade558e5cfe00634d3b2, type: 3}
+  _personajeIncorrecto: {fileID: 21300000, guid: da6c6836ecaa8b84f9b90e49883c0601, type: 3}
+  _fotogramasCelebracion:
+  - {fileID: 21300000, guid: 6c8d65da4fa7cee4121e6b6a1afcc42b, type: 3}
+  - {fileID: 21300000, guid: b1b78a5147d51d4024896495f409ec4c, type: 3}
+  - {fileID: 21300000, guid: a6590e769c306fd39b83f8e1ae51ad57, type: 3}
+  - {fileID: 21300000, guid: 07bf51e203de50d6cca1aa718d20eeae, type: 3}
+  - {fileID: 21300000, guid: 16d07f183fb12c445aa279537f194aa6, type: 3}
+  - {fileID: 21300000, guid: cd26ca1ac45c8635a6dacf75074a912d, type: 3}
+  - {fileID: 21300000, guid: 7de48cf56ef3b39134711cee966995ad, type: 3}
+  - {fileID: 21300000, guid: 8b053d56a95a8818101631e87c56f49a, type: 3}
+  - {fileID: 21300000, guid: 65b7df3dc6de6330ed521d647586e9ae, type: 3}
+  - {fileID: 21300000, guid: 2c14d70d46a046ae3ee07a4b6e5e478c, type: 3}
+  - {fileID: 21300000, guid: b0f9b466002e1d06976d1c12caf9899b, type: 3}
+  - {fileID: 21300000, guid: d296c6b0416e9e675e1d1d260434d72f, type: 3}
+  - {fileID: 21300000, guid: 2754db4152701bd0e496297c5c5e100e, type: 3}
+  - {fileID: 21300000, guid: 05686da77f47a39b063b0ebc150ca6d7, type: 3}
+  - {fileID: 21300000, guid: 7405467c0b6e6eaa58a4805bfedb4253, type: 3}
+  - {fileID: 21300000, guid: 0a5dc2f84c9b6dd419becb0f7134a8df, type: 3}
+  - {fileID: 21300000, guid: 0b265bc7f607ed9b1e9e7bb58efc1bfc, type: 3}
+  - {fileID: 21300000, guid: c9c50b551aa8bf0406b6b0d0b31e3633, type: 3}
+  - {fileID: 21300000, guid: 08f4074c0f976374efcc3100e7a29dea, type: 3}
+  - {fileID: 21300000, guid: a9477a71572bd4c0c111b37945a0bf5f, type: 3}
+  - {fileID: 21300000, guid: 49356ef9020056bd9dcea645e04d037a, type: 3}
+  - {fileID: 21300000, guid: c0ecd4ae01bf2ab89cde8e52ed3c657c, type: 3}
+  - {fileID: 21300000, guid: 67aa11fff81ca8aa9c38f68d125caab0, type: 3}
+  - {fileID: 21300000, guid: 6c8b27e83b3bfe618104f0261325def3, type: 3}
+  - {fileID: 21300000, guid: 1bbf1e673ed2b495ed347bee3b125ad0, type: 3}
+  - {fileID: 21300000, guid: d688641a4f424811bb595775492d504d, type: 3}
+  - {fileID: 21300000, guid: 5bec23f7fafed9eff0615c05eef34623, type: 3}
+  - {fileID: 21300000, guid: 638c277a151f77d018f5d7acd47f0470, type: 3}
+  - {fileID: 21300000, guid: 276216081d5f7539aae2969926b9782a, type: 3}
+  - {fileID: 21300000, guid: dc43134c18d5f4abb273f1c580dda4a1, type: 3}
+  - {fileID: 21300000, guid: aecdc194f95ad563776a9d567d975c6a, type: 3}
+  - {fileID: 21300000, guid: cf50654599883753fd41b3275e3fec61, type: 3}
+  - {fileID: 21300000, guid: 9318eff11daef0cdd6e08c210c148fca, type: 3}
+  - {fileID: 21300000, guid: cca41a3861b660f75fec29a65fa49706, type: 3}
+  - {fileID: 21300000, guid: fffe3866f8eb989cf892716523e7bad1, type: 3}
+  - {fileID: 21300000, guid: d847c166e93c32dff81855a1c69b4b36, type: 3}
+  - {fileID: 21300000, guid: c41358962f73c48dc7ad34a0ccfb8c0c, type: 3}
+  - {fileID: 21300000, guid: 460d555543aa3189e1339c6bf10de6a6, type: 3}
+  - {fileID: 21300000, guid: ebb05fd8c773ec88d78b5e433069c07f, type: 3}
+  - {fileID: 21300000, guid: b0eca3a47b2994172294ce52a6a4f4c0, type: 3}
+  _audioLectura: {fileID: 8300000, guid: 396b52481d4c7cb408094776d04067e5, type: 3}
+  _videoSenas: 
+  _mostrarBienvenida: 0
+  _bienvenidaEtiquetaNivel: 
+  _bienvenidaNombreNivel: 
+  _bienvenidaSaludo: "\xA1Hola, guardi\xE1n!"
+  _bienvenidaDescripcion: 
+  _bienvenidaImagen: {fileID: 0}
+  _bienvenidaAudio: {fileID: 0}
+  _bienvenidaVideoSenas: 
+  _fuente: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  numeroEscena: 11
+  titulo: "Nivel 1 \xB7 Conozco la selva"
+  textoProgreso: 2 de 2
+  pregunta: "Escucha la descripci\xF3n. \xBFCu\xE1l es el \xE1rbol?"
+  instruccion: 
+  opciones:
+  - "\xC1rbol"
+  - "R\xEDo"
+  - Piedra
+  imagenes:
+  - {fileID: 21300000, guid: 4359f42f366c83249bd05a0d23c1191b, type: 3}
+  - {fileID: 21300000, guid: ff8011b12aeda344bab244317a256e54, type: 3}
+  - {fileID: 21300000, guid: 1f7b70e6973e583488a00eb8e9c6bf63, type: 3}
+  atlasDosPorDos: {fileID: 0}
+  indiceCorrecto: 0
+  pistaIncorrecta: Busca el ser vivo alto con tronco, ramas y muchas hojas.
+  mensajeCorrecto: "\xA1Muy bien! El \xE1rbol forma parte importante de la selva. Da sombra y hogar a muchos animales."
+  pronunciaciones: []
+  siguienteEscena: 
+  textoContinuar: SIGUIENTE RETO
+  fondo: {fileID: 21300000, guid: b6a590ffb5b48f412f32db0b1482e1b9, type: 3}
+  imagenEscena: {fileID: 21300000, guid: 9530085e48f072840876ec894727b269, type: 3}
+  explorador: {fileID: 21300000, guid: 2c32b3bf6bcfade558e5cfe00634d3b2, type: 3}
+  fuente: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
