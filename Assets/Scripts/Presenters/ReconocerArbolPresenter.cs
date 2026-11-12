@@ -87,6 +87,7 @@ namespace GuardianesAmazonicos.Presenters
             _vista.MostrarSenas(false, null);
             _vista.PermitirRegresar(NavegacionNiveles.HayAnterior());
             _vista.PermitirAvanzar(false);
+            _vista.AlternarAudio(_configuracion.AudioLectura);
         }
 
         private void Seleccionar(int indice)
