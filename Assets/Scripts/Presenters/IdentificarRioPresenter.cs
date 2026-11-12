@@ -108,7 +108,7 @@ namespace GuardianesAmazonicos.Presenters
             else
             {
                 _vista.MostrarIncorrecta(indice, _configuracion.ObtenerExplicacion(indice));
-                _vista.AlternarAudio(_audioError);
+                _vista.AlternarAudio(_configuracion.ObtenerAudioCorreccion(indice) ?? _audioError);
             }
         }
 
@@ -121,7 +121,15 @@ namespace GuardianesAmazonicos.Presenters
             _vista.EnfocarTarjeta(0);
         }
 
-        private void Leer() => _vista.AlternarAudio(_configuracion.AudioLectura);
+        private void Leer()
+        {
+            AudioClip clip = _vista.PistaVisible
+                ? _configuracion.AudioPista
+                : _vista.RespuestaIncorrectaVisible
+                    ? _configuracion.ObtenerAudioCorreccion(_modelo.IndiceSeleccionado) ?? _audioError
+                    : _configuracion.AudioLectura;
+            _vista.AlternarAudio(clip != null ? clip : _configuracion.AudioLectura);
+        }
         private void AbrirPista() => _vista.MostrarPista(true);
         private void CerrarPista() { _vista.MostrarPista(false); _vista.EnfocarTarjeta(_modelo.IndiceSeleccionado); }
         private void AbrirSenas() { _vista.DetenerAudio(); _vista.MostrarSenas(true, _configuracion.VideoSenas); }

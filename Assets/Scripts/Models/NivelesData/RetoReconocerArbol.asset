@@ -86,6 +86,12 @@ MonoBehaviour:
   - {fileID: 21300000, guid: ebb05fd8c773ec88d78b5e433069c07f, type: 3}
   - {fileID: 21300000, guid: b0eca3a47b2994172294ce52a6a4f4c0, type: 3}
   _audioLectura: {fileID: 8300000, guid: 396b52481d4c7cb408094776d04067e5, type: 3}
+  _audioPista: {fileID: 8300000, guid: 9812dbdd1e5c44d78bdeebc8a594f608, type: 3}
+  _audioCorrecciones:
+  - {fileID: 0}
+  - {fileID: 8300000, guid: 33fe0da39de64dc7a737a81f5ae002ba, type: 3}
+  - {fileID: 8300000, guid: 6b9c27dacc674bf19d47d735ac7a382f, type: 3}
+  _audioFelicitacion: {fileID: 8300000, guid: 0}
   _videoSenas: 
   _mostrarBienvenida: 0
   _bienvenidaEtiquetaNivel: 

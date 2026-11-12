@@ -476,7 +476,8 @@ namespace GuardianesAmazonicos.Editor
         {
             RectTransform capa = Capa("PanelPista", padre);
             r.panelPista = capa.gameObject;
-            Bloqueador("FondoLuz", capa, S(SPRITE_FONDO_PISTA), new Color(1f, 1f, 1f, 0.55f));
+            Image fondoLuz = Bloqueador("FondoLuz", capa, S(SPRITE_FONDO_PISTA), new Color(1f, 1f, 1f, 0.55f));
+            fondoLuz.raycastTarget = false;
             Sprite spritePista = fotogramas != null && fotogramas.Length > 0 ? fotogramas[0] : personaje;
             Image personajePista = Imagen("PersonajePista", capa, spritePista, 147f, -428f, 390f, 562f, true);
             r.animacionPista = ConfigurarAnimacionPersonaje(personajePista, fotogramas, 24f, true);

@@ -113,6 +113,7 @@ namespace GuardianesAmazonicos.Presenters
             {
                 GuardarProgreso();
                 _vista.MostrarCorrecta(seleccionada, "¡Lo lograste!");
+                _vista.AlternarAudio(_configuracion.AudioFelicitacion);
                 _vista.PermitirAvanzar(NavegacionNiveles.HaySiguiente(_configuracion.SiguienteEscena));
                 return;
             }
@@ -120,6 +121,7 @@ namespace GuardianesAmazonicos.Presenters
             if (_personajeGuia != null && _personajePreocupado != null)
                 _personajeGuia.sprite = _personajePreocupado;
             _vista.MostrarIncorrecta(seleccionada, _configuracion.ObtenerExplicacion(seleccionada));
+            _vista.AlternarAudio(_configuracion.ObtenerAudioCorreccion(seleccionada));
         }
 
         private void Reintentar()
@@ -139,7 +141,16 @@ namespace GuardianesAmazonicos.Presenters
                 _vista.MostrarAvisoSinSiguiente(MENSAJE_SIN_SIGUIENTE);
         }
 
-        private void Leer() => _vista.AlternarAudio(_configuracion.AudioLectura);
+        private void Leer()
+        {
+            AudioClip clip = _vista.PistaVisible
+                ? _configuracion.AudioPista
+                : _vista.RespuestaIncorrectaVisible
+                    ? _configuracion.ObtenerAudioCorreccion(_modelo.IndiceSeleccionado)
+                    : _configuracion.AudioLectura;
+            _vista.AlternarAudio(clip != null ? clip : _configuracion.AudioLectura);
+        }
+
         private void MostrarAyuda() => _vista.MostrarPista(true);
 
         private void CerrarAyuda()

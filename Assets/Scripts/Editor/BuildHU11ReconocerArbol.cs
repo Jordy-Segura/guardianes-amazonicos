@@ -158,6 +158,13 @@ namespace GuardianesAmazonicos.Editor
             c.PersonajeIncorrecto = Cargar<Sprite>("Assets/Art/Characters/ExploradorPreocupado.png");
             c.FotogramasCelebracion = BuildAssignedScenes.CargarFotogramasExplorador();
             c.AudioLectura = Cargar<AudioClip>("Assets/Audio/Voice/HU11/lectura_01_11.wav");
+            c.AudioPista = Cargar<AudioClip>("Assets/Audio/Voice/HU11/pista_01_11.wav");
+            c.AudioCorrecciones = new[]
+            {
+                null,
+                Cargar<AudioClip>("Assets/Audio/Voice/HU11/correccion_rio_01_11.wav"),
+                Cargar<AudioClip>("Assets/Audio/Voice/HU11/correccion_piedra_01_11.wav")
+            };
             c.VideoSenas = string.Empty;
             c.MostrarBienvenida = false;
             c.SiguienteEscena = string.Empty;

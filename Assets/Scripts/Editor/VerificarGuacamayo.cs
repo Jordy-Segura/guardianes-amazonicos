@@ -126,6 +126,14 @@ namespace GuardianesAmazonicos.Editor
             c.Pista = "Busca el ave con plumas rojas, amarillas y azules y un pico curvo.";
             c.Felicitacion = "¡Lo lograste!";
             c.AudioLectura = Cargar<AudioClip>("Assets/Audio/Voice/Guacamayo.wav");
+            c.AudioPista = Cargar<AudioClip>("Assets/Audio/Voice/HU03/pista_01_03.wav");
+            c.AudioCorrecciones = new[]
+            {
+                Cargar<AudioClip>("Assets/Audio/Voice/HU03/correccion_mono_01_03.wav"),
+                null,
+                Cargar<AudioClip>("Assets/Audio/Voice/HU03/correccion_tortuga_01_03.wav")
+            };
+            c.AudioFelicitacion = Cargar<AudioClip>("Assets/Audio/Voice/HU03/acierto_01_03.wav");
             c.Fondo = Cargar<Sprite>("Assets/Art/Backgrounds/Niveles/N1_Conozco_la_selva.png");
             c.Personaje = Cargar<Sprite>("Assets/Art/Characters/Explorador.png");
             c.PersonajeIncorrecto = Cargar<Sprite>(RutaPreocupado);

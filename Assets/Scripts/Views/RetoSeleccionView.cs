@@ -120,6 +120,7 @@ namespace GuardianesAmazonicos.Views
         public bool BienvenidaVisible => _ref.estadoBienvenida != null && _ref.estadoBienvenida.activeSelf;
         public bool PistaVisible => _ref.panelPista != null && _ref.panelPista.activeSelf;
         public bool SenasVisibles => _ref.panelSenas != null && _ref.panelSenas.activeSelf;
+        public bool RespuestaIncorrectaVisible => _enEstadoIncorrecto;
 
         /// <summary>Usado por el constructor de escenas del editor.</summary>
         public void Enlazar(ReferenciasActividad referencias)
@@ -256,6 +257,7 @@ namespace GuardianesAmazonicos.Views
 
         public void MostrarSinSeleccion()
         {
+            PermitirBotonesDeApoyoSobreModal(false);
             PrepararTarjetas(RetoSinIndice, RetoSinIndice, RetoSinIndice, true);
             Activar(_ref.globoPregunta, true);
             Activar(_ref.globoCorreccion, false);
@@ -269,6 +271,7 @@ namespace GuardianesAmazonicos.Views
 
         public void MostrarSeleccion(int indice)
         {
+            PermitirBotonesDeApoyoSobreModal(false);
             PrepararTarjetas(indice, RetoSinIndice, RetoSinIndice, true);
             Activar(_ref.globoPregunta, true);
             Activar(_ref.globoCorreccion, false);
@@ -280,6 +283,7 @@ namespace GuardianesAmazonicos.Views
         /// <summary>Borde rojo en la opción errónea, cambio de reacción del personaje y globo con explicación amable.</summary>
         public void MostrarIncorrecta(int indice, string explicacion)
         {
+            PermitirBotonesDeApoyoSobreModal(true);
             PrepararTarjetas(RetoSinIndice, indice, RetoSinIndice, true);
             Activar(_ref.globoPregunta, false);
             Activar(_ref.globoCorreccion, true);
@@ -292,6 +296,7 @@ namespace GuardianesAmazonicos.Views
 
         public void MostrarCorrecta(int indice, string felicitacion)
         {
+            PermitirBotonesDeApoyoSobreModal(false);
             PrepararTarjetas(RetoSinIndice, RetoSinIndice, indice, false);
             Activar(_ref.globoPregunta, true);
             Activar(_ref.globoCorreccion, false);
@@ -318,6 +323,8 @@ namespace GuardianesAmazonicos.Views
 
         public void MostrarPista(bool visible)
         {
+            PermitirBotonesDeApoyoSobreModal(visible);
+            if (visible) PermitirLecturaSobreLaPista();
             if (visible) MostrarSenas(false, null);
             Activar(_ref.panelPista, visible);
             if (_ref.estadoCorrecto == null || !_ref.estadoCorrecto.activeSelf)
@@ -348,6 +355,7 @@ namespace GuardianesAmazonicos.Views
                 return;
             }
 
+            PermitirBotonesDeApoyoSobreModal(false);
             Activar(_ref.panelPista, false);
             Activar(_ref.panelSenas, true);
             BloquearCapaBase(true);
@@ -584,6 +592,39 @@ namespace GuardianesAmazonicos.Views
             if (_ref.capaBase == null) return;
             _ref.capaBase.interactable = !bloquear;
             _ref.capaBase.blocksRaycasts = !bloquear;
+        }
+
+        private void PermitirBotonesDeApoyoSobreModal(bool permitir)
+        {
+            PermitirBotonSobreModal(_ref.botonLectura, permitir);
+            PermitirBotonSobreModal(_ref.botonSenas, permitir);
+        }
+
+        private void PermitirLecturaSobreLaPista()
+        {
+            if (_ref.panelPista == null) return;
+            Image[] imagenes = _ref.panelPista.GetComponentsInChildren<Image>(true);
+            foreach (Image imagen in imagenes)
+            {
+                if (imagen != null && imagen.gameObject.name == "FondoLuz")
+                {
+                    imagen.raycastTarget = false;
+                    break;
+                }
+            }
+        }
+
+        private static void PermitirBotonSobreModal(Button boton, bool permitir)
+        {
+            if (boton == null) return;
+            CanvasGroup grupo = boton.GetComponent<CanvasGroup>();
+            if (permitir && grupo == null) grupo = boton.gameObject.AddComponent<CanvasGroup>();
+            if (grupo == null) return;
+
+            grupo.ignoreParentGroups = permitir;
+            grupo.interactable = true;
+            grupo.blocksRaycasts = true;
+            boton.interactable = true;
         }
 
         private Button BotonTarjeta(int indice)
