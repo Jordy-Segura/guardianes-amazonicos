@@ -37,6 +37,8 @@ namespace GuardianesAmazonicos.Presenters
                 return;
             }
 
+            _vista.Construir(_configuracion);
+
             int cantidad = _configuracion.Opciones != null ? _configuracion.Opciones.Length : 0;
             _modelo = new RetoSeleccionModel(_configuracion.IndiceCorrecto, cantidad);
             _repositorio = new JsonProgresoRepository();
@@ -203,6 +205,8 @@ namespace GuardianesAmazonicos.Presenters
                     progreso.retoMonoCompletado = true;
                 else if (nivel == 1 && escena == 5)
                     progreso.retoJaguarCompletado = true;
+                else if (nivel == 1 && escena == 6)
+                    progreso.retoTortugaCompletado = true;
                 else if (nivel == 1 && escena == 9)
                     progreso.retoPlatanoCompletado = true;
                 else if (nivel == 2 && escena == 1)
@@ -240,6 +244,7 @@ namespace GuardianesAmazonicos.Presenters
                 int escena = _configuracion.NumeroEscena;
                 if (nivel == 1 && escena == 2) return progreso.retoMonoCompletado;
                 if (nivel == 1 && escena == 5) return progreso.retoJaguarCompletado;
+                if (nivel == 1 && escena == 6) return progreso.retoTortugaCompletado;
                 if (nivel == 1 && escena == 9) return progreso.retoPlatanoCompletado;
                 return nivel == 2 && escena == 1 && progreso.RetoMonoCuriosoCompletado;
             }

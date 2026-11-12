@@ -23,5 +23,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Niveles/Nivel02/Escena01_ProtegerHabitatMono.unity
     guid: d7b24872672795d4cbed7c78d3c8595a
+  - enabled: 1
+    path: Assets/Scenes/Niveles/Nivel01/Escena06_HU06_TortugaAgua.unity
+    guid: 8c4c7f37405457d4fac2a205e8523f21
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
