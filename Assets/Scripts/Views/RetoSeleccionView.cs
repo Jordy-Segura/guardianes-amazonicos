@@ -355,6 +355,10 @@ namespace GuardianesAmazonicos.Views
                 return;
             }
 
+            // Cerrar la pista mediante su flujo normal reactiva al personaje de la escena.
+            // Después se muestra Señas sobre la actividad ya restaurada, para que al pulsar X
+            // el personaje siga visible detrás de la tarjeta.
+            if (PistaVisible) MostrarPista(false);
             PermitirBotonesDeApoyoSobreModal(false);
             Activar(_ref.panelPista, false);
             Activar(_ref.panelSenas, true);
