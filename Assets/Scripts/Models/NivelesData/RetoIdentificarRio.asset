@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a8f2a5d201d22a45aa80d23b5277c59, type: 3}
   m_Name: RetoIdentificarRio
   m_EditorClassIdentifier: Assembly-CSharp::GuardianesAmazonicos.Models.RetoSeleccionConfiguracion
-  _nivel: 3
+  _nivel: 1
   _numeroEscena: 7
   _totalEscenas: 12
-  _tituloNivel: "Nivel 3 \xB7 Protejo el r\xEDo"
+  _tituloNivel: "Nivel 1 \xB7 Conozco la selva"
   _siguienteEscena: 
   _pregunta: "Selecciona el r\xEDo."
   _opciones:
@@ -41,7 +41,7 @@ MonoBehaviour:
     y: 0
     width: 0
     height: 0
-  _fondo: {fileID: 21300000, guid: edd5f6a54977f01f717f81b29784a10a, type: 3}
+  _fondo: {fileID: 21300000, guid: b6a590ffb5b48f412f32db0b1482e1b9, type: 3}
   _personaje: {fileID: 21300000, guid: 2c32b3bf6bcfade558e5cfe00634d3b2, type: 3}
   _personajeIncorrecto: {fileID: 21300000, guid: da6c6836ecaa8b84f9b90e49883c0601, type: 3}
   _fotogramasCelebracion:
@@ -97,8 +97,8 @@ MonoBehaviour:
   _bienvenidaVideoSenas: 
   _fuente: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   numeroEscena: 7
-  titulo: "Nivel 3 \xB7 Protejo el r\xEDo"
-  textoProgreso: 2 de 2
+  titulo: "Nivel 1 \xB7 Conozco la selva"
+  textoProgreso: 7 de 12
   pregunta: "Selecciona el r\xEDo."
   instruccion: 
   opciones:

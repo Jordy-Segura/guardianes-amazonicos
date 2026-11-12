@@ -15,7 +15,7 @@ namespace GuardianesAmazonicos.Editor
     /// <summary>Genera únicamente HU-07, usando la plantilla y los recursos comunes del proyecto.</summary>
     public static class BuildHU07IdentificarRio
     {
-        public const string RutaEscena = "Assets/Scenes/Niveles/Nivel03/Escena07_HU07_IdentificarRio.unity";
+        public const string RutaEscena = "Assets/Scenes/Niveles/Nivel01/Escena07_HU07_IdentificarRio.unity";
         private const string RutaConfig = "Assets/Scripts/Models/NivelesData/RetoIdentificarRio.asset";
         private const string RutaHoja = "Assets/Art/Escenas/HU07_Agua_Triptych.png";
 
@@ -137,10 +137,10 @@ namespace GuardianesAmazonicos.Editor
                 AssetDatabase.CreateAsset(c, RutaConfig);
             }
 
-            c.Nivel = 3;
+            c.Nivel = 1;
             c.NumeroEscena = 7;
             c.TotalEscenas = 12;
-            c.TituloNivel = "Nivel 3 · Protejo el río";
+            c.TituloNivel = "Nivel 1 · Conozco la selva";
             c.Pregunta = "Selecciona el río.";
             c.Opciones = new[] { "Río", "Mar", "Laguna" };
             c.ImagenesOpciones = new[] { SpriteHoja("HU07_Rio"), SpriteHoja("HU07_Mar"), SpriteHoja("HU07_Laguna") };
@@ -154,7 +154,7 @@ namespace GuardianesAmazonicos.Editor
             c.Pista = "Busca el agua dulce que fluye entre dos orillas y atraviesa la selva.";
             c.Felicitacion = "¡Muy bien! Encontraste el río.";
             c.ImagenEscena = Cargar<Sprite>("Assets/Art/Backgrounds/Niveles/N3_Protejo_el_rio.png");
-            c.Fondo = Cargar<Sprite>("Assets/Art/Backgrounds/Niveles/N3_Protejo_el_rio.png");
+            c.Fondo = Cargar<Sprite>("Assets/Art/Backgrounds/Niveles/N1_Conozco_la_selva.png");
             c.Personaje = Cargar<Sprite>("Assets/Art/Characters/Explorador.png");
             c.PersonajeIncorrecto = Cargar<Sprite>("Assets/Art/Characters/ExploradorPreocupado.png");
             c.FotogramasCelebracion = BuildAssignedScenes.CargarFotogramasExplorador();
