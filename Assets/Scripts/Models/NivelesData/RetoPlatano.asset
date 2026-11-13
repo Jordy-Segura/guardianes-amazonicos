@@ -98,7 +98,7 @@ MonoBehaviour:
   _fuente: {fileID: 11400000, guid: 767ffc8669e62e144951bc56a822d1e6, type: 2}
   numeroEscena: 9
   titulo: "Nivel 1 \u2022 Conozco la selva"
-  textoProgreso: 2 de 2
+  textoProgreso: 9 de 12
   pregunta: "Observa la selva. \xBFCu\xE1l de estos frutos es el pl\xE1tano?"
   instruccion: 
   opciones:

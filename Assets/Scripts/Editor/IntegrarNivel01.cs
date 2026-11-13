@@ -181,14 +181,11 @@ namespace GuardianesAmazonicos.Editor
                 foreach (TMP_Text texto in textos)
                 {
                     bool teniaContorno = TieneContorno(texto);
-                    if (texto.font == fuente && !teniaContorno) continue;
+                    Material contorno = teniaContorno ? PlantillaUIBuilder.ContornoPara(fuente) : null;
+                    if (texto.font == fuente && (!teniaContorno || texto.fontSharedMaterial == contorno)) continue;
 
                     texto.font = fuente;
-                    if (teniaContorno)
-                    {
-                        Material contorno = PlantillaUIBuilder.ContornoPara(fuente);
-                        if (contorno != null) texto.fontSharedMaterial = contorno;
-                    }
+                    if (contorno != null) texto.fontSharedMaterial = contorno;
 
                     EditorUtility.SetDirty(texto);
                     cambios++;

@@ -98,7 +98,7 @@ MonoBehaviour:
   _fuente: {fileID: 11400000, guid: 767ffc8669e62e144951bc56a822d1e6, type: 2}
   numeroEscena: 1
   titulo: "Nivel 2 \u2022 Cuido los animales"
-  textoProgreso: 2 de 2
+  textoProgreso: 1 de 12
   pregunta: "\xBFQu\xE9 acci\xF3n ayuda a proteger el hogar del Mono Curioso?"
   instruccion: 
   opciones:

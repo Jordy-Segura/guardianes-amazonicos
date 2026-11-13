@@ -218,7 +218,12 @@ namespace GuardianesAmazonicos.Editor
             return configuracion;
         }
 
-        private static void CrearEscena(string ruta, RetoSeleccionConfiguracion c)
+        /// <summary>
+        /// Genera una escena de actividad con la plantilla aprobada. Se expone para
+        /// que otras herramientas del editor (como EstandarizarEscenas) reutilicen
+        /// exactamente la misma composición y referencias serializadas.
+        /// </summary>
+        public static void CrearEscena(string ruta, RetoSeleccionConfiguracion c)
         {
             Scene escena = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
             PlantillaUIBuilder.CrearCamaraYEventos();

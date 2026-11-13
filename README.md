@@ -42,6 +42,7 @@ Las escenas de Jordy (Nivel 1: Bienvenida, Escena 5 y Escena 9; Nivel 2: Escena 
 - Recursos con la convención de la guía: `Assets/Art/Escenas/pregunta_NN_EE_escena.png`, `Assets/Art/Items/Respuestas/respuesta_NN_EE_x.png` y `Assets/Audio/Voice/Lectura/lectura_NN_EE.wav`. Los videos de señas se buscan en `Assets/StreamingAssets/LSEC/senas_nivel_NN_pregunta_EE.mp4`.
 - **Guardianes > Capturar estados de mis escenas** genera capturas 1920 × 1080 de cada estado para revisar la composición.
 - **Guardianes > Sahid > Integrar Nivel 1** ordena las escenas implementadas en Build Profiles, enlaza el botón Siguiente de cada reto y aplica la tipografía OpenDyslexic sin reconstruir escenas; **Guardianes > Sahid > Verificar Integración Nivel 1** comprueba ese estado.
+- **Guardianes > Sahid > Estandarizar escenas de actividad** deja los seis retos con los mismos datos, animaciones y paneles, y **Guardianes > Sahid > Verificar estándar de escenas** audita ese estándar. El detalle está en [docs/ESTANDAR_ESCENAS.md](docs/ESTANDAR_ESCENAS.md).
 
 ## Arquitectura y accesibilidad
 

@@ -98,7 +98,7 @@ MonoBehaviour:
   _fuente: {fileID: 11400000, guid: 767ffc8669e62e144951bc56a822d1e6, type: 2}
   numeroEscena: 6
   titulo: "Nivel 1 \u2022 Conozco la selva"
-  textoProgreso: 2 de 2
+  textoProgreso: 6 de 12
   pregunta: "\xBFQu\xE9 necesita para estar bien?"
   instruccion: 
   opciones:
