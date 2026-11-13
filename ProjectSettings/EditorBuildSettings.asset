@@ -15,17 +15,26 @@ EditorBuildSettings:
     path: Assets/Scenes/Niveles/Nivel01/Escena03_HU03_Guacamayo.unity
     guid: 4495afa18ce2cae40890f4d81fb47f19
   - enabled: 1
+    path: Assets/Scenes/Niveles/Nivel01/Escena04_HU04_Plantas.unity
+    guid: cb1c713d6d8c20045bbb604c5b692cdc
+  - enabled: 1
     path: Assets/Scenes/Niveles/Nivel01/Escena05_IdentificarJaguar.unity
     guid: 5d5ac1fced6cfa24a8a490795437e6c5
   - enabled: 1
     path: Assets/Scenes/Niveles/Nivel01/Escena07_HU07_IdentificarRio.unity
     guid: dd252ee5b940bb44f9225f4b713d8e01
   - enabled: 1
+    path: Assets/Scenes/Niveles/Nivel01/Escena08_HU08_Mariposa.unity
+    guid: c5f6bbf6e63850441a217279238b79e6
+  - enabled: 1
     path: Assets/Scenes/Niveles/Nivel01/Escena09_IdentificarPlatano.unity
     guid: dddbcd5243e5cb24e8fa34001a24f0df
   - enabled: 1
     path: Assets/Scenes/Niveles/Nivel01/Escena11_HU11_ReconocerArbol.unity
     guid: f930ed9eae64d9742901d21d91cee729
+  - enabled: 1
+    path: Assets/Scenes/Niveles/Nivel01/Escena12_Recompensa_final.unity
+    guid: c907f90c6f3c8f7459d4782df01d4b36
   - enabled: 1
     path: Assets/Scenes/Niveles/Nivel02/Escena01_ProtegerHabitatMono.unity
     guid: d7b24872672795d4cbed7c78d3c8595a
