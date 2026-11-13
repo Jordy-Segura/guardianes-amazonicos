@@ -2,10 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using GuardianesAmazonicos.Models;
+using GuardianesAmazonicos.Views;
 using TMPro;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace GuardianesAmazonicos.Editor
 {
@@ -28,6 +30,9 @@ namespace GuardianesAmazonicos.Editor
             public int NumeroEscena;
             public string Felicitacion;
             public string[] Explicaciones;
+            public string RutaAudioLectura;
+            public string RutaFondo;
+            public bool Reconstruir;
         }
 
         private const string ExploradorPreocupado = "Assets/Art/Characters/ExploradorPreocupado.png";
@@ -41,7 +46,8 @@ namespace GuardianesAmazonicos.Editor
                 RutaEscena = "Assets/Scenes/Niveles/Nivel01/Escena02_HU02_Mono.unity",
                 Nivel = 1,
                 NumeroEscena = 2,
-                Felicitacion = "¡Muy bien! Reconociste al mono."
+                Felicitacion = "¡Muy bien! Reconociste al mono.",
+                Reconstruir = true
             },
             new Reto
             {
@@ -51,6 +57,9 @@ namespace GuardianesAmazonicos.Editor
                 Nivel = 1,
                 NumeroEscena = 3,
                 Felicitacion = "¡Muy bien! Reconociste al guacamayo.",
+                RutaAudioLectura = "Assets/Audio/Voice/Lectura/lectura_01_03.wav",
+                RutaFondo = "Assets/Art/Backgrounds/Niveles/N1_Conozco_la_selva.png",
+                Reconstruir = true,
                 Explicaciones = new[]
                 {
                     "El mono trepa los árboles y tiene cola larga. El guacamayo es un ave de plumas de colores.",
@@ -100,13 +109,13 @@ namespace GuardianesAmazonicos.Editor
         public static void Estandarizar()
         {
             NormalizarDatos();
-            ReconstruirEscenaMono();
+            ReconstruirEscenasDePlantilla();
             IntegrarNivel01.AplicarOrdenDeEscenas();
             IntegrarNivel01.AplicarEnlacesSiguiente();
             IntegrarNivel01.AplicarFuenteAccesible();
 
             AssetDatabase.SaveAssets();
-            Debug.Log("EstandarizarEscenas: datos, escena de HU-02 y tipografía estandarizados.");
+            Debug.Log("EstandarizarEscenas: datos, escenas de plantilla y tipografía estandarizados.");
             PruebasEstandarEscenas.EjecutarPruebas();
         }
 
@@ -201,6 +210,30 @@ namespace GuardianesAmazonicos.Editor
                     cambios.Add("progreso heredado");
                 }
 
+                if (!string.IsNullOrEmpty(reto.RutaAudioLectura))
+                {
+                    AudioClip locucion = PlantillaUIBuilder.Cargar<AudioClip>(reto.RutaAudioLectura);
+                    if (locucion == null)
+                        throw new InvalidOperationException("No existe la locución: " + reto.RutaAudioLectura);
+                    if (configuracion.AudioLectura != locucion)
+                    {
+                        configuracion.AudioLectura = locucion;
+                        cambios.Add("locución");
+                    }
+                }
+
+                if (!string.IsNullOrEmpty(reto.RutaFondo))
+                {
+                    Sprite fondo = PlantillaUIBuilder.S(reto.RutaFondo);
+                    if (fondo == null)
+                        throw new InvalidOperationException("No existe el fondo: " + reto.RutaFondo);
+                    if (configuracion.Fondo != fondo)
+                    {
+                        configuracion.Fondo = fondo;
+                        cambios.Add("fondo");
+                    }
+                }
+
                 if (cambios.Count > 0)
                 {
                     EditorUtility.SetDirty(configuracion);
@@ -212,21 +245,55 @@ namespace GuardianesAmazonicos.Editor
         }
 
         /// <summary>
-        /// Reconstruye HU-02 con la plantilla serializada. Su escena anterior generaba
-        /// toda la interfaz en tiempo de ejecución y no tenía animaciones ni paneles
-        /// equivalentes a los del resto de actividades.
+        /// Reconstruye con la plantilla serializada las escenas que todavía generaban
+        /// su interfaz en tiempo de ejecución (HU-02 y HU-03), para que tengan las
+        /// mismas animaciones, paneles y referencias que el resto de actividades.
         /// </summary>
-        public static void ReconstruirEscenaMono()
+        public static void ReconstruirEscenasDePlantilla()
         {
-            Reto mono = Retos.First(reto => reto.Nombre == "HU-02 Mono");
-            RetoSeleccionConfiguracion configuracion =
-                AssetDatabase.LoadAssetAtPath<RetoSeleccionConfiguracion>(mono.RutaConfiguracion);
-            if (configuracion == null)
-                throw new InvalidOperationException("No existe la configuración: " + mono.RutaConfiguracion);
-
             BuildAssignedScenes.PrepararRecursos();
-            BuildAssignedScenes.CrearEscena(mono.RutaEscena, configuracion);
-            Debug.Log("EstandarizarEscenas: HU-02 reconstruida con la plantilla aprobada.");
+            IEnumerable<Reto> pendientes = Retos.Where(reto => reto.Reconstruir);
+
+            foreach (Reto reto in pendientes)
+            {
+                if (YaUsaLaPlantilla(reto.RutaEscena))
+                {
+                    Debug.Log("EstandarizarEscenas: " + reto.Nombre + " ya usa la plantilla serializada.");
+                    continue;
+                }
+
+                RetoSeleccionConfiguracion configuracion =
+                    AssetDatabase.LoadAssetAtPath<RetoSeleccionConfiguracion>(reto.RutaConfiguracion);
+                if (configuracion == null)
+                    throw new InvalidOperationException("No existe la configuración: " + reto.RutaConfiguracion);
+
+                BuildAssignedScenes.CrearEscena(reto.RutaEscena, configuracion);
+                Debug.Log("EstandarizarEscenas: " + reto.Nombre + " reconstruida con la plantilla aprobada.");
+            }
+        }
+
+        /// <summary>
+        /// Evita regenerar una escena que ya está en la plantilla: así el proceso es
+        /// idempotente y no reescribe los identificadores internos de la escena.
+        /// </summary>
+        private static bool YaUsaLaPlantilla(string ruta)
+        {
+            if (!System.IO.File.Exists(ruta)) return false;
+
+            Scene escena = EditorSceneManager.OpenScene(ruta, OpenSceneMode.Single);
+            GameObject[] raices = escena.GetRootGameObjects();
+
+            bool tieneVista = raices
+                .SelectMany(objeto => objeto.GetComponentsInChildren<RetoSeleccionView>(true))
+                .Any();
+            bool tieneCanvas = raices
+                .SelectMany(objeto => objeto.GetComponentsInChildren<Canvas>(true))
+                .Any(canvas => canvas.name == "CanvasActividad");
+            int animaciones = raices
+                .SelectMany(objeto => objeto.GetComponentsInChildren<AnimacionPersonajePNG>(true))
+                .Count();
+
+            return tieneVista && tieneCanvas && animaciones >= 3;
         }
 
         private static bool MismasExplicaciones(string[] actuales, string[] esperadas)

@@ -31,9 +31,9 @@ Las escenas de actividad y la bienvenida se guardan con la plantilla ya construi
 - Tres tarjetas de respuesta de 256 × 307 con borde de selección, error y acierto.
 - Todos los textos en OpenDyslexic, incluidos los creados por la plantilla.
 
-## Excepción conocida: HU-03
+## Escenas migradas a la plantilla
 
-`Escena03_HU03_Guacamayo` mantiene una vista propia (`GuacamayoView`) que construye la interfaz al ejecutar, con animación por fotogramas y su propio panel de configuración. Cumple fuente, animación y accesibilidad, pero no la estructura serializada. Su migración a la plantilla común requiere la aprobación del equipo porque reemplaza esa vista.
+HU-02 y HU-03 generaban su interfaz al ejecutar. Ambas se reconstruyeron con la plantilla serializada: ahora comparten animaciones, paneles, cabecera, audio ambiente y referencias con el resto de actividades. La vista propia `GuacamayoView` se conserva como legado y ya no se usa en la escena.
 
 ## Cómo aplicar y verificar
 
@@ -52,5 +52,4 @@ El estándar no modifica el arte, las coordenadas de la guía ni la arquitectura
 ## Pendientes
 
 - Locución de HU-02 (`lectura_01_02.wav`): la escena ya usa la plantilla y el botón Lectura existe, pero el clip falta porque debe grabarse con la misma voz del resto de actividades.
-- Migración de HU-03 a la plantilla común, si el equipo lo aprueba.
 - Videos LSEC reales: los seis retos ya declaran el nombre del archivo, pero `Assets/StreamingAssets/LSEC/` sigue vacío.

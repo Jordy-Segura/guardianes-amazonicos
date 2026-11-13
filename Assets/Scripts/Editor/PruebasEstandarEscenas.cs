@@ -33,13 +33,10 @@ namespace GuardianesAmazonicos.Editor
             public bool RequiereEstadoCorrecto = true;
             public bool RequiereTarjetas = true;
             public string[] Botones;
-            public bool Serializada = true;
         }
 
         private const string EscenaBienvenida =
             "Assets/Scenes/Niveles/Nivel01/BienvenidaDelGuardian.unity";
-        private const string EscenaGuacamayo =
-            "Assets/Scenes/Niveles/Nivel01/Escena03_HU03_Guacamayo.unity";
 
         private static readonly string[] BotonesActividad =
         {
@@ -96,7 +93,6 @@ namespace GuardianesAmazonicos.Editor
 
             foreach (EstandarizarEscenas.Reto reto in EstandarizarEscenas.Retos)
             {
-                if (reto.RutaEscena == EscenaGuacamayo) continue;
                 escenas.Add(new EscenaEstandar
                 {
                     Ruta = reto.RutaEscena,
@@ -108,16 +104,6 @@ namespace GuardianesAmazonicos.Editor
                     Botones = BotonesActividad
                 });
             }
-
-            // HU-03 mantiene su vista propia (GuacamayoView) y construye la interfaz
-            // en tiempo de ejecución; se audita aparte hasta que el equipo decida
-            // migrarla a la plantilla común.
-            escenas.Add(new EscenaEstandar
-            {
-                Ruta = EscenaGuacamayo,
-                Nombre = "HU-03 Guacamayo (vista propia)",
-                Serializada = false
-            });
 
             return escenas.ToArray();
         }
@@ -195,16 +181,6 @@ namespace GuardianesAmazonicos.Editor
                         esperada.Nombre + ": texto con OpenDyslexic (" + texto.name + ")");
                 }
 
-                if (!esperada.Serializada)
-                {
-                    Assert(raices.SelectMany(objeto => objeto.GetComponentsInChildren<GuacamayoView>(true)).Any(),
-                        "HU-03 conserva su vista propia GuacamayoView");
-                    Debug.LogWarning("Estándar: " + esperada.Nombre +
-                        " construye su interfaz en tiempo de ejecución y no puede auditarse como escena serializada. " +
-                        "Pendiente: migrarla a la plantilla común si el equipo lo aprueba.");
-                    continue;
-                }
-
                 Assert(nombres.Contains(esperada.Canvas), esperada.Nombre + ": usa " + esperada.Canvas);
 
                 Canvas canvas = raices
@@ -254,7 +230,7 @@ namespace GuardianesAmazonicos.Editor
                 }
             }
 
-            Debug.Log("Estándar: escenas serializadas y vista propia revisadas.");
+            Debug.Log("Estándar: escenas de bienvenida y de actividad revisadas.");
         }
 
         private static void Assert(bool condicion, string mensaje)
