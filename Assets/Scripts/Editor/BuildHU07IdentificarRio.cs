@@ -187,6 +187,12 @@ namespace GuardianesAmazonicos.Editor
                 if (tarjeta == null || tarjeta.boton == null || tarjeta.boton.transform.parent is not RectTransform contenedor)
                     throw new InvalidOperationException("No se pudo ubicar una de las tarjetas de HU-07.");
 
+                if (tarjeta.nombre != null)
+                {
+                    tarjeta.nombre.gameObject.SetActive(false);
+                    EditorUtility.SetDirty(tarjeta.nombre.gameObject);
+                }
+
                 Vector2 posicion = contenedor.anchoredPosition;
                 contenedor.anchoredPosition = new Vector2(posicion.x, posicionY);
                 AjustarImagenTarjeta(contenedor);

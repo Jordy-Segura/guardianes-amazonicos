@@ -108,7 +108,7 @@ namespace GuardianesAmazonicos.Editor
             c.NumeroEscena = 3;
             c.TotalEscenas = 12;
             c.TituloNivel = "Nivel 1 · Conozco la selva";
-            c.Pregunta = "Escucha: guacamayo.\n¿Cuál es el guacamayo?";
+            c.Pregunta = "¿Cuál de estos animales es el guacamayo? Elige la imagen correcta.";
             c.Opciones = new[] { "", "", "" };
             c.ImagenesOpciones = new[]
             {

@@ -17,7 +17,7 @@ MonoBehaviour:
   _totalEscenas: 12
   _tituloNivel: "Nivel 1 \xB7 Conozco la selva"
   _siguienteEscena: Escena04_HU04_Plantas
-  _pregunta: "Escucha: guacamayo.\n\xBFCu\xE1l es el guacamayo?"
+  _pregunta: "\xBFCu\xE1l de estos animales es el guacamayo? Elige la imagen correcta."
   _opciones:
   - 
   - 
@@ -105,7 +105,7 @@ MonoBehaviour:
   numeroEscena: 3
   titulo: "Nivel 1 \xB7 Conozco la selva"
   textoProgreso: 2 de 2
-  pregunta: "Escucha: guacamayo.\n\xBFCu\xE1l es el guacamayo?"
+  pregunta: "\xBFCu\xE1l de estos animales es el guacamayo? Elige la imagen correcta."
   instruccion: 
   opciones:
   - 
