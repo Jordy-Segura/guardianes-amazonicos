@@ -29,7 +29,7 @@ Assets/
     └── Persistence/         Persistencia local
 ```
 
-La aventura se organiza en cinco niveles, cada uno con doce escenas (60 escenas en total). Dentro de cada nivel, las actividades se implementan en orden. En el Nivel 1 se implementa la bienvenida (Escena 01), el reconocimiento del mono (Escena 02, HU-02), el jaguar (Escena 05, HU-05) y el plátano (Escena 09, HU-09). El segundo nivel comienza con la actividad de protección del hábitat del Mono Curioso (Escena 01). Las demás escenas se incorporarán conforme se implementen sus actividades. Las pantallas usan Canvas con `Scale With Screen Size`, resolución de referencia 1920×1080 y proporción 16:9. Los textos se renderizan sobre la plantilla para que puedan ajustarse y traducirse sin volver a editar las ilustraciones.
+La aventura se organiza en cinco niveles, cada uno con doce escenas (60 escenas en total). Dentro de cada nivel, las actividades se implementan en orden. En el Nivel 1 se implementan la bienvenida (Escena 01), el reconocimiento del mono (Escena 02, HU-02), el guacamayo (Escena 03, HU-03), el jaguar (Escena 05, HU-05), la tortuga (Escena 06, HU-06) y el plátano (Escena 09, HU-09). El segundo nivel comienza con la actividad de protección del hábitat del Mono Curioso (Escena 01). Las demás escenas se incorporarán conforme se implementen sus actividades. Las pantallas usan Canvas con `Scale With Screen Size`, resolución de referencia 1920×1080 y proporción 16:9. Los textos se renderizan sobre la plantilla para que puedan ajustarse y traducirse sin volver a editar las ilustraciones.
 
 ## Plantilla de actividades (Guía Unity)
 
@@ -41,6 +41,7 @@ Las escenas de Jordy (Nivel 1: Bienvenida, Escena 5 y Escena 9; Nivel 2: Escena 
 - El contenido variable de cada pregunta está en `Assets/Scripts/Models/NivelesData/*.asset` (enunciado, opciones, respuesta correcta, explicaciones, pista, audio y video).
 - Recursos con la convención de la guía: `Assets/Art/Escenas/pregunta_NN_EE_escena.png`, `Assets/Art/Items/Respuestas/respuesta_NN_EE_x.png` y `Assets/Audio/Voice/Lectura/lectura_NN_EE.wav`. Los videos de señas se buscan en `Assets/StreamingAssets/LSEC/senas_nivel_NN_pregunta_EE.mp4`.
 - **Guardianes > Capturar estados de mis escenas** genera capturas 1920 × 1080 de cada estado para revisar la composición.
+- **Guardianes > Sahid > Integrar Nivel 1** ordena las escenas implementadas en Build Profiles, enlaza el botón Siguiente de cada reto y aplica la tipografía OpenDyslexic sin reconstruir escenas; **Guardianes > Sahid > Verificar Integración Nivel 1** comprueba ese estado.
 
 ## Arquitectura y accesibilidad
 

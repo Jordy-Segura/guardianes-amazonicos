@@ -67,4 +67,7 @@ secrets.json
 *.swo
 
 .vsconfig
-docs/
+
+# La documentación del equipo en docs/ se versiona junto con el proyecto.
+# Los PDF de referencia no se duplican en Git: la guía oficial ya está en Assets/_Project/.
+docs/*.pdf
