@@ -2338,7 +2338,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: afab3dd84ff451049bcfda5f3573116e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GuardianesAmazonicos.Presenters.RetoSeleccionPresenter
-  _configuracion: {fileID: 11400000, guid: b1614ab20d39ebc4b90b8d539be6a8e4, type: 2}
+  _configuracion: {fileID: 11400000, guid: c404b8e21a934f1187d2e5c1b0a94004, type: 2}
   _vista: {fileID: 403309998}
 --- !u!1 &415432590
 GameObject:

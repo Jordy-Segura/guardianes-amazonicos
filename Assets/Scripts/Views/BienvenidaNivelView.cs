@@ -51,6 +51,10 @@ namespace GuardianesAmazonicos.Views
         public event Action OnInicioSolicitado;
         public event Action OnConfiguracionSolicitada;
 
+        private GameObject _panelConfiguracion;
+
+        public bool ConfiguracionVisible => _panelConfiguracion != null && _panelConfiguracion.activeSelf;
+
         private void OnEnable()
         {
             Escuchar(_botonComenzar, EmitirComenzar);
@@ -86,6 +90,7 @@ namespace GuardianesAmazonicos.Views
 
         private void Start()
         {
+            PanelConfiguracionAccesibilidad.AplicarPreferencias(_fuenteAudio);
             if (_animacionPersonaje != null) _animacionPersonaje.ReproducirContinuo();
             RetoSeleccionView.AplicarEstiloBotonLectura(_botonAudio, RetoSeleccionView.ModoLecturaActivo);
             if (RetoSeleccionView.ModoLecturaActivo && _fuenteAudio != null && _fuenteAudio.clip != null)
@@ -108,6 +113,39 @@ namespace GuardianesAmazonicos.Views
         {
             if (_botonRegresar != null) _botonRegresar.interactable = regresar;
             if (_botonAvanzar != null) _botonAvanzar.interactable = avanzar;
+        }
+
+        public void MostrarConfiguracion()
+        {
+            if (_panelConfiguracion == null)
+            {
+                RectTransform raiz = _capaBase != null
+                    ? _capaBase.transform.parent as RectTransform
+                    : transform as RectTransform;
+                _panelConfiguracion = PanelConfiguracionAccesibilidad.Construir(raiz, _fuenteAudio,
+                    CerrarConfiguracion);
+            }
+
+            if (_panelConfiguracion == null) return;
+            _panelConfiguracion.transform.SetAsLastSibling();
+            _panelConfiguracion.SetActive(true);
+            if (_capaBase != null)
+            {
+                _capaBase.interactable = false;
+                _capaBase.blocksRaycasts = false;
+            }
+            Enfocar(_panelConfiguracion.GetComponentInChildren<Button>());
+        }
+
+        public void CerrarConfiguracion()
+        {
+            if (_panelConfiguracion != null) _panelConfiguracion.SetActive(false);
+            if (_capaBase != null)
+            {
+                _capaBase.interactable = true;
+                _capaBase.blocksRaycasts = true;
+            }
+            Enfocar(_botonConfiguracion);
         }
 
         /// <summary>Lectura: activa o desactiva el modo lectura y reproduce o detiene la locución de bienvenida.</summary>

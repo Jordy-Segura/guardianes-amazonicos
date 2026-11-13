@@ -194,7 +194,8 @@ namespace GuardianesAmazonicos.Presenters
 
         private void MostrarConfiguracion()
         {
-            Debug.Log("HU-03: la configuración de preferencias se administra desde el menú principal.", this);
+            _vista.DetenerAudio();
+            _vista.MostrarConfiguracion(true);
         }
 
         private bool YaCompletado()

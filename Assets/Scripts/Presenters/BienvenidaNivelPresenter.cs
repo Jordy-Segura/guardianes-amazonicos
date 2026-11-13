@@ -134,7 +134,8 @@ namespace GuardianesAmazonicos.Presenters
 
         private void AbrirConfiguracion()
         {
-            Debug.Log("BienvenidaNivelPresenter: la ventana de configuración se incorporará en una próxima versión.", this);
+            _vista.DetenerAudio();
+            _vista.MostrarConfiguracion();
         }
     }
 }

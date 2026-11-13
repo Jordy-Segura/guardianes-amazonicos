@@ -100,6 +100,7 @@ namespace GuardianesAmazonicos.Views
         private Coroutine _reaccionIncorrecta;
         private bool _enEstadoIncorrecto;
         private bool _construidaDinamica = false;
+        private GameObject _panelConfiguracion;
 
         public event Action OnComenzarSolicitado;
         public event Action<int> OnTarjetaSeleccionada;
@@ -125,6 +126,7 @@ namespace GuardianesAmazonicos.Views
         public bool RespuestaIncorrectaVisible => _enEstadoIncorrecto;
         public bool EstadoCorrectoVisible => _ref.estadoCorrecto != null && _ref.estadoCorrecto.activeSelf;
         public bool AudioReproduciendose => _ref.fuenteAudio != null && _ref.fuenteAudio.isPlaying;
+        public bool ConfiguracionVisible => _panelConfiguracion != null && _panelConfiguracion.activeSelf;
 
         /// <summary>Usado por el constructor de escenas del editor.</summary>
         public void Enlazar(ReferenciasActividad referencias)
@@ -264,6 +266,13 @@ namespace GuardianesAmazonicos.Views
 
             DetenerAudio();
             DetenerVideo();
+        }
+
+        private void Start()
+        {
+            // Las preferencias de accesibilidad son globales: se aplican al entrar
+            // a cualquier actividad, aunque se hayan cambiado en otra escena.
+            PanelConfiguracionAccesibilidad.AplicarPreferencias(_ref.fuenteAudio);
         }
 
         // ----- Estados de la plantilla -----
@@ -442,6 +451,42 @@ namespace GuardianesAmazonicos.Views
             if (_ref.botonRegresar != null) _ref.botonRegresar.interactable = permitido;
         }
 
+        /// <summary>
+        /// Abre o cierra el panel de configuración de accesibilidad. Se construye una
+        /// sola vez y se reutiliza; al abrirlo se bloquea la actividad de fondo y al
+        /// cerrarlo se devuelve el foco al botón de la cabecera.
+        /// </summary>
+        public void MostrarConfiguracion(bool visible)
+        {
+            if (!visible)
+            {
+                CerrarConfiguracion();
+                return;
+            }
+
+            if (_panelConfiguracion == null)
+            {
+                RectTransform raiz = _ref.capaBase != null
+                    ? _ref.capaBase.transform.parent as RectTransform
+                    : transform as RectTransform;
+                _panelConfiguracion = PanelConfiguracionAccesibilidad.Construir(raiz, _ref.fuenteAudio,
+                    CerrarConfiguracion, _ref.textoProgreso != null ? _ref.textoProgreso.font : null);
+            }
+
+            if (_panelConfiguracion == null) return;
+            _panelConfiguracion.transform.SetAsLastSibling();
+            _panelConfiguracion.SetActive(true);
+            BloquearCapaBase(true);
+            Enfocar(_panelConfiguracion.GetComponentInChildren<Button>());
+        }
+
+        public void CerrarConfiguracion()
+        {
+            if (_panelConfiguracion != null) _panelConfiguracion.SetActive(false);
+            BloquearCapaBase(false);
+            Enfocar(_ref.botonConfiguracion);
+        }
+
         public void MostrarProgreso(int escenaActual, int totalEscenas)
         {
             if (_ref.textoProgreso != null)
@@ -555,6 +600,7 @@ namespace GuardianesAmazonicos.Views
             }
 
             if (!Application.isPlaying || _ref.imagenPersonajeGuia == null) return;
+            if (PanelConfiguracionAccesibilidad.MovimientoReducidoActivo) return;
 
             if (_reaccionIncorrecta != null) StopCoroutine(_reaccionIncorrecta);
             _reaccionIncorrecta = StartCoroutine(AnimarReaccionIncorrecta(_ref.imagenPersonajeGuia.rectTransform));
@@ -609,7 +655,7 @@ namespace GuardianesAmazonicos.Views
             Enfocar(_ref.botonSiguiente);
 
             RectTransform contenido = _ref.contenidoCelebracion;
-            if (contenido != null)
+            if (contenido != null && !PanelConfiguracionAccesibilidad.MovimientoReducidoActivo)
             {
                 float tiempo = 0f;
                 while (tiempo < DURACION_ENTRADA)
@@ -620,6 +666,10 @@ namespace GuardianesAmazonicos.Views
                     yield return null;
                 }
 
+                contenido.localScale = Vector3.one;
+            }
+            else if (contenido != null)
+            {
                 contenido.localScale = Vector3.one;
             }
 
