@@ -19,21 +19,22 @@ MonoBehaviour:
   _siguienteEscena: Escena05_IdentificarJaguar
   _pregunta: "Las plantas tambi\xE9n forman parte de la selva.\n\xBFPuedes encontrar una planta?"
   _opciones:
+  - Planta
   - Jaguar
   - Mono
-  - Planta
   _imagenesOpciones:
+  - {fileID: -7698472240328864154, guid: 6556a569d082f394f93c9297d9432690, type: 3}
   - {fileID: 7217512474178845099, guid: 0af007d8c05c58c4e80a31156f0b8aad, type: 3}
   - {fileID: 4023666487891522865, guid: a5121365c9e4f004dbc8f1f58037b5c4, type: 3}
-  - {fileID: -7698472240328864154, guid: 6556a569d082f394f93c9297d9432690, type: 3}
   _indiceCorrecto: 2
   _explicacionesIncorrectas:
+  - "\xA1Muy bien! Identificaste la planta de la selva."
   - "\xA1Buen intento! El jaguar es un animal con manchas. Busca la planta con hojas verdes y flores rojas."
   - "\xA1Buen intento! El mono es un animal que trepa \xE1rboles. Busca la planta con hojas verdes y flores rojas."
-  - "\xA1Muy bien! Identificaste la planta de la selva."
   _pista: Busca la planta con hojas verdes y flores rojas que crece en la selva.
   _felicitacion: "\xA1Lo lograste!"
   _imagenEscena: {fileID: 4857928192221585405, guid: eaa8751dae8319046bc372e4b1bdadf2, type: 3}
+  _mostrarImagenEscena: 1
   _elementoEscena: {fileID: 0}
   _rectElementoEscena:
     serializedVersion: 2
@@ -88,9 +89,9 @@ MonoBehaviour:
   _audioLectura: {fileID: 8300000, guid: 28328df5040f4d1c9fe4f5b6d11dc30a, type: 3}
   _audioPista: {fileID: 8300000, guid: 09e2069f35f449c389706285d4bfb62b, type: 3}
   _audioCorrecciones:
+  - {fileID: 0}
   - {fileID: 8300000, guid: f885fd280e8b40c886d7c4c3a537a875, type: 3}
   - {fileID: 8300000, guid: c5fc77a2ed03457aac47a6bae0db9930, type: 3}
-  - {fileID: 0}
   _audioFelicitacion: {fileID: 8300000, guid: 2ddd6d82c66b4e5eb2a47150004f23e4, type: 3}
   _videoSenas: 
   _mostrarBienvenida: 0
@@ -108,9 +109,9 @@ MonoBehaviour:
   pregunta: "Las plantas tambi\xE9n forman parte de la selva.\n\xBFPuedes encontrar una planta?"
   instruccion: 
   opciones:
+  - Planta
   - Jaguar
   - Mono
-  - Planta
   imagenes:
   - {fileID: 7217512474178845099, guid: 0af007d8c05c58c4e80a31156f0b8aad, type: 3}
   - {fileID: 4023666487891522865, guid: a5121365c9e4f004dbc8f1f58037b5c4, type: 3}
