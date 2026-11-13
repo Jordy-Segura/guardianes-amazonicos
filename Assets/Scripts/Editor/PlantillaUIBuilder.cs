@@ -453,7 +453,8 @@ namespace GuardianesAmazonicos.Editor
         {
             RectTransform capa = Capa("EstadoCorrecto", padre);
             r.estadoCorrecto = capa.gameObject;
-            Bloqueador("ResplandorVerde", capa, S(SPRITE_RESPLANDOR), Color.white);
+            Image resplandor = Bloqueador("ResplandorVerde", capa, S(SPRITE_RESPLANDOR), Color.white);
+            resplandor.raycastTarget = false;
 
             Image celebracion = Imagen("PersonajeCelebracion", capa, fotogramas != null && fotogramas.Length > 0 ? fotogramas[0] : personaje,
                 300f, -290f, 470f, 705f, true);

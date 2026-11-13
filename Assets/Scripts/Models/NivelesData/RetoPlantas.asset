@@ -17,7 +17,6 @@ MonoBehaviour:
   _totalEscenas: 12
   _tituloNivel: "Nivel 1 \xB7 Conozco la selva"
   _siguienteEscena: Escena05_IdentificarJaguar
-<<<<<<< HEAD
   _pregunta: "Las plantas tambi\xE9n forman parte de la selva.\n\xBFPuedes encontrar una planta?"
   _opciones:
   - Jaguar
@@ -35,25 +34,6 @@ MonoBehaviour:
   _pista: Busca la planta con hojas verdes y flores rojas que crece en la selva.
   _felicitacion: "\xA1Lo lograste!"
   _imagenEscena: {fileID: 4857928192221585405, guid: eaa8751dae8319046bc372e4b1bdadf2, type: 3}
-=======
-  _pregunta: "Escucha: guacamayo.\n\xBFCu\xE1l es el guacamayo?"
-  _opciones:
-  - 
-  - 
-  - 
-  _imagenesOpciones:
-  - {fileID: 21300000, guid: 26845133233d7cadb1c648837aea4191, type: 3}
-  - {fileID: 21300000, guid: 7569f8d56b7c7c8ad11e7960c854d1e1, type: 3}
-  - {fileID: 21300000, guid: acd2eed8bcafe3be1dc73f15d82d1936, type: 3}
-  _indiceCorrecto: 1
-  _explicacionesIncorrectas:
-  - "\xA1Muy bien! Identificaste la Planta."
-  - "\xA1Buen intento! El Jaguar vive en la selva. Busca la Planta y vuelve a intentarlo."
-  - "\xA1Buen intento! El mono vive en los \xE1rboles. Busca la Planta y vuelve a intentarlo."
-  _pista: Busca La Planta de color verde, con flores rojas.
-  _felicitacion: "\xA1Lo lograste!"
-  _imagenEscena: {fileID: 21300000, guid: 1b6eda37b3364fc4389888ef5ca1247d, type: 3}
->>>>>>> jir
   _elementoEscena: {fileID: 0}
   _rectElementoEscena:
     serializedVersion: 2
@@ -105,18 +85,9 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 460d555543aa3189e1339c6bf10de6a6, type: 3}
   - {fileID: 21300000, guid: ebb05fd8c773ec88d78b5e433069c07f, type: 3}
   - {fileID: 21300000, guid: b0eca3a47b2994172294ce52a6a4f4c0, type: 3}
-<<<<<<< HEAD
   _audioLectura: {fileID: 0}
   _audioPista: {fileID: 0}
   _audioCorrecciones: []
-=======
-  _audioLectura: {fileID: 8300000, guid: 527be3595612bf94ba3f2004fc9463c9, type: 3}
-  _audioPista: {fileID: 8300000, guid: 7ccefa0a5a7f4e2983fd1e41a5222485, type: 3}
-  _audioCorrecciones:
-  - {fileID: 8300000, guid: e2ed443f6cb44c5882f3a54511963c4f, type: 3}
-  - {fileID: 0}
-  - {fileID: 8300000, guid: ceefdba1789b4a63a46ae1c72d91d422, type: 3}
->>>>>>> jir
   _audioFelicitacion: {fileID: 8300000, guid: 43b7acfb533a4db784919bfb3b7eb6f2, type: 3}
   _videoSenas: 
   _mostrarBienvenida: 0
@@ -130,7 +101,6 @@ MonoBehaviour:
   _fuente: {fileID: 11400000, guid: 767ffc8669e62e144951bc56a822d1e6, type: 2}
   numeroEscena: 4
   titulo: "Nivel 1 \xB7 Conozco la selva"
-<<<<<<< HEAD
   textoProgreso: 4 de 12
   pregunta: "Las plantas tambi\xE9n forman parte de la selva.\n\xBFPuedes encontrar una planta?"
   instruccion: 
@@ -145,31 +115,11 @@ MonoBehaviour:
   atlasDosPorDos: {fileID: 0}
   indiceCorrecto: 2
   pistaIncorrecta: Busca la planta con hojas verdes y flores rojas que crece en la selva.
-=======
-  textoProgreso: 2 de 2
-  pregunta: "Las plamtas tambi\xE9n formar parte de la selva. \n\xBFPuedes encontrar una planta?"
-  instruccion: 
-  opciones:
-  - 
-  - 
-  - 
-  imagenes:
-  - {fileID: 21300000, guid: 26845133233d7cadb1c648837aea4191, type: 3}
-  - {fileID: 21300000, guid: 7569f8d56b7c7c8ad11e7960c854d1e1, type: 3}
-  - {fileID: 21300000, guid: acd2eed8bcafe3be1dc73f15d82d1936, type: 3}
-  atlasDosPorDos: {fileID: 0}
-  indiceCorrecto: 1
-  pistaIncorrecta: Busca el ave con plumas rojas, amarillas y azules y un pico curvo.
->>>>>>> jir
   mensajeCorrecto: "\xA1Lo lograste!"
   pronunciaciones: []
   siguienteEscena: Escena05_IdentificarJaguar
   textoContinuar: SIGUIENTE RETO
   fondo: {fileID: 21300000, guid: b6a590ffb5b48f412f32db0b1482e1b9, type: 3}
-<<<<<<< HEAD
   imagenEscena: {fileID: 4857928192221585405, guid: eaa8751dae8319046bc372e4b1bdadf2, type: 3}
-=======
-  imagenEscena: {fileID: 21300000, guid: 1b6eda37b3364fc4389888ef5ca1247d, type: 3}
->>>>>>> jir
   explorador: {fileID: 21300000, guid: 2c32b3bf6bcfade558e5cfe00634d3b2, type: 3}
   fuente: {fileID: 11400000, guid: 767ffc8669e62e144951bc56a822d1e6, type: 2}

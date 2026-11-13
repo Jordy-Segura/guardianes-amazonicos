@@ -94,12 +94,21 @@ namespace GuardianesAmazonicos.Presenters
             _vista.MostrarBienvenida(_configuracion.MostrarBienvenida);
             _vista.PermitirRegresar(NavegacionNiveles.HayAnterior());
             _vista.PermitirAvanzar(RetoYaCompletado() && NavegacionNiveles.HaySiguiente(_configuracion.SiguienteEscena));
+            _vista.ActualizarEstadoVisualLectura(RetoSeleccionView.ModoLecturaActivo);
+            if (RetoSeleccionView.ModoLecturaActivo)
+            {
+                ReproducirEstadoActual();
+            }
         }
 
         private void Comenzar()
         {
             _vista.DetenerAudio();
             _vista.MostrarBienvenida(false);
+            if (RetoSeleccionView.ModoLecturaActivo)
+            {
+                ReproducirEstadoActual();
+            }
         }
 
         private void SeleccionarTarjeta(int indice)
@@ -116,21 +125,32 @@ namespace GuardianesAmazonicos.Presenters
             {
                 GuardarProgreso();
                 _vista.MostrarCorrecta(indice, _configuracion.Felicitacion);
-                _vista.AlternarAudio(_configuracion.AudioFelicitacion);
+                if (RetoSeleccionView.ModoLecturaActivo)
+                {
+                    _vista.ReproducirAudio(_configuracion.AudioFelicitacion);
+                }
                 _vista.PermitirAvanzar(NavegacionNiveles.HaySiguiente(_configuracion.SiguienteEscena));
             }
             else
             {
                 _vista.MostrarIncorrecta(indice, _configuracion.ObtenerExplicacion(indice));
-                _vista.AlternarAudio(_configuracion.ObtenerAudioCorreccion(indice));
+                if (RetoSeleccionView.ModoLecturaActivo)
+                {
+                    _vista.ReproducirAudio(_configuracion.ObtenerAudioCorreccion(indice));
+                }
             }
         }
 
         private void IntentarloDeNuevo()
         {
+            _vista.DetenerAudio();
             _modelo.Reintentar();
             _vista.MostrarSinSeleccion();
             _vista.EnfocarTarjeta(0);
+            if (RetoSeleccionView.ModoLecturaActivo)
+            {
+                ReproducirEstadoActual();
+            }
         }
 
         private void Siguiente()
@@ -144,27 +164,72 @@ namespace GuardianesAmazonicos.Presenters
 
         private void Leer()
         {
-            AudioClip clip = _vista.BienvenidaVisible
-                ? _configuracion.BienvenidaAudio
-                : _vista.PistaVisible
-                    ? _configuracion.AudioPista
-                    : _vista.RespuestaIncorrectaVisible
-                        ? _configuracion.ObtenerAudioCorreccion(_modelo.IndiceSeleccionado)
-                        : _configuracion.AudioLectura;
-            if (clip == null) clip = _vista.BienvenidaVisible ? _configuracion.BienvenidaAudio : _configuracion.AudioLectura;
-            _vista.AlternarAudio(clip);
+            RetoSeleccionView.ModoLecturaActivo = !RetoSeleccionView.ModoLecturaActivo;
+            _vista.ActualizarEstadoVisualLectura(RetoSeleccionView.ModoLecturaActivo);
+
+            if (!RetoSeleccionView.ModoLecturaActivo)
+            {
+                _vista.DetenerAudio();
+                return;
+            }
+
+            ReproducirEstadoActual();
+        }
+
+        private void ReproducirEstadoActual()
+        {
+            AudioClip clip = ObtenerClipEstadoActual();
+            if (clip != null)
+            {
+                _vista.ReproducirAudio(clip);
+            }
+        }
+
+        private AudioClip ObtenerClipEstadoActual()
+        {
+            if (_vista.BienvenidaVisible)
+            {
+                return _configuracion.BienvenidaAudio != null ? _configuracion.BienvenidaAudio : _configuracion.AudioLectura;
+            }
+
+            if (_vista.PistaVisible)
+            {
+                return _configuracion.AudioPista != null ? _configuracion.AudioPista : _configuracion.AudioLectura;
+            }
+
+            if (_vista.EstadoCorrectoVisible || (_modelo != null && _modelo.Resuelto))
+            {
+                return _configuracion.AudioFelicitacion != null ? _configuracion.AudioFelicitacion : _configuracion.AudioLectura;
+            }
+
+            if (_vista.RespuestaIncorrectaVisible && _modelo != null)
+            {
+                AudioClip correccion = _configuracion.ObtenerAudioCorreccion(_modelo.IndiceSeleccionado);
+                return correccion != null ? correccion : _configuracion.AudioLectura;
+            }
+
+            return _configuracion.AudioLectura;
         }
 
         private void AbrirPista()
         {
             if (_vista.BienvenidaVisible || _modelo.Resuelto) return;
             _vista.MostrarPista(true);
+            if (RetoSeleccionView.ModoLecturaActivo)
+            {
+                ReproducirEstadoActual();
+            }
         }
 
         private void CerrarPista()
         {
+            _vista.DetenerAudio();
             _vista.MostrarPista(false);
             _vista.EnfocarTarjeta(_modelo.IndiceSeleccionado);
+            if (RetoSeleccionView.ModoLecturaActivo)
+            {
+                ReproducirEstadoActual();
+            }
         }
 
         private void AbrirSenas()

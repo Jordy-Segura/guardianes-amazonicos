@@ -87,6 +87,12 @@ namespace GuardianesAmazonicos.Views
         private void Start()
         {
             if (_animacionPersonaje != null) _animacionPersonaje.ReproducirContinuo();
+            RetoSeleccionView.AplicarEstiloBotonLectura(_botonAudio, RetoSeleccionView.ModoLecturaActivo);
+            if (RetoSeleccionView.ModoLecturaActivo && _fuenteAudio != null && _fuenteAudio.clip != null)
+            {
+                _fuenteAudio.Stop();
+                _fuenteAudio.Play();
+            }
             Enfocar(_botonComenzar);
         }
 
@@ -104,16 +110,20 @@ namespace GuardianesAmazonicos.Views
             if (_botonAvanzar != null) _botonAvanzar.interactable = avanzar;
         }
 
-        /// <summary>Lectura: reproduce o detiene la locución de bienvenida.</summary>
+        /// <summary>Lectura: activa o desactiva el modo lectura y reproduce o detiene la locución de bienvenida.</summary>
         public void ReproducirBienvenida()
         {
+            RetoSeleccionView.ModoLecturaActivo = !RetoSeleccionView.ModoLecturaActivo;
+            RetoSeleccionView.AplicarEstiloBotonLectura(_botonAudio, RetoSeleccionView.ModoLecturaActivo);
+
             if (_fuenteAudio == null || _fuenteAudio.clip == null) return;
-            if (_fuenteAudio.isPlaying)
+            if (!RetoSeleccionView.ModoLecturaActivo)
             {
-                _fuenteAudio.Stop();
+                if (_fuenteAudio.isPlaying) _fuenteAudio.Stop();
                 return;
             }
 
+            _fuenteAudio.Stop();
             _fuenteAudio.Play();
         }
 

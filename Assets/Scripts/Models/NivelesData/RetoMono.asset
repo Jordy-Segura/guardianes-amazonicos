@@ -43,8 +43,15 @@ MonoBehaviour:
     height: 0
   _fondo: {fileID: 21300000, guid: b6a590ffb5b48f412f32db0b1482e1b9, type: 3}
   _personaje: {fileID: 21300000, guid: 2c32b3bf6bcfade558e5cfe00634d3b2, type: 3}
+  _personajeIncorrecto: {fileID: 21300000, guid: da6c6836ecaa8b84f9b90e49883c0601, type: 3}
   _fotogramasCelebracion: []
-  _audioLectura: {fileID: 0}
+  _audioLectura: {fileID: 8300000, guid: 658197070c5872680bcbf0eabd47040f, type: 3}
+  _audioPista: {fileID: 8300000, guid: ae83576f5d8d9c88f593fae82b97d921, type: 3}
+  _audioCorrecciones:
+  - {fileID: 0}
+  - {fileID: 8300000, guid: 932e71ff9e76037699bf062103a260c7, type: 3}
+  - {fileID: 8300000, guid: 90ea0fbbefc28673ebe0acabadf45191, type: 3}
+  _audioFelicitacion: {fileID: 8300000, guid: 5b3883f448f4b4f81bdf3cba7376ff7b, type: 3}
   _videoSenas: ''
   _mostrarBienvenida: 0
   _bienvenidaEtiquetaNivel: ''
