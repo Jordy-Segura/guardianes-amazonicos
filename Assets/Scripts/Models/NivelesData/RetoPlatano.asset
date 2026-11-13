@@ -19,7 +19,7 @@ MonoBehaviour:
   _siguienteEscena: 
   _pregunta: "Observa la selva. \xBFCu\xE1l de estos frutos es el pl\xE1tano?"
   _opciones:
-  - Manzana
+  - Heliconia
   - Cacao
   - "Pl\xE1tano"
   _imagenesOpciones:
@@ -28,7 +28,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 90fec6ecd008ed840a8fd38f84ea7c44, type: 3}
   _indiceCorrecto: 2
   _explicacionesIncorrectas:
-  - "La manzana es redonda y roja. El pl\xE1tano es largo, curvo y amarillo."
+  - "La heliconia es una planta de flores rojas de la selva. El pl\xE1tano es un fruto largo, curvo y amarillo."
   - "El cacao es un fruto morado con semillas blancas. El pl\xE1tano es largo, curvo y amarillo."
   - 
   _pista: "Busca una fruta larga y curva que se vuelve amarilla cuando est\xE1 madura."
@@ -86,6 +86,12 @@ MonoBehaviour:
   - {fileID: 21300000, guid: ebb05fd8c773ec88d78b5e433069c07f, type: 3}
   - {fileID: 21300000, guid: b0eca3a47b2994172294ce52a6a4f4c0, type: 3}
   _audioLectura: {fileID: 8300000, guid: 4310439646e1e4242b3c944478ecf9f8, type: 3}
+  _audioPista: {fileID: 8300000, guid: e2278f266d6ee0d08a73bb7e70554222, type: 3}
+  _audioCorrecciones:
+  - {fileID: 8300000, guid: 3d044d8c3b964138a197b9989e3b9e68, type: 3}
+  - {fileID: 8300000, guid: 9060c9b9598ac0f15fc9e35617027ec7, type: 3}
+  - {fileID: 0}
+  _audioFelicitacion: {fileID: 8300000, guid: 3ed8492f4076d78d37c4605cc9fc104b, type: 3}
   _videoSenas: senas_nivel_01_pregunta_09.mp4
   _mostrarBienvenida: 0
   _bienvenidaEtiquetaNivel: 
@@ -102,7 +108,7 @@ MonoBehaviour:
   pregunta: "Observa la selva. \xBFCu\xE1l de estos frutos es el pl\xE1tano?"
   instruccion: 
   opciones:
-  - Manzana
+  - Heliconia
   - Cacao
   - "Pl\xE1tano"
   imagenes:

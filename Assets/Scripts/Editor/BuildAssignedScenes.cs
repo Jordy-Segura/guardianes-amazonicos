@@ -19,6 +19,7 @@ namespace GuardianesAmazonicos.Editor
     /// </summary>
     public static class BuildAssignedScenes
     {
+        private const string ConfigMonoPath = "Assets/Scripts/Models/NivelesData/RetoMono.asset";
         private const string ConfigJaguarPath = "Assets/Scripts/Models/NivelesData/RetoJaguar.asset";
         private const string ConfigPlatanoPath = "Assets/Scripts/Models/NivelesData/RetoPlatano.asset";
         private const string ConfigMonoCuriosoPath = "Assets/Scripts/Models/NivelesData/ProtegerHabitatMono.asset";
@@ -84,6 +85,14 @@ namespace GuardianesAmazonicos.Editor
             jaguar.PersonajeIncorrecto = PlantillaUIBuilder.S(ExploradorPreocupado);
             jaguar.FotogramasCelebracion = CargarFotogramasExplorador();
             jaguar.AudioLectura = PlantillaUIBuilder.Cargar<AudioClip>(Lectura + "lectura_01_05.wav");
+            jaguar.AudioPista = PlantillaUIBuilder.Cargar<AudioClip>(Lectura + "pista_01_05.wav");
+            jaguar.AudioFelicitacion = PlantillaUIBuilder.Cargar<AudioClip>(Lectura + "acierto_01_05.wav");
+            jaguar.AudioCorrecciones = new[]
+            {
+                PlantillaUIBuilder.Cargar<AudioClip>(Lectura + "correccion_01_05_mono.wav"),
+                null,
+                PlantillaUIBuilder.Cargar<AudioClip>(Lectura + "correccion_01_05_guacamayo.wav")
+            };
             jaguar.VideoSenas = "senas_nivel_01_pregunta_05.mp4";
             jaguar.MostrarBienvenida = false;
             jaguar.SiguienteEscena = string.Empty;
@@ -95,7 +104,7 @@ namespace GuardianesAmazonicos.Editor
             platano.NumeroEscena = 9;
             platano.TituloNivel = "Nivel 1 • Conozco la selva";
             platano.Pregunta = "Observa la selva. ¿Cuál de estos frutos es el plátano?";
-            platano.Opciones = new[] { "Manzana", "Cacao", "Plátano" };
+            platano.Opciones = new[] { "Heliconia", "Cacao", "Plátano" };
             platano.ImagenesOpciones = new[]
             {
                 PlantillaUIBuilder.S(Respuestas + "respuesta_01_09_a.png"),
@@ -105,7 +114,7 @@ namespace GuardianesAmazonicos.Editor
             platano.IndiceCorrecto = 2;
             platano.ExplicacionesIncorrectas = new[]
             {
-                "La manzana es redonda y roja. El plátano es largo, curvo y amarillo.",
+                "La heliconia es una planta de flores rojas de la selva. El plátano es un fruto largo, curvo y amarillo.",
                 "El cacao es un fruto morado con semillas blancas. El plátano es largo, curvo y amarillo.",
                 string.Empty
             };
@@ -118,11 +127,36 @@ namespace GuardianesAmazonicos.Editor
             platano.PersonajeIncorrecto = PlantillaUIBuilder.S(ExploradorPreocupado);
             platano.FotogramasCelebracion = CargarFotogramasExplorador();
             platano.AudioLectura = PlantillaUIBuilder.Cargar<AudioClip>(Lectura + "lectura_01_09.wav");
+            platano.AudioPista = PlantillaUIBuilder.Cargar<AudioClip>(Lectura + "pista_01_09.wav");
+            platano.AudioFelicitacion = PlantillaUIBuilder.Cargar<AudioClip>(Lectura + "acierto_01_09.wav");
+            platano.AudioCorrecciones = new[]
+            {
+                PlantillaUIBuilder.Cargar<AudioClip>(Lectura + "correccion_01_09_heliconia.wav"),
+                PlantillaUIBuilder.Cargar<AudioClip>(Lectura + "correccion_01_09_cacao.wav"),
+                null
+            };
             platano.VideoSenas = "senas_nivel_01_pregunta_09.mp4";
             platano.MostrarBienvenida = false;
             platano.SiguienteEscena = string.Empty;
             platano.Fuente = jaguar.Fuente;
             EditorUtility.SetDirty(platano);
+
+            RetoSeleccionConfiguracion retoMono = AssetDatabase.LoadAssetAtPath<RetoSeleccionConfiguracion>(ConfigMonoPath);
+            if (retoMono != null)
+            {
+                retoMono.PersonajeIncorrecto = PlantillaUIBuilder.S(ExploradorPreocupado);
+                retoMono.FotogramasCelebracion = jaguar.FotogramasCelebracion;
+                retoMono.AudioLectura = PlantillaUIBuilder.Cargar<AudioClip>(Lectura + "lectura_01_02.wav");
+                retoMono.AudioPista = PlantillaUIBuilder.Cargar<AudioClip>(Lectura + "pista_01_02.wav");
+                retoMono.AudioFelicitacion = PlantillaUIBuilder.Cargar<AudioClip>(Lectura + "acierto_01_02.wav");
+                retoMono.AudioCorrecciones = new[]
+                {
+                    null,
+                    PlantillaUIBuilder.Cargar<AudioClip>(Lectura + "correccion_01_02_guacamayo.wav"),
+                    PlantillaUIBuilder.Cargar<AudioClip>(Lectura + "correccion_01_02_tortuga.wav")
+                };
+                EditorUtility.SetDirty(retoMono);
+            }
 
             AssetDatabase.SaveAssets();
             CrearEscena(SceneJaguarPath, jaguar);
@@ -164,6 +198,14 @@ namespace GuardianesAmazonicos.Editor
             mono.PersonajeIncorrecto = PlantillaUIBuilder.S(ExploradorPreocupado);
             mono.FotogramasCelebracion = CargarFotogramasExplorador();
             mono.AudioLectura = PlantillaUIBuilder.Cargar<AudioClip>(Lectura + "lectura_02_01.wav");
+            mono.AudioPista = PlantillaUIBuilder.Cargar<AudioClip>(Lectura + "pista_02_01.wav");
+            mono.AudioFelicitacion = PlantillaUIBuilder.Cargar<AudioClip>(Lectura + "acierto_02_01.wav");
+            mono.AudioCorrecciones = new[]
+            {
+                PlantillaUIBuilder.Cargar<AudioClip>(Lectura + "correccion_02_01_basura.wav"),
+                null,
+                PlantillaUIBuilder.Cargar<AudioClip>(Lectura + "correccion_02_01_cortar.wav")
+            };
             mono.VideoSenas = "senas_nivel_02_pregunta_01.mp4";
             mono.MostrarBienvenida = true;
             mono.BienvenidaEtiquetaNivel = "Nivel 2";
@@ -232,6 +274,7 @@ namespace GuardianesAmazonicos.Editor
             PlantillaUIBuilder.Imagen("FondoNivel", capaBase, c.Fondo, 0f, 0f, PlantillaUIBuilder.ANCHO, PlantillaUIBuilder.ALTO);
             PlantillaUIBuilder.ConstruirActividad(capaBase, c.Pregunta, c.Opciones, c.ImagenesOpciones, c.Personaje,
                 c.PersonajeIncorrecto, c.FotogramasCelebracion, c.ImagenEscena, c.ElementoEscena, c.RectElementoEscena, r);
+            OcultarNombresYCentrarIlustracionesTarjetas(r);
 
             if (c.MostrarBienvenida)
             {
@@ -287,6 +330,28 @@ namespace GuardianesAmazonicos.Editor
             EditorSceneManager.MarkSceneDirty(escena);
             EditorSceneManager.SaveScene(escena, ruta);
             VerificarReferenciasGuardadas(ruta);
+        }
+
+        private static void OcultarNombresYCentrarIlustracionesTarjetas(RetoSeleccionView.ReferenciasActividad r)
+        {
+            if (r == null || r.tarjetas == null) return;
+            foreach (RetoSeleccionView.TarjetaRespuestaVista tarjeta in r.tarjetas)
+            {
+                if (tarjeta == null) continue;
+                if (tarjeta.nombre != null)
+                {
+                    tarjeta.nombre.gameObject.SetActive(false);
+                    EditorUtility.SetDirty(tarjeta.nombre.gameObject);
+                }
+
+                if (tarjeta.ilustracion != null)
+                {
+                    RectTransform rectIlustracion = tarjeta.ilustracion.rectTransform;
+                    PlantillaUIBuilder.Colocar(rectIlustracion, 20f, -28f, 216f, 250f);
+                    tarjeta.ilustracion.preserveAspect = true;
+                    EditorUtility.SetDirty(rectIlustracion);
+                }
+            }
         }
 
         private static void VerificarReferenciasGuardadas(string ruta)

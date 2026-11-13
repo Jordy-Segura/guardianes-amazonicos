@@ -2120,6 +2120,7 @@ GameObject:
   - component: {fileID: 403309999}
   - component: {fileID: 403309998}
   - component: {fileID: 403309997}
+  - component: {fileID: 403310001}
   m_Layer: 0
   m_Name: HU03_Guacamayo
   m_TagString: Untagged
@@ -2134,7 +2135,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 403309996}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 34d2202b51d740dfb5861db70cd75b53, type: 3}
   m_Name: 
@@ -2325,6 +2326,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &403310001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 403309996}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: afab3dd84ff451049bcfda5f3573116e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GuardianesAmazonicos.Presenters.RetoSeleccionPresenter
+  _configuracion: {fileID: 11400000, guid: b1614ab20d39ebc4b90b8d539be6a8e4, type: 2}
+  _vista: {fileID: 403309998}
 --- !u!1 &415432590
 GameObject:
   m_ObjectHideFlags: 0
@@ -4895,7 +4910,11 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+<<<<<<< HEAD
   m_text: Busca la planta con hojas verdes y flores rojas que crece en la selva.
+=======
+  m_text: Busca la planta de hojas verdes con flores rojas que crece en la selva.
+>>>>>>> jir
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
