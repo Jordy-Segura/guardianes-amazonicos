@@ -2122,7 +2122,7 @@ GameObject:
   - component: {fileID: 403309997}
   - component: {fileID: 403310001}
   m_Layer: 0
-  m_Name: HU03_Guacamayo
+  m_Name: HU04_Plantas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
