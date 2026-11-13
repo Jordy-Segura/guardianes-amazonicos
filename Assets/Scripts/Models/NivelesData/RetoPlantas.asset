@@ -85,13 +85,13 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 460d555543aa3189e1339c6bf10de6a6, type: 3}
   - {fileID: 21300000, guid: ebb05fd8c773ec88d78b5e433069c07f, type: 3}
   - {fileID: 21300000, guid: b0eca3a47b2994172294ce52a6a4f4c0, type: 3}
-  _audioLectura: {fileID: 0}
-  _audioPista: {fileID: 0}
+  _audioLectura: {fileID: 8300000, guid: 28328df5040f4d1c9fe4f5b6d11dc30a, type: 3}
+  _audioPista: {fileID: 8300000, guid: 09e2069f35f449c389706285d4bfb62b, type: 3}
   _audioCorrecciones:
   - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  _audioFelicitacion: {fileID: 8300000, guid: 43b7acfb533a4db784919bfb3b7eb6f2, type: 3}
+  - {fileID: 8300000, guid: f885fd280e8b40c886d7c4c3a537a875, type: 3}
+  - {fileID: 8300000, guid: c5fc77a2ed03457aac47a6bae0db9930, type: 3}
+  _audioFelicitacion: {fileID: 8300000, guid: 2ddd6d82c66b4e5eb2a47150004f23e4, type: 3}
   _videoSenas: 
   _mostrarBienvenida: 0
   _bienvenidaEtiquetaNivel: 
