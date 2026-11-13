@@ -2120,6 +2120,7 @@ GameObject:
   - component: {fileID: 403309999}
   - component: {fileID: 403309998}
   - component: {fileID: 403309997}
+  - component: {fileID: 403310001}
   m_Layer: 0
   m_Name: HU03_Guacamayo
   m_TagString: Untagged
@@ -2134,12 +2135,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 403309996}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 34d2202b51d740dfb5861db70cd75b53, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GuardianesAmazonicos.Presenters.GuacamayoPresenter
-  _configuracion: {fileID: 11400000, guid: 7636ca2097be67a418c35339a3be0b29, type: 2}
+  _configuracion: {fileID: 11400000, guid: b1614ab20d39ebc4b90b8d539be6a8e4, type: 2}
   _vista: {fileID: 403309998}
   _personajeGuia: {fileID: 1169887839}
   _personajePreocupado: {fileID: 21300000, guid: da6c6836ecaa8b84f9b90e49883c0601, type: 3}
@@ -2325,6 +2326,21 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &403310001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 403309996}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a7c9e4f1b3d4a68b0c5d8e2f7a4c931, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GuardianesAmazonicos.Presenters.ActividadPlantasPresenter
+  _vista: {fileID: 0}
+  _nombreEscenaAnterior: Nivel1_ConozcoLaSelva
+  _nombreEscenaSiguiente: Escena5
 --- !u!1 &415432590
 GameObject:
   m_ObjectHideFlags: 0
