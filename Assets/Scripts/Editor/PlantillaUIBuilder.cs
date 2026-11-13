@@ -360,29 +360,34 @@ namespace GuardianesAmazonicos.Editor
                 201f - origen.x, -208f - origen.y, 598f, 150f, 36f, ROJO_TEXTO);
             r.globoCorreccion.SetActive(false);
 
-            // Imagen principal con máscara dentro del marco.
-            RectTransform ventana = Rect("ImagenPrincipal", capa, 942f, -206f, 758f, 390f);
-            // Máscara redondeada para que las esquinas de la ilustración no salgan del marco.
-            ventana.gameObject.AddComponent<CanvasRenderer>();
-            RoundedRectangleGraphic forma = ventana.gameObject.AddComponent<RoundedRectangleGraphic>();
-            forma.raycastTarget = false;
-            SerializedObject datosForma = new SerializedObject(forma);
-            datosForma.FindProperty("_radioEsquina").floatValue = 34f;
-            datosForma.ApplyModifiedPropertiesWithoutUndo();
-            ventana.gameObject.AddComponent<Mask>().showMaskGraphic = false;
-            Imagen("EscenaPregunta", ventana, imagenEscena, 0f, 0f, 758f, 390f);
-            if (elementoEscena != null)
+            // La ilustración de referencia es opcional para actividades que solo requieren tarjetas.
+            if (imagenEscena != null)
             {
-                Imagen("ElementoEscena", ventana, elementoEscena, rectElemento.x, rectElemento.y, rectElemento.width, rectElemento.height, true);
+                RectTransform ventana = Rect("ImagenPrincipal", capa, 942f, -206f, 758f, 390f);
+                // Máscara redondeada para que las esquinas de la ilustración no salgan del marco.
+                ventana.gameObject.AddComponent<CanvasRenderer>();
+                RoundedRectangleGraphic forma = ventana.gameObject.AddComponent<RoundedRectangleGraphic>();
+                forma.raycastTarget = false;
+                SerializedObject datosForma = new SerializedObject(forma);
+                datosForma.FindProperty("_radioEsquina").floatValue = 34f;
+                datosForma.ApplyModifiedPropertiesWithoutUndo();
+                ventana.gameObject.AddComponent<Mask>().showMaskGraphic = false;
+                Imagen("EscenaPregunta", ventana, imagenEscena, 0f, 0f, 758f, 390f);
+                if (elementoEscena != null)
+                {
+                    Imagen("ElementoEscena", ventana, elementoEscena, rectElemento.x, rectElemento.y, rectElemento.width, rectElemento.height, true);
+                }
+                Imagen("MarcoImagen", capa, S(SPRITE_MARCO), 921f, -188f, 800f, 425f);
             }
 
-            Imagen("MarcoImagen", capa, S(SPRITE_MARCO), 921f, -188f, 800f, 425f);
-
-            float[] columnas = { 921f, 1193f, 1465f };
+            bool cuatroTarjetas = opciones != null && opciones.Length == 4;
+            float[] columnas = cuatroTarjetas
+                ? new[] { 1020f, 1340f, 1020f, 1340f }
+                : new[] { 921f, 1193f, 1465f };
             r.tarjetas = new RetoSeleccionView.TarjetaRespuestaVista[opciones.Length];
             for (int i = 0; i < opciones.Length; i++)
             {
-                r.tarjetas[i] = ConstruirTarjeta(capa, i, columnas[i], opciones[i], imagenes != null && i < imagenes.Length ? imagenes[i] : null);
+                r.tarjetas[i] = ConstruirTarjeta(capa, i, columnas[i], opciones[i], imagenes != null && i < imagenes.Length ? imagenes[i] : null, cuatroTarjetas);
             }
 
             r.botonAceptar = Boton(ImagenVisible("Aceptar", capa, S(SPRITE_ACEPTAR), 18, 18, 1227, 387, 1171f, -978f, 300f), "BotonAceptar");
@@ -392,21 +397,25 @@ namespace GuardianesAmazonicos.Editor
             r.botonIntentarloDeNuevo.gameObject.SetActive(false);
         }
 
-        private static RetoSeleccionView.TarjetaRespuestaVista ConstruirTarjeta(Transform padre, int indice, float x, string nombre, Sprite imagen)
+        private static RetoSeleccionView.TarjetaRespuestaVista ConstruirTarjeta(Transform padre, int indice, float x, string nombre, Sprite imagen, bool cuatroTarjetas)
         {
             RetoSeleccionView.TarjetaRespuestaVista t = new RetoSeleccionView.TarjetaRespuestaVista();
-            Image base_ = Imagen("Respuesta" + (indice + 1), padre, S(SPRITE_TARJETA), x, -663f, 256f, 307f);
+            float anchoTarjeta = cuatroTarjetas ? 240f : 256f;
+            float posicionY = cuatroTarjetas ? (indice < 2 ? -235f : -560f) : -663f;
+            float escalaDecoracion = anchoTarjeta / 256f;
+            Image base_ = Imagen("Respuesta" + (indice + 1), padre, S(SPRITE_TARJETA), x, posicionY, anchoTarjeta, 307f);
             t.boton = Boton(base_, "Respuesta" + (indice + 1));
 
-            t.ilustracion = Imagen("Ilustracion", base_.transform, imagen, 18f, -22f, 220f, 188f, true);
-            t.nombre = Texto("Nombre", base_.transform, nombre, 15f, -216f, 226f, 76f, 28f, TINTA);
+            float anchoIlustracion = anchoTarjeta - 52f;
+            t.ilustracion = Imagen("Ilustracion", base_.transform, imagen, (anchoTarjeta - anchoIlustracion) / 2f, -22f, anchoIlustracion, 188f, true);
+            t.nombre = Texto("Nombre", base_.transform, nombre, 15f, -216f, anchoTarjeta - 30f, 76f, 28f, TINTA);
             t.nombre.maxVisibleLines = 2;
             t.nombre.margin = new Vector4(8f, 0f, 8f, 0f);
 
             // Superposiciones alineadas con el borde dorado de la tarjeta (medido en los PNG).
-            t.brilloSeleccion = Imagen("BrilloSeleccion", base_.transform, S(SPRITE_BRILLO), -40.6f, 56.4f, 351f, 390.4f).gameObject;
-            t.bordeIncorrecto = Imagen("BordeIncorrecto", base_.transform, S(SPRITE_BORDE_INCORRECTO), -15.5f, 32.8f, 288.2f, 374.1f).gameObject;
-            t.bordeCorrecto = Imagen("BordeCorrecto", base_.transform, S(SPRITE_BORDE_CORRECTO), -15.5f, 32.8f, 288.2f, 374.1f).gameObject;
+            t.brilloSeleccion = Imagen("BrilloSeleccion", base_.transform, S(SPRITE_BRILLO), -40.6f * escalaDecoracion, 56.4f * escalaDecoracion, 351f * escalaDecoracion, 390.4f * escalaDecoracion).gameObject;
+            t.bordeIncorrecto = Imagen("BordeIncorrecto", base_.transform, S(SPRITE_BORDE_INCORRECTO), -15.5f * escalaDecoracion, 32.8f * escalaDecoracion, 288.2f * escalaDecoracion, 374.1f * escalaDecoracion).gameObject;
+            t.bordeCorrecto = Imagen("BordeCorrecto", base_.transform, S(SPRITE_BORDE_CORRECTO), -15.5f * escalaDecoracion, 32.8f * escalaDecoracion, 288.2f * escalaDecoracion, 374.1f * escalaDecoracion).gameObject;
             t.brilloSeleccion.SetActive(false);
             t.bordeIncorrecto.SetActive(false);
             t.bordeCorrecto.SetActive(false);

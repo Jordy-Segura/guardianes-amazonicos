@@ -17,7 +17,7 @@ namespace GuardianesAmazonicos.Editor
     {
         public const string RutaEscena = "Assets/Scenes/Niveles/Nivel01/Escena07_HU07_IdentificarRio.unity";
         private const string RutaConfig = "Assets/Scripts/Models/NivelesData/RetoIdentificarRio.asset";
-        private const string RutaHoja = "Assets/Art/Escenas/HU07_Agua_Triptych.png";
+        private const string RutaHoja = "Assets/Art/Escenas/HU07_Respuestas_2x2.png";
 
         [MenuItem("Guardianes/HU-07/Generar escena Identificar el río")]
         public static void Generar()
@@ -97,14 +97,14 @@ namespace GuardianesAmazonicos.Editor
                 Transform actividad = canvas != null ? canvas.transform.Find("CapaBase/Actividad") : null;
                 if (actividad == null) throw new InvalidOperationException("No se encontró la actividad de HU-07.");
 
-                const float posicionY = -635f;
-                for (int indice = 1; indice <= RetoSeleccionConfiguracion.CANTIDAD_OPCIONES; indice++)
+                for (int indice = 1; indice <= 4; indice++)
                 {
                     Transform tarjeta = actividad.Find("Respuesta" + indice);
                     RectTransform rectTarjeta = tarjeta as RectTransform;
                     if (rectTarjeta == null) throw new InvalidOperationException("Falta la tarjeta de respuesta " + indice + " en HU-07.");
-                    Vector2 posicion = rectTarjeta.anchoredPosition;
-                    rectTarjeta.anchoredPosition = new Vector2(posicion.x, posicionY);
+                    float posicionX = indice % 2 == 1 ? 1020f : 1340f;
+                    float posicionY = indice <= 2 ? -235f : -560f;
+                    rectTarjeta.anchoredPosition = new Vector2(posicionX, posicionY);
                     EditorUtility.SetDirty(rectTarjeta);
                     AjustarImagenTarjeta(rectTarjeta);
                 }
@@ -141,19 +141,21 @@ namespace GuardianesAmazonicos.Editor
             c.NumeroEscena = 7;
             c.TotalEscenas = 12;
             c.TituloNivel = "Nivel 1 · Conozco la selva";
-            c.Pregunta = "Selecciona el río.";
-            c.Opciones = new[] { "Río", "Mar", "Laguna" };
-            c.ImagenesOpciones = new[] { SpriteHoja("HU07_Rio"), SpriteHoja("HU07_Mar"), SpriteHoja("HU07_Laguna") };
-            c.IndiceCorrecto = 0;
+            c.Pregunta = "El río recorre la selva y lleva agua dulce entre sus orillas.\n¿Cuál de estas imágenes muestra un río?";
+            c.Opciones = new[] { "Vaso de agua", "Río", "Mar", "Charco" };
+            c.ImagenesOpciones = new[] { SpriteHoja("HU07_Vaso"), SpriteHoja("HU07_Rio"), SpriteHoja("HU07_Mar"), SpriteHoja("HU07_Charco") };
+            c.IndiceCorrecto = 1;
             c.ExplicacionesIncorrectas = new[]
             {
+                "El vaso contiene agua, pero el río fluye por la naturaleza entre sus orillas.",
                 string.Empty,
-                "El mar es muy amplio y llega hasta la costa. Busca el río de agua dulce.",
-                "La laguna es un cuerpo de agua quieta. Busca el río que fluye entre sus orillas."
+                "El mar es muy amplio y tiene agua salada. Busca el río de agua dulce.",
+                "El charco es pequeño y su agua queda quieta. Busca el río que fluye entre sus orillas."
             };
+            c.MostrarImagenEscena = false;
             c.Pista = "Busca el agua dulce que fluye entre dos orillas y atraviesa la selva.";
             c.Felicitacion = "¡Muy bien! Encontraste el río.";
-            c.ImagenEscena = Cargar<Sprite>("Assets/Art/Backgrounds/Niveles/N3_Protejo_el_rio.png");
+            c.ImagenEscena = null;
             c.Fondo = Cargar<Sprite>("Assets/Art/Backgrounds/Niveles/N1_Conozco_la_selva.png");
             c.Personaje = Cargar<Sprite>("Assets/Art/Characters/Explorador.png");
             c.PersonajeIncorrecto = Cargar<Sprite>("Assets/Art/Characters/ExploradorPreocupado.png");
@@ -163,8 +165,9 @@ namespace GuardianesAmazonicos.Editor
             c.AudioCorrecciones = new[]
             {
                 null,
+                null,
                 Cargar<AudioClip>("Assets/Audio/Voice/HU07/correccion_mar_03_07.wav"),
-                Cargar<AudioClip>("Assets/Audio/Voice/HU07/correccion_laguna_03_07.wav")
+                Cargar<AudioClip>("Assets/Audio/Voice/HU07/error_03_07.wav")
             };
             c.VideoSenas = string.Empty;
             c.MostrarBienvenida = false;
@@ -175,16 +178,16 @@ namespace GuardianesAmazonicos.Editor
             return c;
         }
 
-        /// <summary>Levanta la fila para equilibrar el espacio entre la imagen y el borde inferior.</summary>
+        /// <summary>Distribuye las cuatro tarjetas en dos filas equilibradas dentro de HU-07.</summary>
         private static void AjustarTarjetasRespuesta(RetoSeleccionView.ReferenciasActividad referencias)
         {
-            if (referencias.tarjetas == null || referencias.tarjetas.Length != RetoSeleccionConfiguracion.CANTIDAD_OPCIONES)
-                throw new InvalidOperationException("HU-07 debe conservar exactamente tres tarjetas de respuesta.");
+            if (referencias.tarjetas == null || referencias.tarjetas.Length != 4)
+                throw new InvalidOperationException("HU-07 debe tener exactamente cuatro tarjetas de respuesta.");
 
-            const float posicionY = -635f;
-            foreach (RetoSeleccionView.TarjetaRespuestaVista tarjeta in referencias.tarjetas)
+            for (int indice = 0; indice < referencias.tarjetas.Length; indice++)
             {
-                if (tarjeta == null || tarjeta.boton == null || tarjeta.boton.transform.parent is not RectTransform contenedor)
+                RetoSeleccionView.TarjetaRespuestaVista tarjeta = referencias.tarjetas[indice];
+                if (tarjeta == null || tarjeta.boton == null || tarjeta.boton.transform is not RectTransform contenedor)
                     throw new InvalidOperationException("No se pudo ubicar una de las tarjetas de HU-07.");
 
                 if (tarjeta.nombre != null)
@@ -193,8 +196,9 @@ namespace GuardianesAmazonicos.Editor
                     EditorUtility.SetDirty(tarjeta.nombre.gameObject);
                 }
 
-                Vector2 posicion = contenedor.anchoredPosition;
-                contenedor.anchoredPosition = new Vector2(posicion.x, posicionY);
+                float posicionX = indice % 2 == 0 ? 1020f : 1340f;
+                float posicionY = indice < 2 ? -235f : -560f;
+                contenedor.anchoredPosition = new Vector2(posicionX, posicionY);
                 AjustarImagenTarjeta(contenedor);
             }
         }
@@ -231,12 +235,13 @@ namespace GuardianesAmazonicos.Editor
                 if (rectIlustracion.parent != mascaraRect) rectIlustracion.SetParent(mascaraRect, false);
             }
 
-            const float ancho = 188f;
-            const float alto = 188f;
+            // La ilustración cubre la mayor parte de la tarjeta y deja visible el marco dorado.
+            const float ancho = 204f;
+            const float alto = 271f;
             mascaraRect.anchorMin = new Vector2(0f, 1f);
             mascaraRect.anchorMax = new Vector2(0f, 1f);
             mascaraRect.pivot = new Vector2(0f, 1f);
-            mascaraRect.anchoredPosition = new Vector2(34f, -22f);
+            mascaraRect.anchoredPosition = new Vector2(18f, -18f);
             mascaraRect.sizeDelta = new Vector2(ancho, alto);
 
             RoundedRectangleGraphic graficoMascara = mascaraRect.GetComponent<RoundedRectangleGraphic>();
@@ -246,11 +251,13 @@ namespace GuardianesAmazonicos.Editor
             Mask mascara = mascaraRect.GetComponent<Mask>();
             mascara.showMaskGraphic = false;
 
-            rectIlustracion.anchorMin = Vector2.zero;
-            rectIlustracion.anchorMax = Vector2.one;
-            rectIlustracion.pivot = new Vector2(0.5f, 0.5f);
-            rectIlustracion.anchoredPosition = Vector2.zero;
-            rectIlustracion.sizeDelta = Vector2.zero;
+            // Sprite cuadrado dentro de una ventana vertical: escala por alto y recorta
+            // simétricamente los lados para llenar la tarjeta sin deformar el dibujo.
+            rectIlustracion.anchorMin = new Vector2(0f, 1f);
+            rectIlustracion.anchorMax = new Vector2(0f, 1f);
+            rectIlustracion.pivot = new Vector2(0f, 1f);
+            rectIlustracion.anchoredPosition = new Vector2((ancho - alto) * 0.5f, 0f);
+            rectIlustracion.sizeDelta = new Vector2(alto, alto);
             imagen.preserveAspect = true;
 
             EditorUtility.SetDirty(mascaraRect);
@@ -262,8 +269,9 @@ namespace GuardianesAmazonicos.Editor
             TextureImporter importer = AssetImporter.GetAtPath(RutaHoja) as TextureImporter;
             if (importer == null) throw new InvalidOperationException("No se encontró la hoja ilustrada de HU-07: " + RutaHoja);
             importer.GetSourceTextureWidthAndHeight(out int ancho, out int alto);
-            if (ancho % 3 != 0) throw new InvalidOperationException("La hoja debe tener tres paneles del mismo ancho.");
-            int panel = ancho / 3;
+            if (ancho % 2 != 0 || alto % 2 != 0) throw new InvalidOperationException("La hoja debe tener cuatro paneles cuadrados.");
+            int panelX = ancho / 2;
+            int panelY = alto / 2;
             importer.textureType = TextureImporterType.Sprite;
             importer.spriteImportMode = SpriteImportMode.Multiple;
             importer.alphaIsTransparency = true;
@@ -272,16 +280,18 @@ namespace GuardianesAmazonicos.Editor
             importer.textureCompression = TextureImporterCompression.Uncompressed;
             importer.spritesheet = new[]
             {
-                Meta("HU07_Rio", 0, panel, alto), Meta("HU07_Mar", panel, panel, alto),
-                Meta("HU07_Laguna", panel * 2, panel, alto)
+                Meta("HU07_Vaso", 0, panelY, panelX, panelY),
+                Meta("HU07_Rio", panelX, panelY, panelX, panelY),
+                Meta("HU07_Mar", 0, 0, panelX, panelY),
+                Meta("HU07_Charco", panelX, 0, panelX, panelY)
             };
             importer.SaveAndReimport();
         }
 
-        private static SpriteMetaData Meta(string nombre, int x, int ancho, int alto) => new SpriteMetaData
+        private static SpriteMetaData Meta(string nombre, int x, int y, int ancho, int alto) => new SpriteMetaData
         {
             name = nombre,
-            rect = new Rect(x, 0, ancho, alto),
+            rect = new Rect(x, y, ancho, alto),
             alignment = (int)SpriteAlignment.Center,
             pivot = new Vector2(0.5f, 0.5f)
         };

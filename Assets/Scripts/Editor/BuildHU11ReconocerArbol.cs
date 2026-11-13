@@ -140,14 +140,14 @@ namespace GuardianesAmazonicos.Editor
             c.NumeroEscena = 11;
             c.TotalEscenas = 12;
             c.TituloNivel = "Nivel 1 · Conozco la selva";
-            c.Pregunta = "Escucha la descripción. ¿Cuál es el árbol?";
+            c.Pregunta = "Los árboles de la selva tienen tronco, ramas y hojas.\n¿Cuál de estas imágenes muestra un árbol?";
             c.Opciones = new[] { "Árbol", "Río", "Piedra" };
             c.ImagenesOpciones = new[] { Cargar<Sprite>("Assets/Art/Escenas/HU11_Tarjeta_Arbol.png"), Cargar<Sprite>("Assets/Art/Escenas/HU11_Tarjeta_Rio.png"), Cargar<Sprite>("Assets/Art/Escenas/HU11_Tarjeta_Piedra.png") };
             c.IndiceCorrecto = 0;
             c.ExplicacionesIncorrectas = new[]
             {
                 string.Empty,
-                "El río lleva agua entre sus orillas. Escucha las pistas y busca el árbol.",
+                "El río lleva agua entre sus orillas. Busca el árbol con tronco, ramas y hojas.",
                 "La piedra es dura y no tiene tronco ni hojas. Busca el árbol de la selva."
             };
             c.Pista = "Busca el ser vivo alto con tronco, ramas y muchas hojas.";

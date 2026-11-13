@@ -17,7 +17,7 @@ MonoBehaviour:
   _totalEscenas: 12
   _tituloNivel: "Nivel 1 \xB7 Conozco la selva"
   _siguienteEscena: 
-  _pregunta: "Escucha la descripci\xF3n. \xBFCu\xE1l es el \xE1rbol?"
+  _pregunta: "Los \xE1rboles de la selva tienen tronco, ramas y hojas.\n\xBFCu\xE1l de estas im\xE1genes muestra un \xE1rbol?"
   _opciones:
   - "\xC1rbol"
   - "R\xEDo"
@@ -29,7 +29,7 @@ MonoBehaviour:
   _indiceCorrecto: 0
   _explicacionesIncorrectas:
   - 
-  - "El r\xEDo lleva agua entre sus orillas. Escucha las pistas y busca el \xE1rbol."
+  - "El r\xEDo lleva agua entre sus orillas. Busca el \xE1rbol con tronco, ramas y hojas."
   - "La piedra es dura y no tiene tronco ni hojas. Busca el \xE1rbol de la selva."
   _pista: Busca el ser vivo alto con tronco, ramas y muchas hojas.
   _felicitacion: "\xA1Muy bien! El \xE1rbol forma parte importante de la selva. Da sombra y hogar a muchos animales."
@@ -105,7 +105,7 @@ MonoBehaviour:
   numeroEscena: 11
   titulo: "Nivel 1 \xB7 Conozco la selva"
   textoProgreso: 2 de 2
-  pregunta: "Escucha la descripci\xF3n. \xBFCu\xE1l es el \xE1rbol?"
+  pregunta: "Los \xE1rboles de la selva tienen tronco, ramas y hojas.\n\xBFCu\xE1l de estas im\xE1genes muestra un \xE1rbol?"
   instruccion: 
   opciones:
   - "\xC1rbol"

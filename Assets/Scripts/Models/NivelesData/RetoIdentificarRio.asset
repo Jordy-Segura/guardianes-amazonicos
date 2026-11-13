@@ -17,23 +17,27 @@ MonoBehaviour:
   _totalEscenas: 12
   _tituloNivel: "Nivel 1 \xB7 Conozco la selva"
   _siguienteEscena: 
-  _pregunta: "Selecciona el r\xEDo."
+  _pregunta: "El r\xEDo recorre la selva y lleva agua dulce entre sus orillas.\n\xBFCu\xE1l de estas im\xE1genes muestra un r\xEDo?"
   _opciones:
+  - Vaso de agua
   - "R\xEDo"
   - Mar
-  - Laguna
+  - Charco
   _imagenesOpciones:
-  - {fileID: 65674915160281102, guid: a18eede01c2558843b561e373c473cda, type: 3}
-  - {fileID: 2145028437839266291, guid: a18eede01c2558843b561e373c473cda, type: 3}
-  - {fileID: 5529895049085433387, guid: a18eede01c2558843b561e373c473cda, type: 3}
-  _indiceCorrecto: 0
+  - {fileID: 8885652702647527550, guid: c1cb7093e247ff04a8defa6a53a731cb, type: 3}
+  - {fileID: 65674915160281102, guid: c1cb7093e247ff04a8defa6a53a731cb, type: 3}
+  - {fileID: 2145028437839266291, guid: c1cb7093e247ff04a8defa6a53a731cb, type: 3}
+  - {fileID: -6277274079625501688, guid: c1cb7093e247ff04a8defa6a53a731cb, type: 3}
+  _indiceCorrecto: 1
   _explicacionesIncorrectas:
+  - "El vaso contiene agua, pero el r\xEDo fluye por la naturaleza entre sus orillas."
   - 
-  - "El mar es muy amplio y llega hasta la costa. Busca el r\xEDo de agua dulce."
-  - "La laguna es un cuerpo de agua quieta. Busca el r\xEDo que fluye entre sus orillas."
+  - "El mar es muy amplio y tiene agua salada. Busca el r\xEDo de agua dulce."
+  - "El charco es peque\xF1o y su agua queda quieta. Busca el r\xEDo que fluye entre sus orillas."
   _pista: Busca el agua dulce que fluye entre dos orillas y atraviesa la selva.
   _felicitacion: "\xA1Muy bien! Encontraste el r\xEDo."
-  _imagenEscena: {fileID: 21300000, guid: edd5f6a54977f01f717f81b29784a10a, type: 3}
+  _imagenEscena: {fileID: 0}
+  _mostrarImagenEscena: 0
   _elementoEscena: {fileID: 0}
   _rectElementoEscena:
     serializedVersion: 2
@@ -89,9 +93,10 @@ MonoBehaviour:
   _audioPista: {fileID: 8300000, guid: 72315002750045cfbf752d95624e705d, type: 3}
   _audioCorrecciones:
   - {fileID: 0}
+  - {fileID: 0}
   - {fileID: 8300000, guid: 4c69ffcf28824293b1d6e49da622bb6e, type: 3}
-  - {fileID: 8300000, guid: d1243fd519834268aaaf36b62b5c1e9a, type: 3}
-  _audioFelicitacion: {fileID: 8300000, guid: 0}
+  - {fileID: 8300000, guid: dd07f24015ce1734a817064ac0747dce, type: 3}
+  _audioFelicitacion: {fileID: 0}
   _videoSenas: 
   _mostrarBienvenida: 0
   _bienvenidaEtiquetaNivel: 
@@ -105,24 +110,26 @@ MonoBehaviour:
   numeroEscena: 7
   titulo: "Nivel 1 \xB7 Conozco la selva"
   textoProgreso: 7 de 12
-  pregunta: "Selecciona el r\xEDo."
+  pregunta: "El r\xEDo recorre la selva y lleva agua dulce entre sus orillas.\n\xBFCu\xE1l de estas im\xE1genes muestra un r\xEDo?"
   instruccion: 
   opciones:
+  - Vaso de agua
   - "R\xEDo"
   - Mar
-  - Laguna
+  - Charco
   imagenes:
-  - {fileID: 65674915160281102, guid: a18eede01c2558843b561e373c473cda, type: 3}
-  - {fileID: 2145028437839266291, guid: a18eede01c2558843b561e373c473cda, type: 3}
-  - {fileID: 5529895049085433387, guid: a18eede01c2558843b561e373c473cda, type: 3}
+  - {fileID: 8885652702647527550, guid: c1cb7093e247ff04a8defa6a53a731cb, type: 3}
+  - {fileID: 65674915160281102, guid: c1cb7093e247ff04a8defa6a53a731cb, type: 3}
+  - {fileID: 2145028437839266291, guid: c1cb7093e247ff04a8defa6a53a731cb, type: 3}
+  - {fileID: -6277274079625501688, guid: c1cb7093e247ff04a8defa6a53a731cb, type: 3}
   atlasDosPorDos: {fileID: 0}
-  indiceCorrecto: 0
+  indiceCorrecto: 1
   pistaIncorrecta: Busca el agua dulce que fluye entre dos orillas y atraviesa la selva.
   mensajeCorrecto: "\xA1Muy bien! Encontraste el r\xEDo."
   pronunciaciones: []
   siguienteEscena: 
   textoContinuar: SIGUIENTE RETO
-  fondo: {fileID: 21300000, guid: edd5f6a54977f01f717f81b29784a10a, type: 3}
-  imagenEscena: {fileID: 21300000, guid: edd5f6a54977f01f717f81b29784a10a, type: 3}
+  fondo: {fileID: 21300000, guid: b6a590ffb5b48f412f32db0b1482e1b9, type: 3}
+  imagenEscena: {fileID: 0}
   explorador: {fileID: 21300000, guid: 2c32b3bf6bcfade558e5cfe00634d3b2, type: 3}
   fuente: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}

@@ -776,29 +776,34 @@ namespace GuardianesAmazonicos.Views
             Sprite spEscena = c.ImagenEscena != null ? c.ImagenEscena : CargarSprite("EscenaSelvaHabitat");
             Image imgEscena = CrearImagenRelativa("Ilustracion", rectMascara, spEscena, Color.white, Vector2.zero, new Vector2(726f, 358f));
             imgEscena.preserveAspect = false;
+            marco.gameObject.SetActive(c.MostrarImagenEscena);
 
             // Tarjetas de respuesta
-            float[] posX = { 942f, 1204f, 1466f };
-            int cantidad = Mathf.Min(3, c.Opciones != null ? c.Opciones.Length : 0);
+            int cantidad = Mathf.Min(4, c.Opciones != null ? c.Opciones.Length : 0);
+            float[] posX = cantidad == 4
+                ? new[] { 745f, 990f, 1235f, 1480f }
+                : new[] { 942f, 1204f, 1466f };
+            float anchoTarjeta = cantidad == 4 ? 240f : 256f;
+            float posicionTarjetasY = cantidad == 4 ? -535f : -663f;
             _ref.tarjetas = new TarjetaRespuestaVista[cantidad];
 
             for (int i = 0; i < cantidad; i++)
             {
                 _ref.tarjetas[i] = new TarjetaRespuestaVista();
-                RectTransform rectTarjeta = CrearImagenTopLeft("Respuesta" + (i + 1), capaActividad, CargarSprite("TarjetaRespuesta"), Color.white, new Vector2(posX[i], -663f), new Vector2(256f, 307f)).rectTransform;
+                RectTransform rectTarjeta = CrearImagenTopLeft("Respuesta" + (i + 1), capaActividad, CargarSprite("TarjetaRespuesta"), Color.white, new Vector2(posX[i], posicionTarjetasY), new Vector2(anchoTarjeta, 307f)).rectTransform;
                 _ref.tarjetas[i].boton = rectTarjeta.gameObject.AddComponent<Button>();
 
                 // Brillo
-                Image brillo = CrearImagenRelativa("Brillo", rectTarjeta, CargarSprite("BrilloSeleccion"), Color.white, Vector2.zero, new Vector2(256f, 307f));
+                Image brillo = CrearImagenRelativa("Brillo", rectTarjeta, CargarSprite("BrilloSeleccion"), Color.white, Vector2.zero, new Vector2(anchoTarjeta, 307f));
                 brillo.gameObject.SetActive(false);
                 _ref.tarjetas[i].brilloSeleccion = brillo.gameObject;
 
                 // Bordes
-                Image bordeInc = CrearImagenRelativa("BordeIncorrecto", rectTarjeta, CargarSprite("BordeRespuestaIncorrecta"), Color.white, Vector2.zero, new Vector2(256f, 307f));
+                Image bordeInc = CrearImagenRelativa("BordeIncorrecto", rectTarjeta, CargarSprite("BordeRespuestaIncorrecta"), Color.white, Vector2.zero, new Vector2(anchoTarjeta, 307f));
                 bordeInc.gameObject.SetActive(false);
                 _ref.tarjetas[i].bordeIncorrecto = bordeInc.gameObject;
 
-                Image bordeCor = CrearImagenRelativa("BordeCorrecto", rectTarjeta, CargarSprite("BordeRespuestaCorrecta"), Color.white, Vector2.zero, new Vector2(256f, 307f));
+                Image bordeCor = CrearImagenRelativa("BordeCorrecto", rectTarjeta, CargarSprite("BordeRespuestaCorrecta"), Color.white, Vector2.zero, new Vector2(anchoTarjeta, 307f));
                 bordeCor.gameObject.SetActive(false);
                 _ref.tarjetas[i].bordeCorrecto = bordeCor.gameObject;
 
@@ -815,7 +820,7 @@ namespace GuardianesAmazonicos.Views
                 rectIlustracion.anchorMax = new Vector2(0.5f, 1f);
                 rectIlustracion.pivot = new Vector2(0.5f, 0.5f);
                 rectIlustracion.anchoredPosition = new Vector2(0f, -112f);
-                rectIlustracion.sizeDelta = new Vector2(216f, 180f);
+                rectIlustracion.sizeDelta = new Vector2(anchoTarjeta - 48f, 180f);
                 Image imgOp = goIlustracion.GetComponent<Image>();
                 imgOp.sprite = sp;
                 imgOp.color = Color.white;
@@ -824,7 +829,7 @@ namespace GuardianesAmazonicos.Views
                 _ref.tarjetas[i].ilustracion = imgOp;
 
                 // Nombre
-                _ref.tarjetas[i].nombre = CrearTextoRelativo("Nombre", rectTarjeta, c.Opciones[i], new Vector2(15f, -216f), new Vector2(226f, 76f), 24f, Tinta, TextAlignmentOptions.Center, true, c.Fuente);
+                _ref.tarjetas[i].nombre = CrearTextoRelativo("Nombre", rectTarjeta, c.Opciones[i], new Vector2(15f, -216f), new Vector2(anchoTarjeta - 30f, 76f), 24f, Tinta, TextAlignmentOptions.Center, true, c.Fuente);
             }
 
             // Botones de confirmación

@@ -33,6 +33,7 @@ namespace GuardianesAmazonicos.Models
 
         [Header("Escena de la pregunta (PNG horizontal sin texto)")]
         [SerializeField] private Sprite _imagenEscena;
+        [SerializeField] private bool _mostrarImagenEscena = true;
         [SerializeField] private Sprite _elementoEscena;
         [Tooltip("x, y, ancho y alto dentro de la imagen principal (origen arriba a la izquierda, Y negativa).")]
         [SerializeField] private Rect _rectElementoEscena;
@@ -137,6 +138,7 @@ namespace GuardianesAmazonicos.Models
             get => _imagenEscena != null ? _imagenEscena : imagenEscena;
             set { _imagenEscena = value; imagenEscena = value; }
         }
+        public bool MostrarImagenEscena { get => _mostrarImagenEscena; set => _mostrarImagenEscena = value; }
         public Sprite ElementoEscena { get => _elementoEscena; set => _elementoEscena = value; }
         public Rect RectElementoEscena { get => _rectElementoEscena; set => _rectElementoEscena = value; }
         public Sprite Fondo

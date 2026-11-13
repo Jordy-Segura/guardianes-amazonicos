@@ -17,7 +17,7 @@ MonoBehaviour:
   _totalEscenas: 12
   _tituloNivel: "Nivel 1 \xB7 Conozco la selva"
   _siguienteEscena: Escena04_HU04_Plantas
-  _pregunta: "\xBFCu\xE1l de estos animales es el guacamayo? Elige la imagen correcta."
+  _pregunta: "En la selva viven aves de muchos colores.\n\xBFCu\xE1l de estos animales es el guacamayo?"
   _opciones:
   - 
   - 
@@ -105,7 +105,7 @@ MonoBehaviour:
   numeroEscena: 3
   titulo: "Nivel 1 \xB7 Conozco la selva"
   textoProgreso: 2 de 2
-  pregunta: "\xBFCu\xE1l de estos animales es el guacamayo? Elige la imagen correcta."
+  pregunta: "En la selva viven aves de muchos colores.\n\xBFCu\xE1l de estos animales es el guacamayo?"
   instruccion: 
   opciones:
   - 

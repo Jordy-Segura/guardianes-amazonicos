@@ -31,7 +31,7 @@ namespace GuardianesAmazonicos.Presenters
         {
             if (_vista == null) _vista = GetComponent<RetoSeleccionView>();
             if (_vista == null || _configuracion == null || _configuracion.Opciones == null ||
-                _configuracion.Opciones.Length != 3 || _configuracion.IndiceCorrecto < 0 || _configuracion.IndiceCorrecto > 2)
+                _configuracion.Opciones.Length != 4 || _configuracion.IndiceCorrecto < 0 || _configuracion.IndiceCorrecto > 3)
             {
                 Debug.LogError("HU-07: falta la configuración o vista de la actividad.", this);
                 enabled = false;
