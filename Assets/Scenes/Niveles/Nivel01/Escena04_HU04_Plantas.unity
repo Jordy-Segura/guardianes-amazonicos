@@ -2335,12 +2335,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 403309996}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2a7c9e4f1b3d4a68b0c5d8e2f7a4c931, type: 3}
+  m_Script: {fileID: 11500000, guid: afab3dd84ff451049bcfda5f3573116e, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::GuardianesAmazonicos.Presenters.ActividadPlantasPresenter
-  _vista: {fileID: 0}
-  _nombreEscenaAnterior: Nivel1_ConozcoLaSelva
-  _nombreEscenaSiguiente: Escena5
+  m_EditorClassIdentifier: Assembly-CSharp::GuardianesAmazonicos.Presenters.RetoSeleccionPresenter
+  _configuracion: {fileID: 11400000, guid: b1614ab20d39ebc4b90b8d539be6a8e4, type: 2}
+  _vista: {fileID: 403309998}
 --- !u!1 &415432590
 GameObject:
   m_ObjectHideFlags: 0
@@ -4911,7 +4910,11 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+<<<<<<< HEAD
   m_text: Busca la planta con hojas verdes y flores rojas que crece en la selva.
+=======
+  m_text: Busca la planta de hojas verdes con flores rojas que crece en la selva.
+>>>>>>> jir
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
