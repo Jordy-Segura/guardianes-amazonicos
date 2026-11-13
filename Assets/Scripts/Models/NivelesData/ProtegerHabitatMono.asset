@@ -95,7 +95,7 @@ MonoBehaviour:
   _bienvenidaImagen: {fileID: 21300000, guid: 88e06cdf121f65745abe57cbfbc174b9, type: 3}
   _bienvenidaAudio: {fileID: 8300000, guid: 1008b8fa042261145ad3deba15b6a7cc, type: 3}
   _bienvenidaVideoSenas: senas_nivel_02_bienvenida.mp4
-  _fuente: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  _fuente: {fileID: 11400000, guid: 767ffc8669e62e144951bc56a822d1e6, type: 2}
   numeroEscena: 1
   titulo: "Nivel 2 \u2022 Cuido los animales"
   textoProgreso: 2 de 2
@@ -119,4 +119,4 @@ MonoBehaviour:
   fondo: {fileID: 21300000, guid: d84eb283f1f0456bfce04484df0c7bd9, type: 3}
   imagenEscena: {fileID: 21300000, guid: 2999d199e58f48348869005c2e815d0e, type: 3}
   explorador: {fileID: 21300000, guid: 2c32b3bf6bcfade558e5cfe00634d3b2, type: 3}
-  fuente: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  fuente: {fileID: 11400000, guid: 767ffc8669e62e144951bc56a822d1e6, type: 2}

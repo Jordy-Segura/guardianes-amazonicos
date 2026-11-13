@@ -56,7 +56,9 @@ namespace GuardianesAmazonicos.Editor
         public const string SPRITE_BORDE_CORRECTO = UI + "BordeRespuestaCorrecta.png";
         public const string SPRITE_INTENTARLO = UI + "BotonIntentarloDeNuevo.png";
 
-        public const string FUENTE = "Assets/Fonts/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF.asset";
+        // RNF-01: la guía exige OpenDyslexic SDF como tipografía accesible del juego.
+        public const string FUENTE = "Assets/Fonts/OpenDyslexic3-Regular SDF.asset";
+        public const string CONTORNO_ACCESIBLE = "Assets/Fonts/OpenDyslexic3-Regular SDF - Outline.mat";
         public const string RENDER_TEXTURE_LSEC = "Assets/Art/LSEC_RenderTexture.renderTexture";
         public const string AUDIO_AMBIENTE_SELVA = "Assets/Audio/SFX/ambiente_selva_suave.wav";
 
@@ -535,10 +537,42 @@ namespace GuardianesAmazonicos.Editor
             return p;
         }
 
+        /// <summary>
+        /// Material de contorno coherente con la fuente del texto. El contorno de
+        /// LiberationSans no sirve para OpenDyslexic porque usa otro atlas (RNF-01);
+        /// para la fuente accesible se crea una sola vez un material derivado.
+        /// </summary>
+        public static Material ContornoPara(TMP_FontAsset fuente)
+        {
+            if (fuente == null) return null;
+
+            if (!fuente.name.StartsWith("OpenDyslexic"))
+            {
+                return AssetDatabase.LoadAssetAtPath<Material>(
+                    "Assets/Fonts/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF - Outline.mat");
+            }
+
+            Material existente = AssetDatabase.LoadAssetAtPath<Material>(CONTORNO_ACCESIBLE);
+            if (existente != null) return existente;
+
+            Material materialFuente = fuente.material;
+            if (materialFuente == null) return null;
+
+            Material contorno = new Material(materialFuente);
+            contorno.name = "OpenDyslexic3-Regular SDF - Outline";
+            contorno.EnableKeyword("OUTLINE_ON");
+            contorno.SetFloat(ShaderUtilities.ID_OutlineWidth, 0.1f);
+            contorno.SetFloat(ShaderUtilities.ID_OutlineSoftness, 0f);
+            contorno.SetColor(ShaderUtilities.ID_OutlineColor, Color.black);
+            AssetDatabase.CreateAsset(contorno, CONTORNO_ACCESIBLE);
+            AssetDatabase.SaveAssets();
+            return contorno;
+        }
+
         private static void AplicarContorno(TMP_Text texto)
         {
-            Material contorno = AssetDatabase.LoadAssetAtPath<Material>(
-                "Assets/Fonts/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF - Outline.mat");
+            if (texto == null) return;
+            Material contorno = ContornoPara(texto.font);
             if (contorno != null) texto.fontSharedMaterial = contorno;
         }
     }

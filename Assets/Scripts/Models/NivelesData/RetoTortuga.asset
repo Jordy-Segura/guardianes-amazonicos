@@ -16,7 +16,7 @@ MonoBehaviour:
   _numeroEscena: 6
   _totalEscenas: 12
   _tituloNivel: "Nivel 1 \u2022 Conozco la selva"
-  _siguienteEscena: 
+  _siguienteEscena: Escena09_IdentificarPlatano
   _pregunta: "\xBFQu\xE9 necesita para estar bien?"
   _opciones:
   - Agua
@@ -95,7 +95,7 @@ MonoBehaviour:
   _bienvenidaImagen: {fileID: 0}
   _bienvenidaAudio: {fileID: 0}
   _bienvenidaVideoSenas: 
-  _fuente: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  _fuente: {fileID: 11400000, guid: 767ffc8669e62e144951bc56a822d1e6, type: 2}
   numeroEscena: 6
   titulo: "Nivel 1 \u2022 Conozco la selva"
   textoProgreso: 2 de 2
@@ -114,9 +114,9 @@ MonoBehaviour:
   pistaIncorrecta: "Busca el elemento l\xEDquido y refrescante que la tortuga y todos los seres vivos necesitan beber para vivir."
   mensajeCorrecto: "\xA1Muy bien! El agua es importante para los seres vivos."
   pronunciaciones: []
-  siguienteEscena: 
+  siguienteEscena: Escena09_IdentificarPlatano
   textoContinuar: SIGUIENTE RETO
   fondo: {fileID: 21300000, guid: b6a590ffb5b48f412f32db0b1482e1b9, type: 3}
   imagenEscena: {fileID: 21300000, guid: 00f4c4051263cbb4fbb74e96b1fb09d6, type: 3}
   explorador: {fileID: 21300000, guid: acd2eed8bcafe3be1dc73f15d82d1936, type: 3}
-  fuente: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  fuente: {fileID: 11400000, guid: 767ffc8669e62e144951bc56a822d1e6, type: 2}
