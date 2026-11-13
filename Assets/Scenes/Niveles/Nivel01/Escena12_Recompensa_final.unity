@@ -651,7 +651,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GuardianesAmazonicos.Presenters.BienvenidaNivelPresenter
   _vista: {fileID: 161890392}
-  _siguienteEscena: 
+  _numeroEscena: 12
+  _siguienteEscena: Escena01_ProtegerHabitatMono
 --- !u!114 &161890392
 MonoBehaviour:
   m_ObjectHideFlags: 0

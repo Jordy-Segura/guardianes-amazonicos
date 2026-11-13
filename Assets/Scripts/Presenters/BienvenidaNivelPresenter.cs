@@ -16,6 +16,7 @@ namespace GuardianesAmazonicos.Presenters
         private const int ESCENA_BIENVENIDA = 1;
 
         [SerializeField] private BienvenidaNivelView _vista;
+        [SerializeField, Min(1)] private int _numeroEscena = ESCENA_BIENVENIDA;
         [Tooltip("Vacío: se carga la siguiente escena de Build Profiles.")]
         [SerializeField] private string _siguienteEscena;
 
@@ -83,7 +84,7 @@ namespace GuardianesAmazonicos.Presenters
         private void Start()
         {
             if (_vista == null || _modelo == null) return;
-            _vista.MostrarProgreso(ESCENA_BIENVENIDA, AventuraBienvenidaModel.TotalPuntosProgreso);
+            _vista.MostrarProgreso(_numeroEscena, AventuraBienvenidaModel.TotalPuntosProgreso);
             _vista.PermitirNavegacion(NavegacionNiveles.HayAnterior(),
                 _modelo.AventuraIniciada && NavegacionNiveles.HaySiguiente(_siguienteEscena));
         }
