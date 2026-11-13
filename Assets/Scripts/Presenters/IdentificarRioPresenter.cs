@@ -126,13 +126,24 @@ namespace GuardianesAmazonicos.Presenters
         {
             AudioClip clip = _vista.PistaVisible
                 ? _configuracion.AudioPista
+                : _vista.EstadoCorrectoVisible
+                    ? _audioAcierto
                 : _vista.RespuestaIncorrectaVisible
                     ? _configuracion.ObtenerAudioCorreccion(_modelo.IndiceSeleccionado) ?? _audioError
                     : _configuracion.AudioLectura;
             _vista.AlternarAudio(clip != null ? clip : _configuracion.AudioLectura);
         }
-        private void AbrirPista() => _vista.MostrarPista(true);
-        private void CerrarPista() { _vista.MostrarPista(false); _vista.EnfocarTarjeta(_modelo.IndiceSeleccionado); }
+        private void AbrirPista()
+        {
+            _vista.MostrarPista(true);
+            _vista.ReproducirAudio(_configuracion.AudioPista);
+        }
+        private void CerrarPista()
+        {
+            _vista.DetenerAudio();
+            _vista.MostrarPista(false);
+            _vista.EnfocarTarjeta(_modelo.IndiceSeleccionado);
+        }
         private void AbrirSenas() { _vista.DetenerAudio(); _vista.MostrarSenas(true, _configuracion.VideoSenas); }
         private void CerrarSenas() { _vista.MostrarSenas(false, null); _vista.EnfocarTarjeta(_modelo.IndiceSeleccionado); }
         private void Regresar() => NavegacionNiveles.CargarAnterior();

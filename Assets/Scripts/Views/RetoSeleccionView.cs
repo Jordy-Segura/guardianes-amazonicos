@@ -866,10 +866,9 @@ namespace GuardianesAmazonicos.Views
             Sprite spEscena = c.ImagenEscena != null ? c.ImagenEscena : CargarSprite("EscenaSelvaHabitat");
             Image imgEscena = CrearImagenFull("Ilustracion", rectMascara, spEscena);
             imgEscena.preserveAspect = false;
-            marco.gameObject.SetActive(c.MostrarImagenEscena);
-
             Image marco = CrearImagenTopLeft("MarcoEscena", capaActividad, CargarSprite("MarcoEscena"), Color.white, new Vector2(921f, -188f), new Vector2(800f, 425f));
             marco.raycastTarget = false;
+            marco.gameObject.SetActive(c.MostrarImagenEscena);
 
             // Tarjetas de respuesta
             int cantidad = Mathf.Min(4, c.Opciones != null ? c.Opciones.Length : 0);
