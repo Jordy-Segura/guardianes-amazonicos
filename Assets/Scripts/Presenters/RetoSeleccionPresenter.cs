@@ -265,7 +265,8 @@ namespace GuardianesAmazonicos.Presenters
 
         private void AbrirConfiguracion()
         {
-            Debug.Log("RetoSeleccionPresenter: la ventana de configuración se incorporará en una próxima versión.", this);
+            _vista.DetenerAudio();
+            _vista.MostrarConfiguracion(true);
         }
 
         private void GuardarProgreso()
@@ -316,11 +317,18 @@ namespace GuardianesAmazonicos.Presenters
                 ProgresoEstudianteData progreso = _repositorio.Cargar();
                 int nivel = _configuracion.Nivel;
                 int escena = _configuracion.NumeroEscena;
-                if (nivel == 1 && escena == 2) return progreso.retoMonoCompletado;
-                if (nivel == 1 && escena == 5) return progreso.retoJaguarCompletado;
-                if (nivel == 1 && escena == 6) return progreso.retoTortugaCompletado;
-                if (nivel == 1 && escena == 9) return progreso.retoPlatanoCompletado;
-                return nivel == 2 && escena == 1 && progreso.RetoMonoCuriosoCompletado;
+                if (nivel == 2) return escena == 1 && progreso.RetoMonoCuriosoCompletado;
+
+                // El avance guardado solo se actualiza al resolver una actividad, así
+                // que sirve como respaldo para las que no tienen bandera propia
+                // (HU-04, HU-07, HU-08 y HU-11) y para partidas antiguas.
+                if (progreso.puntoProgresoActual >= escena) return true;
+                if (escena == 2) return progreso.retoMonoCompletado;
+                if (escena == 3) return progreso.retoGuacamayoCompletado;
+                if (escena == 5) return progreso.retoJaguarCompletado;
+                if (escena == 6) return progreso.retoTortugaCompletado;
+                if (escena == 9) return progreso.retoPlatanoCompletado;
+                return false;
             }
             catch (Exception excepcion) when (excepcion is IOException || excepcion is UnauthorizedAccessException)
             {

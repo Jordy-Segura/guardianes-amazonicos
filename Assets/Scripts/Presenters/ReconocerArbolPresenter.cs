@@ -148,7 +148,11 @@ namespace GuardianesAmazonicos.Presenters
         private void CerrarSenas() { _vista.MostrarSenas(false, null); _vista.EnfocarTarjeta(_modelo.IndiceSeleccionado); }
         private void Regresar() => NavegacionNiveles.CargarAnterior();
         private void IrInicio() => NavegacionNiveles.CargarInicio();
-        private void Configuracion() => Debug.Log("HU-11: preferencias disponibles desde el menú principal.", this);
+        private void Configuracion()
+        {
+            _vista.DetenerAudio();
+            _vista.MostrarConfiguracion(true);
+        }
 
         private void Avanzar()
         {
