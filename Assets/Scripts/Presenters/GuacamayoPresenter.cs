@@ -98,7 +98,11 @@ namespace GuardianesAmazonicos.Presenters
             _vista.MostrarSenas(false, null);
             _vista.PermitirRegresar(NavegacionNiveles.HayAnterior());
             _vista.PermitirAvanzar(YaCompletado() && NavegacionNiveles.HaySiguiente(_configuracion.SiguienteEscena));
-            _vista.AlternarAudio(_configuracion.AudioLectura);
+            _vista.ActualizarEstadoVisualLectura(RetoSeleccionView.ModoLecturaActivo);
+            if (RetoSeleccionView.ModoLecturaActivo)
+            {
+                ReproducirEstadoActual();
+            }
         }
 
         private void Seleccionar(int indice)
@@ -113,8 +117,12 @@ namespace GuardianesAmazonicos.Presenters
             if (_modelo.Confirmar())
             {
                 GuardarProgreso();
-                _vista.MostrarCorrecta(seleccionada, "¡Lo lograste!");
-                _vista.AlternarAudio(_configuracion.AudioFelicitacion);
+                string felicitacion = !string.IsNullOrWhiteSpace(_configuracion.Felicitacion) ? _configuracion.Felicitacion : "¡Lo lograste!";
+                _vista.MostrarCorrecta(seleccionada, felicitacion);
+                if (RetoSeleccionView.ModoLecturaActivo)
+                {
+                    _vista.ReproducirAudio(_configuracion.AudioFelicitacion);
+                }
                 _vista.PermitirAvanzar(NavegacionNiveles.HaySiguiente(_configuracion.SiguienteEscena));
                 return;
             }
@@ -122,16 +130,24 @@ namespace GuardianesAmazonicos.Presenters
             if (_personajeGuia != null && _personajePreocupado != null)
                 _personajeGuia.sprite = _personajePreocupado;
             _vista.MostrarIncorrecta(seleccionada, _configuracion.ObtenerExplicacion(seleccionada));
-            _vista.AlternarAudio(_configuracion.ObtenerAudioCorreccion(seleccionada));
+            if (RetoSeleccionView.ModoLecturaActivo)
+            {
+                _vista.ReproducirAudio(_configuracion.ObtenerAudioCorreccion(seleccionada));
+            }
         }
 
         private void Reintentar()
         {
             if (_modelo.Resuelto) return;
+            _vista.DetenerAudio();
             _modelo.Reintentar();
             if (_personajeGuia != null) _personajeGuia.sprite = _configuracion.Personaje;
             _vista.MostrarSinSeleccion();
             _vista.EnfocarTarjeta(0);
+            if (RetoSeleccionView.ModoLecturaActivo)
+            {
+                ReproducirEstadoActual();
+            }
         }
 
         private void Continuar()
@@ -144,6 +160,19 @@ namespace GuardianesAmazonicos.Presenters
 
         private void Leer()
         {
+            RetoSeleccionView.ModoLecturaActivo = !RetoSeleccionView.ModoLecturaActivo;
+            _vista.ActualizarEstadoVisualLectura(RetoSeleccionView.ModoLecturaActivo);
+            if (!RetoSeleccionView.ModoLecturaActivo)
+            {
+                _vista.DetenerAudio();
+                return;
+            }
+
+            ReproducirEstadoActual();
+        }
+
+        private void ReproducirEstadoActual()
+        {
             AudioClip clip = _vista.PistaVisible
                 ? _configuracion.AudioPista
                 : _vista.EstadoCorrectoVisible
@@ -151,13 +180,16 @@ namespace GuardianesAmazonicos.Presenters
                 : _vista.RespuestaIncorrectaVisible
                     ? _configuracion.ObtenerAudioCorreccion(_modelo.IndiceSeleccionado)
                     : _configuracion.AudioLectura;
-            _vista.AlternarAudio(clip != null ? clip : _configuracion.AudioLectura);
+            _vista.ReproducirAudio(clip != null ? clip : _configuracion.AudioLectura);
         }
 
         private void MostrarAyuda()
         {
             _vista.MostrarPista(true);
-            _vista.ReproducirAudio(_configuracion.AudioPista);
+            if (RetoSeleccionView.ModoLecturaActivo)
+            {
+                ReproducirEstadoActual();
+            }
         }
 
         private void CerrarAyuda()
@@ -165,6 +197,10 @@ namespace GuardianesAmazonicos.Presenters
             _vista.DetenerAudio();
             _vista.MostrarPista(false);
             _vista.EnfocarTarjeta(_modelo.IndiceSeleccionado);
+            if (RetoSeleccionView.ModoLecturaActivo)
+            {
+                ReproducirEstadoActual();
+            }
         }
 
         private void MostrarSenas()

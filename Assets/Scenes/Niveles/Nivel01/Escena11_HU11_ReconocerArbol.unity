@@ -403,7 +403,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\xA1Muy bien! El \xE1rbol forma parte importante de la selva. Da sombra y hogar a muchos animales."
+  m_text: "\xA1Muy bien! Reconociste el \xE1rbol de la selva."
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2100000, guid: 79459efec17a4d00a321bdcc27bbc385, type: 2}
@@ -4109,7 +4109,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 1465, y: -635}
+  m_AnchoredPosition: {x: 1465, y: -663}
   m_SizeDelta: {x: 256, y: 307}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1415210334
@@ -4827,7 +4827,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 1193, y: -635}
+  m_AnchoredPosition: {x: 1193, y: -663}
   m_SizeDelta: {x: 256, y: 307}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1609252272
@@ -6551,7 +6551,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Nivel 1 \xB7 Conozco la selva"
+  m_text: "Nivel 1 \u2022 Conozco la selva"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -6715,7 +6715,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 921, y: -635}
+  m_AnchoredPosition: {x: 921, y: -663}
   m_SizeDelta: {x: 256, y: 307}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1920711119
@@ -7096,7 +7096,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1990405830
 RectTransform:
   m_ObjectHideFlags: 0

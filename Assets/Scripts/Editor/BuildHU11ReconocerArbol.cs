@@ -45,7 +45,6 @@ namespace GuardianesAmazonicos.Editor
             r.botonSenas = cabecera.senas;
             r.botonAyuda = cabecera.ayuda;
             r.botonRegresar = cabecera.regresar;
-            if (r.botonRegresar != null) r.botonRegresar.gameObject.SetActive(false);
             r.botonAvanzar = cabecera.avanzar;
             r.botonInicio = cabecera.inicio;
             r.botonConfiguracion = cabecera.configuracion;

@@ -139,7 +139,7 @@ namespace GuardianesAmazonicos.Editor
             c.Personaje = Cargar<Sprite>("Assets/Art/Characters/Explorador.png");
             c.PersonajeIncorrecto = Cargar<Sprite>(RutaPreocupado);
             c.FotogramasCelebracion = BuildAssignedScenes.CargarFotogramasExplorador();
-            c.Fuente = Cargar<TMP_FontAsset>("Assets/Fonts/OpenDyslexic3-Regular SDF.asset");
+            c.Fuente = Cargar<TMP_FontAsset>(PlantillaUIBuilder.FUENTE);
             c.SiguienteEscena = "Escena04_HU04_Plantas";
             c.VideoSenas = string.Empty;
             EditorUtility.SetDirty(c);

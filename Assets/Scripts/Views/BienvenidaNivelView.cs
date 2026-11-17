@@ -123,7 +123,7 @@ namespace GuardianesAmazonicos.Views
                     ? _capaBase.transform.parent as RectTransform
                     : transform as RectTransform;
                 _panelConfiguracion = PanelConfiguracionAccesibilidad.Construir(raiz, _fuenteAudio,
-                    CerrarConfiguracion);
+                    CerrarConfiguracion, _textoProgreso != null ? _textoProgreso.font : null);
             }
 
             if (_panelConfiguracion == null) return;

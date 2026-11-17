@@ -2721,8 +2721,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 12, y: -12}
-  m_SizeDelta: {x: 232, y: 278}
+  m_AnchoredPosition: {x: 20, y: -28}
+  m_SizeDelta: {x: 216, y: 250}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &549363872
 MonoBehaviour:
@@ -2744,7 +2744,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 7569f8d56b7c7c8ad11e7960c854d1e1, type: 3}
+  m_Sprite: {fileID: -8684075996859904563, guid: 60b6a9be90a32b7479b173c25a65be9b, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -2821,8 +2821,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "Las mariposas son muy especiales. \n\xBFPuedes encontrar la mariposa?"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 767ffc8669e62e144951bc56a822d1e6, type: 2}
-  m_sharedMaterial: {fileID: -4203256325650379, guid: 767ffc8669e62e144951bc56a822d1e6, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: -4203256325650379, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -2846,7 +2846,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 26.2
+  m_fontSize: 40
   m_fontSizeBase: 40
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -3107,7 +3107,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Nivel 1 \xB7 Conozco la selva"
+  m_text: "Nivel 1 \u2022 Conozco la selva"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -3134,7 +3134,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 26.4
+  m_fontSize: 28
   m_fontSizeBase: 28
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -3590,7 +3590,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\xA1Lo lograste!"
+  m_text: "\xA1Muy bien! Identificaste a la mariposa."
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2100000, guid: 79459efec17a4d00a321bdcc27bbc385, type: 2}
@@ -5401,8 +5401,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 12, y: -63.30002}
-  m_SizeDelta: {x: 232, y: 278}
+  m_AnchoredPosition: {x: 20, y: -28}
+  m_SizeDelta: {x: 216, y: 250}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1313139986
 MonoBehaviour:
@@ -5424,7 +5424,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -8684075996859904563, guid: 60b6a9be90a32b7479b173c25a65be9b, type: 3}
+  m_Sprite: {fileID: 2757533609866577236, guid: cadfa49c682c5dc4a94be6459f6988d1, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -6780,8 +6780,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 12, y: -63.30002}
-  m_SizeDelta: {x: 232, y: 278}
+  m_AnchoredPosition: {x: 20, y: -28}
+  m_SizeDelta: {x: 216, y: 250}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1690425227
 MonoBehaviour:
@@ -6803,7 +6803,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 2757533609866577236, guid: cadfa49c682c5dc4a94be6459f6988d1, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 7569f8d56b7c7c8ad11e7960c854d1e1, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1

@@ -72,6 +72,14 @@ namespace GuardianesAmazonicos.Editor
             tortuga.PersonajeIncorrecto = PlantillaUIBuilder.S(ExploradorPreocupado);
             tortuga.FotogramasCelebracion = BuildAssignedScenes.CargarFotogramasExplorador();
             tortuga.AudioLectura = PlantillaUIBuilder.Cargar<AudioClip>(Lectura + "lectura_01_06.wav");
+            tortuga.AudioPista = PlantillaUIBuilder.Cargar<AudioClip>(Lectura + "pista_01_06.wav");
+            tortuga.AudioFelicitacion = PlantillaUIBuilder.Cargar<AudioClip>(Lectura + "acierto_01_06.wav");
+            tortuga.AudioCorrecciones = new[]
+            {
+                null,
+                PlantillaUIBuilder.Cargar<AudioClip>(Lectura + "correccion_01_06_fruta.wav"),
+                PlantillaUIBuilder.Cargar<AudioClip>(Lectura + "correccion_01_06_arbol.wav")
+            };
             tortuga.VideoSenas = "senas_nivel_01_pregunta_06.mp4";
             tortuga.MostrarBienvenida = false;
             tortuga.SiguienteEscena = string.Empty;

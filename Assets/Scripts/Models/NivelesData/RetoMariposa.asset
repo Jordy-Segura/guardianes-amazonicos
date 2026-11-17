@@ -15,7 +15,7 @@ MonoBehaviour:
   _nivel: 1
   _numeroEscena: 8
   _totalEscenas: 12
-  _tituloNivel: "Nivel 1 \xB7 Conozco la selva"
+  _tituloNivel: "Nivel 1 \u2022 Conozco la selva"
   _siguienteEscena: Escena09_IdentificarPlatano
   _pregunta: "Las mariposas son muy especiales.\n\xBFPuedes encontrar la mariposa?"
   _opciones:
@@ -30,9 +30,9 @@ MonoBehaviour:
   _explicacionesIncorrectas:
   - "\xA1Buen intento! El guacamayo es un ave con plumas y pico curvo. Busca la mariposa."
   - "\xA1Buen intento! La rana salta cerca del agua. Busca la mariposa con alas coloridas."
-  - "\xA1Muy bien! Identificaste la mariposa."
+  - "\xA1Muy bien! Identificaste a la mariposa."
   _pista: Busca el insecto con alas grandes y coloridas que vuela entre las flores.
-  _felicitacion: "\xA1Lo lograste!"
+  _felicitacion: "\xA1Muy bien! Identificaste a la mariposa."
   _imagenEscena: {fileID: -5754237627793701598, guid: c919d2c013871b440955d591d8aca354, type: 3}
   _elementoEscena: {fileID: 0}
   _rectElementoEscena:
@@ -85,10 +85,13 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 460d555543aa3189e1339c6bf10de6a6, type: 3}
   - {fileID: 21300000, guid: ebb05fd8c773ec88d78b5e433069c07f, type: 3}
   - {fileID: 21300000, guid: b0eca3a47b2994172294ce52a6a4f4c0, type: 3}
-  _audioLectura: {fileID: 0}
-  _audioPista: {fileID: 0}
-  _audioCorrecciones: []
-  _audioFelicitacion: {fileID: 8300000, guid: 43b7acfb533a4db784919bfb3b7eb6f2, type: 3}
+  _audioLectura: {fileID: 8300000, guid: de7092fdf6672e17ca624f4ab18a4bc5, type: 3}
+  _audioPista: {fileID: 8300000, guid: 883804066df07fcee619413063dd6a7a, type: 3}
+  _audioCorrecciones:
+  - {fileID: 8300000, guid: f2df03ad6ae0e1a4bad6c3f4f1ec08bf, type: 3}
+  - {fileID: 8300000, guid: c9e640a8935dce3e328074468e4f039c, type: 3}
+  - {fileID: 0}
+  _audioFelicitacion: {fileID: 8300000, guid: c2af5e3ecfe4c9ffcb24037649a41942, type: 3}
   _videoSenas: 
   _mostrarBienvenida: 0
   _bienvenidaEtiquetaNivel: 
@@ -98,9 +101,9 @@ MonoBehaviour:
   _bienvenidaImagen: {fileID: 0}
   _bienvenidaAudio: {fileID: 0}
   _bienvenidaVideoSenas: 
-  _fuente: {fileID: 11400000, guid: 767ffc8669e62e144951bc56a822d1e6, type: 2}
+  _fuente: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   numeroEscena: 8
-  titulo: "Nivel 1 \xB7 Conozco la selva"
+  titulo: "Nivel 1 \u2022 Conozco la selva"
   textoProgreso: 8 de 12
   pregunta: "Las mariposas son muy especiales.\n\xBFPuedes encontrar la mariposa?"
   instruccion: 
@@ -115,11 +118,11 @@ MonoBehaviour:
   atlasDosPorDos: {fileID: 0}
   indiceCorrecto: 2
   pistaIncorrecta: Busca el insecto con alas grandes y coloridas que vuela entre las flores.
-  mensajeCorrecto: "\xA1Lo lograste!"
+  mensajeCorrecto: "\xA1Muy bien! Identificaste a la mariposa."
   pronunciaciones: []
   siguienteEscena: Escena09_IdentificarPlatano
   textoContinuar: SIGUIENTE RETO
   fondo: {fileID: 21300000, guid: b6a590ffb5b48f412f32db0b1482e1b9, type: 3}
   imagenEscena: {fileID: -5754237627793701598, guid: c919d2c013871b440955d591d8aca354, type: 3}
   explorador: {fileID: 21300000, guid: 2c32b3bf6bcfade558e5cfe00634d3b2, type: 3}
-  fuente: {fileID: 11400000, guid: 767ffc8669e62e144951bc56a822d1e6, type: 2}
+  fuente: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}

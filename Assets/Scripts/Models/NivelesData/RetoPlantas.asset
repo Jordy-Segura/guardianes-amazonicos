@@ -15,7 +15,7 @@ MonoBehaviour:
   _nivel: 1
   _numeroEscena: 4
   _totalEscenas: 12
-  _tituloNivel: "Nivel 1 \xB7 Conozco la selva"
+  _tituloNivel: "Nivel 1 \u2022 Conozco la selva"
   _siguienteEscena: Escena05_IdentificarJaguar
   _pregunta: "Las plantas tambi\xE9n forman parte de la selva.\n\xBFPuedes encontrar una planta?"
   _opciones:
@@ -26,13 +26,13 @@ MonoBehaviour:
   - {fileID: -7698472240328864154, guid: 6556a569d082f394f93c9297d9432690, type: 3}
   - {fileID: 7217512474178845099, guid: 0af007d8c05c58c4e80a31156f0b8aad, type: 3}
   - {fileID: 4023666487891522865, guid: a5121365c9e4f004dbc8f1f58037b5c4, type: 3}
-  _indiceCorrecto: 2
+  _indiceCorrecto: 0
   _explicacionesIncorrectas:
-  - "\xA1Muy bien! Identificaste la planta de la selva."
+  - "\xA1Muy bien! Reconociste la planta."
   - "\xA1Buen intento! El jaguar es un animal con manchas. Busca la planta con hojas verdes y flores rojas."
   - "\xA1Buen intento! El mono es un animal que trepa \xE1rboles. Busca la planta con hojas verdes y flores rojas."
   _pista: Busca la planta con hojas verdes y flores rojas que crece en la selva.
-  _felicitacion: "\xA1Lo lograste!"
+  _felicitacion: "\xA1Muy bien! Reconociste la planta."
   _imagenEscena: {fileID: 4857928192221585405, guid: eaa8751dae8319046bc372e4b1bdadf2, type: 3}
   _mostrarImagenEscena: 1
   _elementoEscena: {fileID: 0}
@@ -102,9 +102,9 @@ MonoBehaviour:
   _bienvenidaImagen: {fileID: 0}
   _bienvenidaAudio: {fileID: 0}
   _bienvenidaVideoSenas: 
-  _fuente: {fileID: 11400000, guid: 767ffc8669e62e144951bc56a822d1e6, type: 2}
+  _fuente: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   numeroEscena: 4
-  titulo: "Nivel 1 \xB7 Conozco la selva"
+  titulo: "Nivel 1 \u2022 Conozco la selva"
   textoProgreso: 4 de 12
   pregunta: "Las plantas tambi\xE9n forman parte de la selva.\n\xBFPuedes encontrar una planta?"
   instruccion: 
@@ -113,17 +113,17 @@ MonoBehaviour:
   - Jaguar
   - Mono
   imagenes:
+  - {fileID: -7698472240328864154, guid: 6556a569d082f394f93c9297d9432690, type: 3}
   - {fileID: 7217512474178845099, guid: 0af007d8c05c58c4e80a31156f0b8aad, type: 3}
   - {fileID: 4023666487891522865, guid: a5121365c9e4f004dbc8f1f58037b5c4, type: 3}
-  - {fileID: -7698472240328864154, guid: 6556a569d082f394f93c9297d9432690, type: 3}
   atlasDosPorDos: {fileID: 0}
-  indiceCorrecto: 2
+  indiceCorrecto: 0
   pistaIncorrecta: Busca la planta con hojas verdes y flores rojas que crece en la selva.
-  mensajeCorrecto: "\xA1Lo lograste!"
+  mensajeCorrecto: "\xA1Muy bien! Reconociste la planta."
   pronunciaciones: []
   siguienteEscena: Escena05_IdentificarJaguar
   textoContinuar: SIGUIENTE RETO
   fondo: {fileID: 21300000, guid: b6a590ffb5b48f412f32db0b1482e1b9, type: 3}
   imagenEscena: {fileID: 4857928192221585405, guid: eaa8751dae8319046bc372e4b1bdadf2, type: 3}
   explorador: {fileID: 21300000, guid: 2c32b3bf6bcfade558e5cfe00634d3b2, type: 3}
-  fuente: {fileID: 11400000, guid: 767ffc8669e62e144951bc56a822d1e6, type: 2}
+  fuente: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}

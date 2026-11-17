@@ -15,7 +15,7 @@ MonoBehaviour:
   _nivel: 1
   _numeroEscena: 7
   _totalEscenas: 12
-  _tituloNivel: "Nivel 1 \xB7 Conozco la selva"
+  _tituloNivel: "Nivel 1 \u2022 Conozco la selva"
   _siguienteEscena: 
   _pregunta: "El r\xEDo recorre la selva y lleva agua dulce entre sus orillas.\n\xBFCu\xE1l de estas im\xE1genes muestra un r\xEDo?"
   _opciones:
@@ -30,10 +30,10 @@ MonoBehaviour:
   - {fileID: -6277274079625501688, guid: c1cb7093e247ff04a8defa6a53a731cb, type: 3}
   _indiceCorrecto: 1
   _explicacionesIncorrectas:
-  - "El vaso contiene agua, pero el r\xEDo fluye por la naturaleza entre sus orillas."
+  - "\xA1Buen intento! El vaso contiene agua, pero el r\xEDo fluye por la naturaleza entre sus orillas."
   - 
-  - "El mar es muy amplio y tiene agua salada. Busca el r\xEDo de agua dulce."
-  - "El charco es peque\xF1o y su agua queda quieta. Busca el r\xEDo que fluye entre sus orillas."
+  - "\xA1Buen intento! El mar es muy amplio y tiene agua salada. Busca el r\xEDo de agua dulce."
+  - "\xA1Buen intento! El charco es peque\xF1o y su agua queda quieta. Busca el r\xEDo que fluye entre sus orillas."
   _pista: Busca el agua dulce que fluye entre dos orillas y atraviesa la selva.
   _felicitacion: "\xA1Muy bien! Encontraste el r\xEDo."
   _imagenEscena: {fileID: 0}
@@ -92,11 +92,11 @@ MonoBehaviour:
   _audioLectura: {fileID: 8300000, guid: ea82fad4eaf932b4fa823b29a7cb5a7a, type: 3}
   _audioPista: {fileID: 8300000, guid: 72315002750045cfbf752d95624e705d, type: 3}
   _audioCorrecciones:
-  - {fileID: 0}
+  - {fileID: 8300000, guid: d1243fd519834268aaaf36b62b5c1e9a, type: 3}
   - {fileID: 0}
   - {fileID: 8300000, guid: 4c69ffcf28824293b1d6e49da622bb6e, type: 3}
   - {fileID: 8300000, guid: dd07f24015ce1734a817064ac0747dce, type: 3}
-  _audioFelicitacion: {fileID: 0}
+  _audioFelicitacion: {fileID: 8300000, guid: 2f736989fb47fe94eb04eea82e9da2bd, type: 3}
   _videoSenas: 
   _mostrarBienvenida: 0
   _bienvenidaEtiquetaNivel: 
@@ -108,7 +108,7 @@ MonoBehaviour:
   _bienvenidaVideoSenas: 
   _fuente: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   numeroEscena: 7
-  titulo: "Nivel 1 \xB7 Conozco la selva"
+  titulo: "Nivel 1 \u2022 Conozco la selva"
   textoProgreso: 7 de 12
   pregunta: "El r\xEDo recorre la selva y lleva agua dulce entre sus orillas.\n\xBFCu\xE1l de estas im\xE1genes muestra un r\xEDo?"
   instruccion: 

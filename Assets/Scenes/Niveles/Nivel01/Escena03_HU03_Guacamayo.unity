@@ -2721,8 +2721,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 12, y: -12}
-  m_SizeDelta: {x: 232, y: 278}
+  m_AnchoredPosition: {x: 20, y: -28}
+  m_SizeDelta: {x: 216, y: 250}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &549363872
 MonoBehaviour:
@@ -3107,7 +3107,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Nivel 1 \xB7 Conozco la selva"
+  m_text: "Nivel 1 \u2022 Conozco la selva"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -3590,7 +3590,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\xA1Lo lograste!"
+  m_text: "\xA1Muy bien! Identificaste al guacamayo."
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2100000, guid: 79459efec17a4d00a321bdcc27bbc385, type: 2}
@@ -5401,8 +5401,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 12, y: -12}
-  m_SizeDelta: {x: 232, y: 278}
+  m_AnchoredPosition: {x: 20, y: -28}
+  m_SizeDelta: {x: 216, y: 250}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1313139986
 MonoBehaviour:
@@ -6780,8 +6780,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 12, y: -12}
-  m_SizeDelta: {x: 232, y: 278}
+  m_AnchoredPosition: {x: 20, y: -28}
+  m_SizeDelta: {x: 216, y: 250}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1690425227
 MonoBehaviour:
