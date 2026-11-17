@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 45cb8ccb6d1243b391c2016fb19903bb
+AudioImporter:
+  defaultSetup:
+    loadType: 0
+    sampleRateSetting: 0
+    sampleRateOverride: 24000
+    compressionFormat: 0
+    quality: 1
+    conversionMode: 0
+  customFlags: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

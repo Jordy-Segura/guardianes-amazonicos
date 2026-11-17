@@ -31,7 +31,11 @@ namespace GuardianesAmazonicos.Editor
             public string Felicitacion;
             public string[] Explicaciones;
             public string RutaAudioLectura;
+            public string RutaAudioPista;
+            public string[] RutasAudioCorrecciones;
+            public string RutaAudioFelicitacion;
             public string RutaFondo;
+            public int Tarjetas = 3;
             public bool Reconstruir;
         }
 
@@ -78,6 +82,15 @@ namespace GuardianesAmazonicos.Editor
                 Nivel = 1,
                 NumeroEscena = 6,
                 Felicitacion = "¡Muy bien! El agua es importante para los seres vivos.",
+                RutaAudioLectura = "Assets/Audio/Voice/Lectura/lectura_01_06.wav",
+                RutaAudioPista = "Assets/Audio/Voice/Lectura/pista_01_06.wav",
+                RutaAudioFelicitacion = "Assets/Audio/Voice/Lectura/acierto_01_06.wav",
+                RutasAudioCorrecciones = new[]
+                {
+                    null,
+                    "Assets/Audio/Voice/Lectura/correccion_01_06_fruta.wav",
+                    "Assets/Audio/Voice/Lectura/correccion_01_06_arbol.wav"
+                },
                 Reconstruir = true
             },
             new Reto
@@ -88,6 +101,27 @@ namespace GuardianesAmazonicos.Editor
                 Nivel = 1,
                 NumeroEscena = 9,
                 Felicitacion = "¡Lo lograste! Identificaste el plátano."
+            },
+            new Reto
+            {
+                Nombre = "HU-10 Loro",
+                RutaConfiguracion = "Assets/Scripts/Models/NivelesData/RetoLoro.asset",
+                RutaEscena = "Assets/Scenes/Niveles/Nivel01/Escena10_HU10_Loro.unity",
+                Nivel = 1,
+                NumeroEscena = 10,
+                Felicitacion = "¡Muy bien! Ese es el loro.",
+                Tarjetas = 4,
+                RutaAudioLectura = "Assets/Audio/Voice/HU10/lectura_01_10.wav",
+                RutaAudioPista = "Assets/Audio/Voice/HU10/pista_01_10.wav",
+                RutaAudioFelicitacion = "Assets/Audio/Voice/HU10/acierto_01_10.wav",
+                RutasAudioCorrecciones = new[]
+                {
+                    null,
+                    "Assets/Audio/Voice/HU10/correccion_guacamayo_01_10.wav",
+                    "Assets/Audio/Voice/HU10/correccion_mono_01_10.wav",
+                    "Assets/Audio/Voice/HU10/correccion_tortuga_01_10.wav"
+                },
+                Reconstruir = true
             },
             new Reto
             {
@@ -134,6 +168,27 @@ namespace GuardianesAmazonicos.Editor
         public static void EstandarizarReconstruyendoPorLote()
         {
             EstandarizarPorLote(true);
+        }
+
+        /// <summary>
+        /// Genera la actividad HU-10 (loro) si todavía no existe y después aplica
+        /// el estándar y las pruebas completas del Nivel 1.
+        /// </summary>
+        public static void EstandarizarConLoroPorLote()
+        {
+            try
+            {
+                BuildSceneHU10.Generar();
+                Estandarizar(false);
+                PruebasIntegracionNivel1.EjecutarPruebas();
+                PruebasHU06.EjecutarPruebas();
+                EditorApplication.Exit(0);
+            }
+            catch (Exception excepcion)
+            {
+                Debug.LogError("EstandarizarEscenas: la generación de HU-10 falló. " + excepcion);
+                EditorApplication.Exit(1);
+            }
         }
 
         private static void EstandarizarPorLote(bool forzarReconstruccion)
@@ -212,7 +267,7 @@ namespace GuardianesAmazonicos.Editor
                     cambios.Add("felicitación");
                 }
 
-                if (reto.Explicaciones != null && reto.Explicaciones.Length == RetoSeleccionConfiguracion.CANTIDAD_OPCIONES
+                if (reto.Explicaciones != null && reto.Explicaciones.Length == reto.Tarjetas
                     && !MismasExplicaciones(configuracion.ExplicacionesIncorrectas, reto.Explicaciones))
                 {
                     configuracion.ExplicacionesIncorrectas = reto.Explicaciones;
@@ -235,6 +290,50 @@ namespace GuardianesAmazonicos.Editor
                     {
                         configuracion.AudioLectura = locucion;
                         cambios.Add("locución");
+                    }
+                }
+
+                if (!string.IsNullOrEmpty(reto.RutaAudioPista))
+                {
+                    AudioClip pista = PlantillaUIBuilder.Cargar<AudioClip>(reto.RutaAudioPista);
+                    if (pista == null)
+                        throw new InvalidOperationException("No existe el audio de pista: " + reto.RutaAudioPista);
+                    if (configuracion.AudioPista != pista)
+                    {
+                        configuracion.AudioPista = pista;
+                        cambios.Add("audio de pista");
+                    }
+                }
+
+                if (reto.RutasAudioCorrecciones != null && reto.RutasAudioCorrecciones.Length == reto.Tarjetas)
+                {
+                    AudioClip[] correcciones = new AudioClip[reto.RutasAudioCorrecciones.Length];
+                    for (int indice = 0; indice < correcciones.Length; indice++)
+                    {
+                        string ruta = reto.RutasAudioCorrecciones[indice];
+                        if (string.IsNullOrEmpty(ruta)) continue;
+                        AudioClip clip = PlantillaUIBuilder.Cargar<AudioClip>(ruta);
+                        if (clip == null)
+                            throw new InvalidOperationException("No existe el audio de corrección: " + ruta);
+                        correcciones[indice] = clip;
+                    }
+
+                    if (!MismosAudios(configuracion.AudioCorrecciones, correcciones))
+                    {
+                        configuracion.AudioCorrecciones = correcciones;
+                        cambios.Add("audios de corrección");
+                    }
+                }
+
+                if (!string.IsNullOrEmpty(reto.RutaAudioFelicitacion))
+                {
+                    AudioClip felicitacion = PlantillaUIBuilder.Cargar<AudioClip>(reto.RutaAudioFelicitacion);
+                    if (felicitacion == null)
+                        throw new InvalidOperationException("No existe el audio de felicitación: " + reto.RutaAudioFelicitacion);
+                    if (configuracion.AudioFelicitacion != felicitacion)
+                    {
+                        configuracion.AudioFelicitacion = felicitacion;
+                        cambios.Add("audio de felicitación");
                     }
                 }
 
@@ -320,6 +419,17 @@ namespace GuardianesAmazonicos.Editor
                 string actual = actuales[indice] ?? string.Empty;
                 string esperada = esperadas[indice] ?? string.Empty;
                 if (actual.Trim() != esperada.Trim()) return false;
+            }
+
+            return true;
+        }
+
+        private static bool MismosAudios(AudioClip[] actuales, AudioClip[] esperados)
+        {
+            if (actuales == null || actuales.Length != esperados.Length) return false;
+            for (int indice = 0; indice < esperados.Length; indice++)
+            {
+                if (actuales[indice] != esperados[indice]) return false;
             }
 
             return true;
