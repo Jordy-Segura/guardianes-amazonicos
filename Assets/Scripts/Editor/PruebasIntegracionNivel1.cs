@@ -64,11 +64,18 @@ namespace GuardianesAmazonicos.Editor
 
             int jaguar = rutas.IndexOf("Assets/Scenes/Niveles/Nivel01/Escena05_IdentificarJaguar.unity");
             int tortuga = rutas.IndexOf("Assets/Scenes/Niveles/Nivel01/Escena06_HU06_TortugaAgua.unity");
+            int rio = rutas.IndexOf("Assets/Scenes/Niveles/Nivel01/Escena07_HU07_IdentificarRio.unity");
+            int mariposa = rutas.IndexOf("Assets/Scenes/Niveles/Nivel01/Escena08_HU08_Mariposa.unity");
             int platano = rutas.IndexOf("Assets/Scenes/Niveles/Nivel01/Escena09_IdentificarPlatano.unity");
+            int arbol = rutas.IndexOf("Assets/Scenes/Niveles/Nivel01/Escena11_HU11_ReconocerArbol.unity");
+            int recompensa = rutas.IndexOf("Assets/Scenes/Niveles/Nivel01/Escena12_Recompensa_final.unity");
             Assert(tortuga == jaguar + 1, "La tortuga (HU-06) va inmediatamente después del jaguar (HU-05)");
-            Assert(platano == tortuga + 1, "El plátano (HU-09) va inmediatamente después de la tortuga (HU-06)");
+            Assert(rio == tortuga + 1, "El río (HU-07) va inmediatamente después de la tortuga (HU-06)");
+            Assert(mariposa == rio + 1, "La mariposa (HU-08) va inmediatamente después del río (HU-07)");
+            Assert(arbol == platano + 1, "El árbol (HU-11) va inmediatamente después del plátano (HU-09)");
+            Assert(recompensa == arbol + 1, "La recompensa final (HU-12) cierra el Nivel 1");
 
-            Debug.Log("Integración: orden de escenas verificado (07 escenas del bloque implementado).");
+            Debug.Log("Integración: orden de escenas verificado (12 escenas de la aventura).");
         }
 
         private static void ProbarCadenaDeNavegacion()
@@ -80,20 +87,26 @@ namespace GuardianesAmazonicos.Editor
             RetoSeleccionConfiguracion platano = Cargar("Assets/Scripts/Models/NivelesData/RetoPlatano.asset");
 
             Assert(mono.SiguienteEscena == IntegrarNivel01.EscenaGuacamayo, "HU-02 enlaza con HU-03");
-            Assert(guacamayo.SiguienteEscena == IntegrarNivel01.EscenaPlantas, "HU-03 conserva el destino previsto HU-04");
+            Assert(guacamayo.SiguienteEscena == IntegrarNivel01.EscenaPlantas, "HU-03 enlaza con HU-04");
             Assert(jaguar.SiguienteEscena == IntegrarNivel01.EscenaTortuga, "HU-05 enlaza con HU-06");
-            Assert(tortuga.SiguienteEscena == IntegrarNivel01.EscenaPlatano, "HU-06 enlaza con HU-09");
-            Assert(string.IsNullOrEmpty(platano.SiguienteEscena), "HU-09 usa el orden de Build Profiles como respaldo");
+            Assert(tortuga.SiguienteEscena == IntegrarNivel01.EscenaRio, "HU-06 enlaza con HU-07");
+            Assert(platano.SiguienteEscena == IntegrarNivel01.EscenaArbol, "HU-09 enlaza con HU-11");
 
-            Assert(EsCargable(IntegrarNivel01.EscenaGuacamayo), "HU-03 es cargable");
-            Assert(EsCargable(IntegrarNivel01.EscenaTortuga), "HU-06 es cargable");
-            Assert(EsCargable(IntegrarNivel01.EscenaPlatano), "HU-09 es cargable");
-            Assert(!EsCargable(IntegrarNivel01.EscenaPlantas),
-                "HU-04 aún no existe: HU-03 avanzará a la escena siguiente de Build Profiles");
+            foreach (string escena in new[]
+            {
+                IntegrarNivel01.EscenaPlantas, IntegrarNivel01.EscenaTortuga,
+                IntegrarNivel01.EscenaRio, IntegrarNivel01.EscenaMariposa,
+                IntegrarNivel01.EscenaPlatano, IntegrarNivel01.EscenaArbol,
+                IntegrarNivel01.EscenaRecompensa
+            })
+            {
+                Assert(EsCargable(escena), "La escena está en Build Profiles: " + escena);
+            }
 
             Assert(tortuga.NumeroEscena == 6 && tortuga.TotalEscenas == 12, "HU-06 se muestra como 6 de 12");
 
-            Debug.Log("Integración: cadena HU-02 -> HU-03 -> HU-05 -> HU-06 -> HU-09 -> Nivel 2 verificada.");
+            Debug.Log("Integración: cadena HU-02 -> HU-03 -> HU-04 -> HU-05 -> HU-06 -> HU-07 -> HU-08 -> " +
+                "HU-09 -> HU-11 -> HU-12 -> Nivel 2 verificada.");
         }
 
         private static void ProbarFuenteAccesible()

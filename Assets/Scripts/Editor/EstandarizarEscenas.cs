@@ -59,13 +59,7 @@ namespace GuardianesAmazonicos.Editor
                 Felicitacion = "¡Muy bien! Reconociste al guacamayo.",
                 RutaAudioLectura = "Assets/Audio/Voice/Lectura/lectura_01_03.wav",
                 RutaFondo = "Assets/Art/Backgrounds/Niveles/N1_Conozco_la_selva.png",
-                Reconstruir = true,
-                Explicaciones = new[]
-                {
-                    "El mono trepa los árboles y tiene cola larga. El guacamayo es un ave de plumas de colores.",
-                    string.Empty,
-                    "La tortuga camina despacio y lleva un caparazón duro. El guacamayo es un ave de plumas de colores."
-                }
+                Reconstruir = true
             },
             new Reto
             {
@@ -83,7 +77,8 @@ namespace GuardianesAmazonicos.Editor
                 RutaEscena = "Assets/Scenes/Niveles/Nivel01/Escena06_HU06_TortugaAgua.unity",
                 Nivel = 1,
                 NumeroEscena = 6,
-                Felicitacion = "¡Muy bien! El agua es importante para los seres vivos."
+                Felicitacion = "¡Muy bien! El agua es importante para los seres vivos.",
+                Reconstruir = true
             },
             new Reto
             {
@@ -108,8 +103,18 @@ namespace GuardianesAmazonicos.Editor
         [MenuItem("Guardianes/Sahid/Estandarizar escenas de actividad")]
         public static void Estandarizar()
         {
+            Estandarizar(false);
+        }
+
+        /// <summary>
+        /// Aplica el estándar. Con <paramref name="forzarReconstruccion"/> vuelve a
+        /// generar las escenas de plantilla aunque ya existan, para incorporar los
+        /// cambios de la plantilla común.
+        /// </summary>
+        public static void Estandarizar(bool forzarReconstruccion)
+        {
             NormalizarDatos();
-            ReconstruirEscenasDePlantilla();
+            ReconstruirEscenasDePlantilla(forzarReconstruccion);
             IntegrarNivel01.AplicarOrdenDeEscenas();
             IntegrarNivel01.AplicarEnlacesSiguiente();
             IntegrarNivel01.AplicarFuenteAccesible();
@@ -122,9 +127,20 @@ namespace GuardianesAmazonicos.Editor
         /// <summary>Punto de entrada para Unity en modo batch: -executeMethod.</summary>
         public static void EstandarizarPorLote()
         {
+            EstandarizarPorLote(false);
+        }
+
+        /// <summary>Reconstruye las escenas de plantilla y luego verifica todo el estándar.</summary>
+        public static void EstandarizarReconstruyendoPorLote()
+        {
+            EstandarizarPorLote(true);
+        }
+
+        private static void EstandarizarPorLote(bool forzarReconstruccion)
+        {
             try
             {
-                Estandarizar();
+                Estandarizar(forzarReconstruccion);
                 PruebasIntegracionNivel1.EjecutarPruebas();
                 PruebasHU06.EjecutarPruebas();
                 EditorApplication.Exit(0);
@@ -249,14 +265,14 @@ namespace GuardianesAmazonicos.Editor
         /// su interfaz en tiempo de ejecución (HU-02 y HU-03), para que tengan las
         /// mismas animaciones, paneles y referencias que el resto de actividades.
         /// </summary>
-        public static void ReconstruirEscenasDePlantilla()
+        public static void ReconstruirEscenasDePlantilla(bool forzar = false)
         {
             BuildAssignedScenes.PrepararRecursos();
             IEnumerable<Reto> pendientes = Retos.Where(reto => reto.Reconstruir);
 
             foreach (Reto reto in pendientes)
             {
-                if (YaUsaLaPlantilla(reto.RutaEscena))
+                if (!forzar && YaUsaLaPlantilla(reto.RutaEscena))
                 {
                     Debug.Log("EstandarizarEscenas: " + reto.Nombre + " ya usa la plantilla serializada.");
                     continue;

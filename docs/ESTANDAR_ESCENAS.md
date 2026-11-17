@@ -33,11 +33,15 @@ Las escenas de actividad y la bienvenida se guardan con la plantilla ya construi
 
 ## Escenas migradas a la plantilla
 
-HU-02 y HU-03 generaban su interfaz al ejecutar. Ambas se reconstruyeron con la plantilla serializada: ahora comparten animaciones, paneles, cabecera, audio ambiente y referencias con el resto de actividades. La vista propia `GuacamayoView` se conserva como legado y ya no se usa en la escena.
+HU-02, HU-03 y HU-06 generaban su interfaz al ejecutar. Se reconstruyeron con la plantilla serializada: ahora comparten animaciones, paneles, cabecera, audio ambiente y referencias con el resto de actividades. La vista propia `GuacamayoView` se conserva como legado y ya no se usa en la escena.
+
+## Escenas con vista propia
+
+Las escenas HU-04, HU-07, HU-08, HU-11 y HU-12 llegaron de `develop` con vistas propias (`ActividadPlantas`, `IdentificarRio`, `ReconocerArbol`, mariposa y recompensa). Comparten la tipografía OpenDyslexic y el audio por estado, pero su composición no es la plantilla serializada; migrarlas es una decisión pendiente del equipo.
 
 ## Cómo aplicar y verificar
 
-- **Guardianes > Sahid > Estandarizar escenas de actividad**: normaliza los datos de los seis retos, reconstruye HU-02 con la plantilla, reordena Build Profiles, enlaza `Siguiente` y aplica la tipografía.
+- **Guardianes > Sahid > Estandarizar escenas de actividad**: normaliza los datos de los seis retos de plantilla, reconstruye las escenas que lo necesiten, reordena Build Profiles, enlaza `Siguiente` y aplica la tipografía.
 - **Guardianes > Sahid > Verificar estándar de escenas**: audita datos y escenas; falla si algo se sale del estándar.
 - En lote:
 
@@ -51,5 +55,5 @@ El estándar no modifica el arte, las coordenadas de la guía ni la arquitectura
 
 ## Pendientes
 
-- Locución de HU-02 (`lectura_01_02.wav`): la escena ya usa la plantilla y el botón Lectura existe, pero el clip falta porque debe grabarse con la misma voz del resto de actividades.
-- Videos LSEC reales: los seis retos ya declaran el nombre del archivo, pero `Assets/StreamingAssets/LSEC/` sigue vacío.
+- Locución de HU-02: resuelta; `develop` incorporó `lectura_01_02.wav` y los audios de pista y felicitación.
+- Videos LSEC reales: los retos declaran el nombre del archivo, pero `Assets/StreamingAssets/LSEC/` sigue vacío.

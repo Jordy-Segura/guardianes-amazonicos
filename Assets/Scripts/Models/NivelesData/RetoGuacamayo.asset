@@ -15,7 +15,7 @@ MonoBehaviour:
   _nivel: 1
   _numeroEscena: 3
   _totalEscenas: 12
-  _tituloNivel: "Nivel 1 \xB7 Conozco la selva"
+  _tituloNivel: "Nivel 1 \u2022 Conozco la selva"
   _siguienteEscena: Escena04_HU04_Plantas
   _pregunta: "En la selva viven aves de muchos colores.\n\xBFCu\xE1l de estos animales es el guacamayo?"
   _opciones:
@@ -32,8 +32,9 @@ MonoBehaviour:
   - "\xA1Muy bien! Identificaste el guacamayo."
   - "\xA1Buen intento! La tortuga tiene caparaz\xF3n. Busca el ave de colores y vuelve a intentarlo."
   _pista: Busca el ave con plumas rojas, amarillas y azules y un pico curvo.
-  _felicitacion: "\xA1Lo lograste!"
+  _felicitacion: "\xA1Muy bien! Reconociste al guacamayo."
   _imagenEscena: {fileID: 21300000, guid: 1b6eda37b3364fc4389888ef5ca1247d, type: 3}
+  _mostrarImagenEscena: 1
   _elementoEscena: {fileID: 0}
   _rectElementoEscena:
     serializedVersion: 2
@@ -85,14 +86,14 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 460d555543aa3189e1339c6bf10de6a6, type: 3}
   - {fileID: 21300000, guid: ebb05fd8c773ec88d78b5e433069c07f, type: 3}
   - {fileID: 21300000, guid: b0eca3a47b2994172294ce52a6a4f4c0, type: 3}
-  _audioLectura: {fileID: 8300000, guid: 527be3595612bf94ba3f2004fc9463c9, type: 3}
+  _audioLectura: {fileID: 8300000, guid: fbe87e32e9784f56864c6c9216de026f, type: 3}
   _audioPista: {fileID: 8300000, guid: 7ccefa0a5a7f4e2983fd1e41a5222485, type: 3}
   _audioCorrecciones:
   - {fileID: 8300000, guid: e2ed443f6cb44c5882f3a54511963c4f, type: 3}
   - {fileID: 0}
   - {fileID: 8300000, guid: ceefdba1789b4a63a46ae1c72d91d422, type: 3}
   _audioFelicitacion: {fileID: 8300000, guid: 43b7acfb533a4db784919bfb3b7eb6f2, type: 3}
-  _videoSenas: 
+  _videoSenas: senas_nivel_01_pregunta_03.mp4
   _mostrarBienvenida: 0
   _bienvenidaEtiquetaNivel: 
   _bienvenidaNombreNivel: 
@@ -103,8 +104,8 @@ MonoBehaviour:
   _bienvenidaVideoSenas: 
   _fuente: {fileID: 11400000, guid: 767ffc8669e62e144951bc56a822d1e6, type: 2}
   numeroEscena: 3
-  titulo: "Nivel 1 \xB7 Conozco la selva"
-  textoProgreso: 2 de 2
+  titulo: "Nivel 1 \u2022 Conozco la selva"
+  textoProgreso: 3 de 12
   pregunta: "En la selva viven aves de muchos colores.\n\xBFCu\xE1l de estos animales es el guacamayo?"
   instruccion: 
   opciones:
@@ -118,7 +119,7 @@ MonoBehaviour:
   atlasDosPorDos: {fileID: 0}
   indiceCorrecto: 1
   pistaIncorrecta: Busca el ave con plumas rojas, amarillas y azules y un pico curvo.
-  mensajeCorrecto: "\xA1Lo lograste!"
+  mensajeCorrecto: "\xA1Muy bien! Reconociste al guacamayo."
   pronunciaciones: []
   siguienteEscena: Escena04_HU04_Plantas
   textoContinuar: SIGUIENTE RETO
