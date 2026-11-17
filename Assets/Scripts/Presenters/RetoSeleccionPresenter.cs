@@ -94,12 +94,21 @@ namespace GuardianesAmazonicos.Presenters
             _vista.MostrarBienvenida(_configuracion.MostrarBienvenida);
             _vista.PermitirRegresar(NavegacionNiveles.HayAnterior());
             _vista.PermitirAvanzar(RetoYaCompletado() && NavegacionNiveles.HaySiguiente(_configuracion.SiguienteEscena));
+            _vista.ActualizarEstadoVisualLectura(RetoSeleccionView.ModoLecturaActivo);
+            if (RetoSeleccionView.ModoLecturaActivo)
+            {
+                ReproducirEstadoActual();
+            }
         }
 
         private void Comenzar()
         {
             _vista.DetenerAudio();
             _vista.MostrarBienvenida(false);
+            if (RetoSeleccionView.ModoLecturaActivo)
+            {
+                ReproducirEstadoActual();
+            }
         }
 
         private void SeleccionarTarjeta(int indice)
@@ -116,19 +125,32 @@ namespace GuardianesAmazonicos.Presenters
             {
                 GuardarProgreso();
                 _vista.MostrarCorrecta(indice, _configuracion.Felicitacion);
+                if (RetoSeleccionView.ModoLecturaActivo)
+                {
+                    _vista.ReproducirAudio(_configuracion.AudioFelicitacion);
+                }
                 _vista.PermitirAvanzar(NavegacionNiveles.HaySiguiente(_configuracion.SiguienteEscena));
             }
             else
             {
                 _vista.MostrarIncorrecta(indice, _configuracion.ObtenerExplicacion(indice));
+                if (RetoSeleccionView.ModoLecturaActivo)
+                {
+                    _vista.ReproducirAudio(_configuracion.ObtenerAudioCorreccion(indice));
+                }
             }
         }
 
         private void IntentarloDeNuevo()
         {
+            _vista.DetenerAudio();
             _modelo.Reintentar();
             _vista.MostrarSinSeleccion();
             _vista.EnfocarTarjeta(0);
+            if (RetoSeleccionView.ModoLecturaActivo)
+            {
+                ReproducirEstadoActual();
+            }
         }
 
         private void Siguiente()
@@ -142,20 +164,72 @@ namespace GuardianesAmazonicos.Presenters
 
         private void Leer()
         {
-            AudioClip clip = _vista.BienvenidaVisible ? _configuracion.BienvenidaAudio : _configuracion.AudioLectura;
-            _vista.AlternarAudio(clip);
+            RetoSeleccionView.ModoLecturaActivo = !RetoSeleccionView.ModoLecturaActivo;
+            _vista.ActualizarEstadoVisualLectura(RetoSeleccionView.ModoLecturaActivo);
+
+            if (!RetoSeleccionView.ModoLecturaActivo)
+            {
+                _vista.DetenerAudio();
+                return;
+            }
+
+            ReproducirEstadoActual();
+        }
+
+        private void ReproducirEstadoActual()
+        {
+            AudioClip clip = ObtenerClipEstadoActual();
+            if (clip != null)
+            {
+                _vista.ReproducirAudio(clip);
+            }
+        }
+
+        private AudioClip ObtenerClipEstadoActual()
+        {
+            if (_vista.BienvenidaVisible)
+            {
+                return _configuracion.BienvenidaAudio != null ? _configuracion.BienvenidaAudio : _configuracion.AudioLectura;
+            }
+
+            if (_vista.PistaVisible)
+            {
+                return _configuracion.AudioPista != null ? _configuracion.AudioPista : _configuracion.AudioLectura;
+            }
+
+            if (_vista.EstadoCorrectoVisible || (_modelo != null && _modelo.Resuelto))
+            {
+                return _configuracion.AudioFelicitacion != null ? _configuracion.AudioFelicitacion : _configuracion.AudioLectura;
+            }
+
+            if (_vista.RespuestaIncorrectaVisible && _modelo != null)
+            {
+                AudioClip correccion = _configuracion.ObtenerAudioCorreccion(_modelo.IndiceSeleccionado);
+                return correccion != null ? correccion : _configuracion.AudioLectura;
+            }
+
+            return _configuracion.AudioLectura;
         }
 
         private void AbrirPista()
         {
             if (_vista.BienvenidaVisible || _modelo.Resuelto) return;
             _vista.MostrarPista(true);
+            if (RetoSeleccionView.ModoLecturaActivo)
+            {
+                ReproducirEstadoActual();
+            }
         }
 
         private void CerrarPista()
         {
+            _vista.DetenerAudio();
             _vista.MostrarPista(false);
             _vista.EnfocarTarjeta(_modelo.IndiceSeleccionado);
+            if (RetoSeleccionView.ModoLecturaActivo)
+            {
+                ReproducirEstadoActual();
+            }
         }
 
         private void AbrirSenas()
@@ -191,7 +265,8 @@ namespace GuardianesAmazonicos.Presenters
 
         private void AbrirConfiguracion()
         {
-            Debug.Log("RetoSeleccionPresenter: la ventana de configuración se incorporará en una próxima versión.", this);
+            _vista.DetenerAudio();
+            _vista.MostrarConfiguracion(true);
         }
 
         private void GuardarProgreso()
@@ -242,11 +317,18 @@ namespace GuardianesAmazonicos.Presenters
                 ProgresoEstudianteData progreso = _repositorio.Cargar();
                 int nivel = _configuracion.Nivel;
                 int escena = _configuracion.NumeroEscena;
-                if (nivel == 1 && escena == 2) return progreso.retoMonoCompletado;
-                if (nivel == 1 && escena == 5) return progreso.retoJaguarCompletado;
-                if (nivel == 1 && escena == 6) return progreso.retoTortugaCompletado;
-                if (nivel == 1 && escena == 9) return progreso.retoPlatanoCompletado;
-                return nivel == 2 && escena == 1 && progreso.RetoMonoCuriosoCompletado;
+                if (nivel == 2) return escena == 1 && progreso.RetoMonoCuriosoCompletado;
+
+                // El avance guardado solo se actualiza al resolver una actividad, así
+                // que sirve como respaldo para las que no tienen bandera propia
+                // (HU-04, HU-07, HU-08 y HU-11) y para partidas antiguas.
+                if (progreso.puntoProgresoActual >= escena) return true;
+                if (escena == 2) return progreso.retoMonoCompletado;
+                if (escena == 3) return progreso.retoGuacamayoCompletado;
+                if (escena == 5) return progreso.retoJaguarCompletado;
+                if (escena == 6) return progreso.retoTortugaCompletado;
+                if (escena == 9) return progreso.retoPlatanoCompletado;
+                return false;
             }
             catch (Exception excepcion) when (excepcion is IOException || excepcion is UnauthorizedAccessException)
             {

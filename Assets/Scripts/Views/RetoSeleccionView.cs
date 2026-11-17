@@ -100,6 +100,7 @@ namespace GuardianesAmazonicos.Views
         private Coroutine _reaccionIncorrecta;
         private bool _enEstadoIncorrecto;
         private bool _construidaDinamica = false;
+        private GameObject _panelConfiguracion;
 
         public event Action OnComenzarSolicitado;
         public event Action<int> OnTarjetaSeleccionada;
@@ -117,9 +118,15 @@ namespace GuardianesAmazonicos.Views
         public event Action OnInicioSolicitado;
         public event Action OnConfiguracionSolicitada;
 
+        public static bool ModoLecturaActivo { get; set; }
+
         public bool BienvenidaVisible => _ref.estadoBienvenida != null && _ref.estadoBienvenida.activeSelf;
         public bool PistaVisible => _ref.panelPista != null && _ref.panelPista.activeSelf;
         public bool SenasVisibles => _ref.panelSenas != null && _ref.panelSenas.activeSelf;
+        public bool RespuestaIncorrectaVisible => _enEstadoIncorrecto;
+        public bool EstadoCorrectoVisible => _ref.estadoCorrecto != null && _ref.estadoCorrecto.activeSelf;
+        public bool AudioReproduciendose => _ref.fuenteAudio != null && _ref.fuenteAudio.isPlaying;
+        public bool ConfiguracionVisible => _panelConfiguracion != null && _panelConfiguracion.activeSelf;
 
         /// <summary>Usado por el constructor de escenas del editor.</summary>
         public void Enlazar(ReferenciasActividad referencias)
@@ -152,6 +159,10 @@ namespace GuardianesAmazonicos.Views
         {
             if (_construidaDinamica || (_ref.tarjetas != null && _ref.tarjetas.Length > 0 && _ref.tarjetas[0] != null && _ref.tarjetas[0].boton != null))
             {
+                if (configuracion != null && ((configuracion.Nivel == 1 && (configuracion.NumeroEscena == 5 || configuracion.NumeroEscena == 9)) || configuracion.Nivel == 2))
+                {
+                    AjustarTarjetasSinTexto();
+                }
                 return;
             }
 
@@ -160,6 +171,29 @@ namespace GuardianesAmazonicos.Views
             if (isActiveAndEnabled)
             {
                 RegistrarEventos();
+            }
+        }
+
+        private void AjustarTarjetasSinTexto()
+        {
+            if (_ref.tarjetas == null) return;
+            foreach (TarjetaRespuestaVista tarjeta in _ref.tarjetas)
+            {
+                if (tarjeta == null) continue;
+                if (tarjeta.nombre != null && tarjeta.nombre.gameObject.activeSelf)
+                {
+                    tarjeta.nombre.gameObject.SetActive(false);
+                }
+                if (tarjeta.ilustracion != null)
+                {
+                    RectTransform rect = tarjeta.ilustracion.rectTransform;
+                    rect.anchorMin = new Vector2(0f, 1f);
+                    rect.anchorMax = new Vector2(0f, 1f);
+                    rect.pivot = new Vector2(0f, 1f);
+                    rect.anchoredPosition = new Vector2(20f, -28f);
+                    rect.sizeDelta = new Vector2(216f, 250f);
+                    tarjeta.ilustracion.preserveAspect = true;
+                }
             }
         }
 
@@ -234,6 +268,13 @@ namespace GuardianesAmazonicos.Views
             DetenerVideo();
         }
 
+        private void Start()
+        {
+            // Las preferencias de accesibilidad son globales: se aplican al entrar
+            // a cualquier actividad, aunque se hayan cambiado en otra escena.
+            PanelConfiguracionAccesibilidad.AplicarPreferencias(_ref.fuenteAudio);
+        }
+
         // ----- Estados de la plantilla -----
 
         public void MostrarBienvenida(bool visible)
@@ -256,6 +297,7 @@ namespace GuardianesAmazonicos.Views
 
         public void MostrarSinSeleccion()
         {
+            PermitirBotonesDeApoyoSobreModal(false);
             PrepararTarjetas(RetoSinIndice, RetoSinIndice, RetoSinIndice, true);
             Activar(_ref.globoPregunta, true);
             Activar(_ref.globoCorreccion, false);
@@ -269,6 +311,7 @@ namespace GuardianesAmazonicos.Views
 
         public void MostrarSeleccion(int indice)
         {
+            PermitirBotonesDeApoyoSobreModal(false);
             PrepararTarjetas(indice, RetoSinIndice, RetoSinIndice, true);
             Activar(_ref.globoPregunta, true);
             Activar(_ref.globoCorreccion, false);
@@ -280,6 +323,7 @@ namespace GuardianesAmazonicos.Views
         /// <summary>Borde rojo en la opción errónea, cambio de reacción del personaje y globo con explicación amable.</summary>
         public void MostrarIncorrecta(int indice, string explicacion)
         {
+            PermitirBotonesDeApoyoSobreModal(true);
             PrepararTarjetas(RetoSinIndice, indice, RetoSinIndice, true);
             Activar(_ref.globoPregunta, false);
             Activar(_ref.globoCorreccion, true);
@@ -292,6 +336,8 @@ namespace GuardianesAmazonicos.Views
 
         public void MostrarCorrecta(int indice, string felicitacion)
         {
+            PermitirBotonesDeApoyoSobreModal(true);
+            PermitirLecturaSobreEstadoCorrecto();
             PrepararTarjetas(RetoSinIndice, RetoSinIndice, indice, false);
             Activar(_ref.globoPregunta, true);
             Activar(_ref.globoCorreccion, false);
@@ -318,6 +364,8 @@ namespace GuardianesAmazonicos.Views
 
         public void MostrarPista(bool visible)
         {
+            PermitirBotonesDeApoyoSobreModal(visible);
+            if (visible) PermitirLecturaSobreLaPista();
             if (visible) MostrarSenas(false, null);
             Activar(_ref.panelPista, visible);
             if (_ref.estadoCorrecto == null || !_ref.estadoCorrecto.activeSelf)
@@ -348,6 +396,11 @@ namespace GuardianesAmazonicos.Views
                 return;
             }
 
+            // Cerrar la pista mediante su flujo normal reactiva al personaje de la escena.
+            // Después se muestra Señas sobre la actividad ya restaurada, para que al pulsar X
+            // el personaje siga visible detrás de la tarjeta.
+            if (PistaVisible) MostrarPista(false);
+            PermitirBotonesDeApoyoSobreModal(false);
             Activar(_ref.panelPista, false);
             Activar(_ref.panelSenas, true);
             BloquearCapaBase(true);
@@ -398,6 +451,42 @@ namespace GuardianesAmazonicos.Views
             if (_ref.botonRegresar != null) _ref.botonRegresar.interactable = permitido;
         }
 
+        /// <summary>
+        /// Abre o cierra el panel de configuración de accesibilidad. Se construye una
+        /// sola vez y se reutiliza; al abrirlo se bloquea la actividad de fondo y al
+        /// cerrarlo se devuelve el foco al botón de la cabecera.
+        /// </summary>
+        public void MostrarConfiguracion(bool visible)
+        {
+            if (!visible)
+            {
+                CerrarConfiguracion();
+                return;
+            }
+
+            if (_panelConfiguracion == null)
+            {
+                RectTransform raiz = _ref.capaBase != null
+                    ? _ref.capaBase.transform.parent as RectTransform
+                    : transform as RectTransform;
+                _panelConfiguracion = PanelConfiguracionAccesibilidad.Construir(raiz, _ref.fuenteAudio,
+                    CerrarConfiguracion, _ref.textoProgreso != null ? _ref.textoProgreso.font : null);
+            }
+
+            if (_panelConfiguracion == null) return;
+            _panelConfiguracion.transform.SetAsLastSibling();
+            _panelConfiguracion.SetActive(true);
+            BloquearCapaBase(true);
+            Enfocar(_panelConfiguracion.GetComponentInChildren<Button>());
+        }
+
+        public void CerrarConfiguracion()
+        {
+            if (_panelConfiguracion != null) _panelConfiguracion.SetActive(false);
+            BloquearCapaBase(false);
+            Enfocar(_ref.botonConfiguracion);
+        }
+
         public void MostrarProgreso(int escenaActual, int totalEscenas)
         {
             if (_ref.textoProgreso != null)
@@ -409,6 +498,16 @@ namespace GuardianesAmazonicos.Views
         public static string FormatearProgreso(int escenaActual, int totalEscenas)
         {
             return "<color=#FFD43B>" + escenaActual + "</color> de " + totalEscenas;
+        }
+
+        public void ReproducirAudio(AudioClip clip)
+        {
+            AudioSource fuente = _ref.fuenteAudio;
+            if (fuente == null || clip == null) return;
+
+            fuente.Stop();
+            fuente.clip = clip;
+            fuente.Play();
         }
 
         public void AlternarAudio(AudioClip clip)
@@ -430,6 +529,26 @@ namespace GuardianesAmazonicos.Views
         public void DetenerAudio()
         {
             if (_ref.fuenteAudio != null && _ref.fuenteAudio.isPlaying) _ref.fuenteAudio.Stop();
+        }
+
+        public void ActualizarEstadoVisualLectura(bool activo)
+        {
+            AplicarEstiloBotonLectura(_ref.botonLectura, activo);
+        }
+
+        public static void AplicarEstiloBotonLectura(Button boton, bool activo)
+        {
+            if (boton == null) return;
+            if (boton.targetGraphic != null)
+            {
+                boton.targetGraphic.color = activo ? new Color(0.8f, 1f, 0.82f, 1f) : Color.white;
+            }
+
+            RectTransform rect = boton.transform as RectTransform;
+            if (rect != null)
+            {
+                rect.localScale = activo ? new Vector3(1.06f, 1.06f, 1f) : Vector3.one;
+            }
         }
 
         public void EnfocarTarjeta(int indice)
@@ -481,6 +600,7 @@ namespace GuardianesAmazonicos.Views
             }
 
             if (!Application.isPlaying || _ref.imagenPersonajeGuia == null) return;
+            if (PanelConfiguracionAccesibilidad.MovimientoReducidoActivo) return;
 
             if (_reaccionIncorrecta != null) StopCoroutine(_reaccionIncorrecta);
             _reaccionIncorrecta = StartCoroutine(AnimarReaccionIncorrecta(_ref.imagenPersonajeGuia.rectTransform));
@@ -535,7 +655,7 @@ namespace GuardianesAmazonicos.Views
             Enfocar(_ref.botonSiguiente);
 
             RectTransform contenido = _ref.contenidoCelebracion;
-            if (contenido != null)
+            if (contenido != null && !PanelConfiguracionAccesibilidad.MovimientoReducidoActivo)
             {
                 float tiempo = 0f;
                 while (tiempo < DURACION_ENTRADA)
@@ -546,6 +666,10 @@ namespace GuardianesAmazonicos.Views
                     yield return null;
                 }
 
+                contenido.localScale = Vector3.one;
+            }
+            else if (contenido != null)
+            {
                 contenido.localScale = Vector3.one;
             }
 
@@ -584,6 +708,70 @@ namespace GuardianesAmazonicos.Views
             if (_ref.capaBase == null) return;
             _ref.capaBase.interactable = !bloquear;
             _ref.capaBase.blocksRaycasts = !bloquear;
+        }
+
+        private void PermitirBotonesDeApoyoSobreModal(bool permitir)
+        {
+            PermitirBotonSobreModal(_ref.botonLectura, permitir);
+            PermitirBotonSobreModal(_ref.botonSenas, permitir);
+        }
+
+        private void PermitirLecturaSobreLaPista()
+        {
+            if (_ref.panelPista == null) return;
+            Image[] imagenes = _ref.panelPista.GetComponentsInChildren<Image>(true);
+            foreach (Image imagen in imagenes)
+            {
+                if (imagen != null && imagen.gameObject.name == "FondoLuz")
+                {
+                    imagen.raycastTarget = false;
+                    break;
+                }
+            }
+        }
+
+        private void PermitirLecturaSobreEstadoCorrecto()
+        {
+            if (_ref.estadoCorrecto == null) return;
+            Image[] imagenes = _ref.estadoCorrecto.GetComponentsInChildren<Image>(true);
+            foreach (Image imagen in imagenes)
+            {
+                if (imagen != null && (imagen.gameObject.name == "ResplandorVerde" || imagen.gameObject.name == "FondoResplandor"))
+                {
+                    imagen.raycastTarget = false;
+                }
+            }
+        }
+
+        private static void PermitirBotonSobreModal(Button boton, bool permitir)
+        {
+            if (boton == null) return;
+            CanvasGroup grupo = boton.GetComponent<CanvasGroup>();
+            if (permitir && grupo == null) grupo = boton.gameObject.AddComponent<CanvasGroup>();
+            if (grupo != null)
+            {
+                grupo.ignoreParentGroups = permitir;
+                grupo.interactable = true;
+                grupo.blocksRaycasts = true;
+            }
+
+            Canvas canvasBoton = boton.GetComponent<Canvas>();
+            if (permitir)
+            {
+                if (canvasBoton == null) canvasBoton = boton.gameObject.AddComponent<Canvas>();
+                canvasBoton.overrideSorting = true;
+                canvasBoton.sortingOrder = 30;
+                if (boton.GetComponent<GraphicRaycaster>() == null)
+                {
+                    boton.gameObject.AddComponent<GraphicRaycaster>();
+                }
+            }
+            else if (canvasBoton != null)
+            {
+                canvasBoton.overrideSorting = false;
+            }
+
+            boton.interactable = true;
         }
 
         private Button BotonTarjeta(int indice)
@@ -702,6 +890,10 @@ namespace GuardianesAmazonicos.Views
             guia.preserveAspect = true;
             guia.raycastTarget = false;
             _ref.personajeGuia = guia.gameObject;
+            _ref.imagenPersonajeGuia = guia;
+            _ref.spritePersonajeNormal = spritePersonaje;
+            _ref.spritePersonajeIncorrecto = c.PersonajeIncorrecto != null ? c.PersonajeIncorrecto : CargarSprite("ExploradorPreocupado");
+            if (_ref.spritePersonajeIncorrecto == null) _ref.spritePersonajeIncorrecto = spritePersonaje;
 
             // Globo de pregunta
             RectTransform globo = CrearImagenTopLeft("GloboPregunta", capaActividad, CargarSprite("GloboPregunta"), Color.white, new Vector2(158f, -174f), new Vector2(684f, 240f)).rectTransform;
@@ -715,45 +907,45 @@ namespace GuardianesAmazonicos.Views
             _ref.globoCorreccion = globoCorrec.gameObject;
             _ref.globoCorreccion.SetActive(false);
 
-            // Marco con ilustración
-            RectTransform marco = CrearImagenTopLeft("MarcoEscena", capaActividad, CargarSprite("MarcoEscena"), Color.white, new Vector2(942f, -206f), new Vector2(758f, 390f)).rectTransform;
-            GameObject ventanaMask = new GameObject("VentanaMascara", typeof(RectTransform), typeof(Image), typeof(RectMask2D));
-            ventanaMask.transform.SetParent(marco, false);
-            RectTransform rectMascara = ventanaMask.transform as RectTransform;
-            rectMascara.anchorMin = Vector2.zero;
-            rectMascara.anchorMax = Vector2.one;
-            rectMascara.offsetMin = new Vector2(16f, 16f);
-            rectMascara.offsetMax = new Vector2(-16f, -16f);
-            Image fondoMarco = ventanaMask.GetComponent<Image>();
-            fondoMarco.color = new Color(1f, 0.972f, 0.91f, 1f);
-            fondoMarco.raycastTarget = false;
+            // Contenedor de la escena con fondo opaco y RectMask2D (942, -206, 758, 390) y MarcoEscena encima (921, -188, 800, 425)
+            Image contenedorEscena = CrearImagenTopLeft("ContenedorEscena", capaActividad, null, new Color(1f, 0.972f, 0.91f, 1f), new Vector2(942f, -206f), new Vector2(758f, 390f));
+            contenedorEscena.raycastTarget = false;
+            contenedorEscena.gameObject.AddComponent<RectMask2D>();
+            RectTransform rectMascara = contenedorEscena.rectTransform;
 
             Sprite spEscena = c.ImagenEscena != null ? c.ImagenEscena : CargarSprite("EscenaSelvaHabitat");
-            Image imgEscena = CrearImagenRelativa("Ilustracion", rectMascara, spEscena, Color.white, Vector2.zero, new Vector2(726f, 358f));
+            Image imgEscena = CrearImagenFull("Ilustracion", rectMascara, spEscena);
             imgEscena.preserveAspect = false;
+            Image marco = CrearImagenTopLeft("MarcoEscena", capaActividad, CargarSprite("MarcoEscena"), Color.white, new Vector2(921f, -188f), new Vector2(800f, 425f));
+            marco.raycastTarget = false;
+            marco.gameObject.SetActive(c.MostrarImagenEscena);
 
             // Tarjetas de respuesta
-            float[] posX = { 942f, 1204f, 1466f };
-            int cantidad = Mathf.Min(3, c.Opciones != null ? c.Opciones.Length : 0);
+            int cantidad = Mathf.Min(4, c.Opciones != null ? c.Opciones.Length : 0);
+            float[] posX = cantidad == 4
+                ? new[] { 745f, 990f, 1235f, 1480f }
+                : new[] { 942f, 1204f, 1466f };
+            float anchoTarjeta = cantidad == 4 ? 240f : 256f;
+            float posicionTarjetasY = cantidad == 4 ? -535f : -663f;
             _ref.tarjetas = new TarjetaRespuestaVista[cantidad];
 
             for (int i = 0; i < cantidad; i++)
             {
                 _ref.tarjetas[i] = new TarjetaRespuestaVista();
-                RectTransform rectTarjeta = CrearImagenTopLeft("Respuesta" + (i + 1), capaActividad, CargarSprite("TarjetaRespuesta"), Color.white, new Vector2(posX[i], -663f), new Vector2(256f, 307f)).rectTransform;
+                RectTransform rectTarjeta = CrearImagenTopLeft("Respuesta" + (i + 1), capaActividad, CargarSprite("TarjetaRespuesta"), Color.white, new Vector2(posX[i], posicionTarjetasY), new Vector2(anchoTarjeta, 307f)).rectTransform;
                 _ref.tarjetas[i].boton = rectTarjeta.gameObject.AddComponent<Button>();
 
                 // Brillo
-                Image brillo = CrearImagenRelativa("Brillo", rectTarjeta, CargarSprite("BrilloSeleccion"), Color.white, Vector2.zero, new Vector2(256f, 307f));
+                Image brillo = CrearImagenRelativa("Brillo", rectTarjeta, CargarSprite("BrilloSeleccion"), Color.white, Vector2.zero, new Vector2(anchoTarjeta, 307f));
                 brillo.gameObject.SetActive(false);
                 _ref.tarjetas[i].brilloSeleccion = brillo.gameObject;
 
                 // Bordes
-                Image bordeInc = CrearImagenRelativa("BordeIncorrecto", rectTarjeta, CargarSprite("BordeRespuestaIncorrecta"), Color.white, Vector2.zero, new Vector2(256f, 307f));
+                Image bordeInc = CrearImagenRelativa("BordeIncorrecto", rectTarjeta, CargarSprite("BordeRespuestaIncorrecta"), Color.white, Vector2.zero, new Vector2(anchoTarjeta, 307f));
                 bordeInc.gameObject.SetActive(false);
                 _ref.tarjetas[i].bordeIncorrecto = bordeInc.gameObject;
 
-                Image bordeCor = CrearImagenRelativa("BordeCorrecto", rectTarjeta, CargarSprite("BordeRespuestaCorrecta"), Color.white, Vector2.zero, new Vector2(256f, 307f));
+                Image bordeCor = CrearImagenRelativa("BordeCorrecto", rectTarjeta, CargarSprite("BordeRespuestaCorrecta"), Color.white, Vector2.zero, new Vector2(anchoTarjeta, 307f));
                 bordeCor.gameObject.SetActive(false);
                 _ref.tarjetas[i].bordeCorrecto = bordeCor.gameObject;
 
@@ -770,7 +962,7 @@ namespace GuardianesAmazonicos.Views
                 rectIlustracion.anchorMax = new Vector2(0.5f, 1f);
                 rectIlustracion.pivot = new Vector2(0.5f, 0.5f);
                 rectIlustracion.anchoredPosition = new Vector2(0f, -112f);
-                rectIlustracion.sizeDelta = new Vector2(216f, 180f);
+                rectIlustracion.sizeDelta = new Vector2(anchoTarjeta - 48f, 180f);
                 Image imgOp = goIlustracion.GetComponent<Image>();
                 imgOp.sprite = sp;
                 imgOp.color = Color.white;
@@ -779,7 +971,7 @@ namespace GuardianesAmazonicos.Views
                 _ref.tarjetas[i].ilustracion = imgOp;
 
                 // Nombre
-                _ref.tarjetas[i].nombre = CrearTextoRelativo("Nombre", rectTarjeta, c.Opciones[i], new Vector2(15f, -216f), new Vector2(226f, 76f), 24f, Tinta, TextAlignmentOptions.Center, true, c.Fuente);
+                _ref.tarjetas[i].nombre = CrearTextoRelativo("Nombre", rectTarjeta, c.Opciones[i], new Vector2(15f, -216f), new Vector2(anchoTarjeta - 30f, 76f), 24f, Tinta, TextAlignmentOptions.Center, true, c.Fuente);
             }
 
             // Botones de confirmación

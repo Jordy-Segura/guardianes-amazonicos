@@ -33,6 +33,7 @@ namespace GuardianesAmazonicos.Models
 
         [Header("Escena de la pregunta (PNG horizontal sin texto)")]
         [SerializeField] private Sprite _imagenEscena;
+        [SerializeField] private bool _mostrarImagenEscena = true;
         [SerializeField] private Sprite _elementoEscena;
         [Tooltip("x, y, ancho y alto dentro de la imagen principal (origen arriba a la izquierda, Y negativa).")]
         [SerializeField] private Rect _rectElementoEscena;
@@ -45,6 +46,9 @@ namespace GuardianesAmazonicos.Models
 
         [Header("Accesibilidad")]
         [SerializeField] private AudioClip _audioLectura;
+        [SerializeField] private AudioClip _audioPista;
+        [SerializeField] private AudioClip[] _audioCorrecciones = new AudioClip[CANTIDAD_OPCIONES];
+        [SerializeField] private AudioClip _audioFelicitacion;
         [Tooltip("Archivo en StreamingAssets/LSEC grabado con la intérprete aprobada.")]
         [SerializeField] private string _videoSenas;
 
@@ -134,6 +138,7 @@ namespace GuardianesAmazonicos.Models
             get => _imagenEscena != null ? _imagenEscena : imagenEscena;
             set { _imagenEscena = value; imagenEscena = value; }
         }
+        public bool MostrarImagenEscena { get => _mostrarImagenEscena; set => _mostrarImagenEscena = value; }
         public Sprite ElementoEscena { get => _elementoEscena; set => _elementoEscena = value; }
         public Rect RectElementoEscena { get => _rectElementoEscena; set => _rectElementoEscena = value; }
         public Sprite Fondo
@@ -149,6 +154,15 @@ namespace GuardianesAmazonicos.Models
         public Sprite PersonajeIncorrecto { get => _personajeIncorrecto; set => _personajeIncorrecto = value; }
         public Sprite[] FotogramasCelebracion { get => _fotogramasCelebracion; set => _fotogramasCelebracion = value; }
         public AudioClip AudioLectura { get => _audioLectura; set => _audioLectura = value; }
+        public AudioClip AudioPista { get => _audioPista; set => _audioPista = value; }
+        public AudioClip AudioFelicitacion { get => _audioFelicitacion; set => _audioFelicitacion = value; }
+        public AudioClip[] AudioCorrecciones { get => _audioCorrecciones; set => _audioCorrecciones = value; }
+        public AudioClip ObtenerAudioCorreccion(int indice)
+        {
+            return _audioCorrecciones != null && indice >= 0 && indice < _audioCorrecciones.Length
+                ? _audioCorrecciones[indice]
+                : null;
+        }
         public string VideoSenas { get => _videoSenas; set => _videoSenas = value; }
         public bool MostrarBienvenida { get => _mostrarBienvenida; set => _mostrarBienvenida = value; }
         public string BienvenidaEtiquetaNivel { get => _bienvenidaEtiquetaNivel; set => _bienvenidaEtiquetaNivel = value; }

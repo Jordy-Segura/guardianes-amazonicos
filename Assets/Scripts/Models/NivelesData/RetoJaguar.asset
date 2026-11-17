@@ -86,6 +86,12 @@ MonoBehaviour:
   - {fileID: 21300000, guid: ebb05fd8c773ec88d78b5e433069c07f, type: 3}
   - {fileID: 21300000, guid: b0eca3a47b2994172294ce52a6a4f4c0, type: 3}
   _audioLectura: {fileID: 8300000, guid: ff02781d097419f4f9561419526d598f, type: 3}
+  _audioPista: {fileID: 8300000, guid: dca7cd090e5341534b3b12ca15d8a92a, type: 3}
+  _audioCorrecciones:
+  - {fileID: 8300000, guid: d8a6770871c8724ec284cda950d97115, type: 3}
+  - {fileID: 0}
+  - {fileID: 8300000, guid: 9eca678353276694af2ed8769b09688a, type: 3}
+  _audioFelicitacion: {fileID: 8300000, guid: 2c7110969eec6d1cfda9e349ceaa576f, type: 3}
   _videoSenas: senas_nivel_01_pregunta_05.mp4
   _mostrarBienvenida: 0
   _bienvenidaEtiquetaNivel: 
