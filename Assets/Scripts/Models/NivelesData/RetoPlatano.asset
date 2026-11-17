@@ -28,8 +28,8 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 90fec6ecd008ed840a8fd38f84ea7c44, type: 3}
   _indiceCorrecto: 2
   _explicacionesIncorrectas:
-  - "La heliconia es una planta de flores rojas de la selva. El pl\xE1tano es un fruto largo, curvo y amarillo."
-  - "El cacao es un fruto morado con semillas blancas. El pl\xE1tano es largo, curvo y amarillo."
+  - "\xA1Buen intento! La heliconia es una planta de flores rojas de la selva. El pl\xE1tano es un fruto largo, curvo y amarillo."
+  - "\xA1Buen intento! El cacao es un fruto morado con semillas blancas. El pl\xE1tano es largo, curvo y amarillo."
   - 
   _pista: "Busca una fruta larga y curva que se vuelve amarilla cuando est\xE1 madura."
   _felicitacion: "\xA1Lo lograste! Identificaste el pl\xE1tano."

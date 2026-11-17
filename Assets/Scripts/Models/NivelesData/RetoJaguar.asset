@@ -28,9 +28,9 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 7569f8d56b7c7c8ad11e7960c854d1e1, type: 3}
   _indiceCorrecto: 1
   _explicacionesIncorrectas:
-  - "El mono trepa los \xE1rboles y tiene una cola larga. El jaguar es un felino con manchas."
+  - "\xA1Buen intento! El mono trepa los \xE1rboles y tiene una cola larga. El jaguar es un felino con manchas."
   - 
-  - El guacamayo es un ave de plumas de colores. El jaguar es un felino con manchas.
+  - "\xA1Buen intento! El guacamayo es un ave de plumas de colores. El jaguar es un felino con manchas."
   _pista: Busca un animal parecido a un gato grande, de pelaje amarillo con manchas oscuras.
   _felicitacion: "\xA1Lo lograste! Encontraste al jaguar."
   _imagenEscena: {fileID: 21300000, guid: 8e5d29d3ef5986148b3f371a2c2a5249, type: 3}

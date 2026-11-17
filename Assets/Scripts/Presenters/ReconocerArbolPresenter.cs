@@ -87,7 +87,11 @@ namespace GuardianesAmazonicos.Presenters
             _vista.MostrarSenas(false, null);
             _vista.PermitirRegresar(NavegacionNiveles.HayAnterior());
             _vista.PermitirAvanzar(false);
-            _vista.AlternarAudio(_configuracion.AudioLectura);
+            _vista.ActualizarEstadoVisualLectura(RetoSeleccionView.ModoLecturaActivo);
+            if (RetoSeleccionView.ModoLecturaActivo)
+            {
+                ReproducirEstadoActual();
+            }
         }
 
         private void Seleccionar(int indice)
@@ -103,13 +107,19 @@ namespace GuardianesAmazonicos.Presenters
             {
                 GuardarProgreso();
                 _vista.MostrarCorrecta(indice, _configuracion.Felicitacion);
-                _vista.AlternarAudio(_audioAcierto);
+                if (RetoSeleccionView.ModoLecturaActivo)
+                {
+                    _vista.ReproducirAudio(_audioAcierto != null ? _audioAcierto : _configuracion.AudioFelicitacion);
+                }
                 _vista.PermitirAvanzar(true);
             }
             else
             {
                 _vista.MostrarIncorrecta(indice, _configuracion.ObtenerExplicacion(indice));
-                _vista.AlternarAudio(_configuracion.ObtenerAudioCorreccion(indice) ?? _audioError);
+                if (RetoSeleccionView.ModoLecturaActivo)
+                {
+                    _vista.ReproducirAudio(_configuracion.ObtenerAudioCorreccion(indice) ?? _audioError);
+                }
             }
         }
 
@@ -120,29 +130,54 @@ namespace GuardianesAmazonicos.Presenters
             _modelo.Reintentar();
             _vista.MostrarSinSeleccion();
             _vista.EnfocarTarjeta(0);
+            if (RetoSeleccionView.ModoLecturaActivo)
+            {
+                ReproducirEstadoActual();
+            }
         }
 
         private void Leer()
         {
+            RetoSeleccionView.ModoLecturaActivo = !RetoSeleccionView.ModoLecturaActivo;
+            _vista.ActualizarEstadoVisualLectura(RetoSeleccionView.ModoLecturaActivo);
+            if (!RetoSeleccionView.ModoLecturaActivo)
+            {
+                _vista.DetenerAudio();
+                return;
+            }
+
+            ReproducirEstadoActual();
+        }
+
+        private void ReproducirEstadoActual()
+        {
             AudioClip clip = _vista.PistaVisible
                 ? _configuracion.AudioPista
                 : _vista.EstadoCorrectoVisible
-                    ? _audioAcierto
+                    ? (_audioAcierto != null ? _audioAcierto : _configuracion.AudioFelicitacion)
                 : _vista.RespuestaIncorrectaVisible
                     ? _configuracion.ObtenerAudioCorreccion(_modelo.IndiceSeleccionado) ?? _audioError
                     : _configuracion.AudioLectura;
-            _vista.AlternarAudio(clip != null ? clip : _configuracion.AudioLectura);
+            _vista.ReproducirAudio(clip != null ? clip : _configuracion.AudioLectura);
         }
+
         private void AbrirPista()
         {
             _vista.MostrarPista(true);
-            _vista.ReproducirAudio(_configuracion.AudioPista);
+            if (RetoSeleccionView.ModoLecturaActivo)
+            {
+                ReproducirEstadoActual();
+            }
         }
         private void CerrarPista()
         {
             _vista.DetenerAudio();
             _vista.MostrarPista(false);
             _vista.EnfocarTarjeta(_modelo.IndiceSeleccionado);
+            if (RetoSeleccionView.ModoLecturaActivo)
+            {
+                ReproducirEstadoActual();
+            }
         }
         private void AbrirSenas() { _vista.DetenerAudio(); _vista.MostrarSenas(true, _configuracion.VideoSenas); }
         private void CerrarSenas() { _vista.MostrarSenas(false, null); _vista.EnfocarTarjeta(_modelo.IndiceSeleccionado); }

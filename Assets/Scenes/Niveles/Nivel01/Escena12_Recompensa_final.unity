@@ -176,7 +176,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\xA1Haz completado todos \nlos retos del  "
+  m_text: "\xA1Has completado todos\nlos retos del"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 767ffc8669e62e144951bc56a822d1e6, type: 2}
   m_sharedMaterial: {fileID: -4203256325650379, guid: 767ffc8669e62e144951bc56a822d1e6, type: 2}
@@ -203,13 +203,13 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 45
-  m_fontSizeBase: 45
+  m_fontSize: 38
+  m_fontSizeBase: 38
   m_fontWeight: 400
   m_enableAutoSizing: 0
-  m_fontSizeMin: 20
-  m_fontSizeMax: 26
-  m_fontStyle: 0
+  m_fontSizeMin: 24
+  m_fontSizeMax: 38
+  m_fontStyle: 1
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -692,7 +692,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: 4b1e903c6ab40fa47d274fd61783bfa8, type: 3}
   m_Resource: {fileID: 8300000, guid: 2f8d836ea3005dc45af2f66de78a338f, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
@@ -1407,7 +1407,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 67, y: -15}
+  m_AnchoredPosition: {x: 70, y: -14}
   m_SizeDelta: {x: 148, y: 64}
   m_Pivot: {x: 0, y: 1}
 --- !u!222 &918424784
@@ -1465,7 +1465,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 33.65
+  m_fontSize: 36
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -1594,7 +1594,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 42.45
+  m_fontSize: 54
   m_fontSizeBase: 54
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -2599,7 +2599,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 26.4
+  m_fontSize: 28
   m_fontSizeBase: 28
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -3680,7 +3680,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Nivel 1!
+  m_text: "\xA1Nivel 1!"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 767ffc8669e62e144951bc56a822d1e6, type: 2}
   m_sharedMaterial: {fileID: -4203256325650379, guid: 767ffc8669e62e144951bc56a822d1e6, type: 2}
@@ -3707,12 +3707,12 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 55
-  m_fontSizeBase: 55
+  m_fontSize: 44
+  m_fontSizeBase: 44
   m_fontWeight: 400
   m_enableAutoSizing: 0
-  m_fontSizeMin: 24
-  m_fontSizeMax: 40
+  m_fontSizeMin: 28
+  m_fontSizeMax: 44
   m_fontStyle: 1
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512

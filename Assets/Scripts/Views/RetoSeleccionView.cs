@@ -21,9 +21,10 @@ namespace GuardianesAmazonicos.Views
         private const float ESPERA_CELEBRACION = 0.45f;
         private const float DURACION_ENTRADA = 0.25f;
 
-        private static readonly Color Tinta = new Color(0.12f, 0.18f, 0.14f, 1f);
+        private static readonly Color Tinta = new Color32(0x24, 0x1B, 0x0E, 0xFF);
         private static readonly Color TintaBlanca = Color.white;
-        private static readonly Color RojoFallo = new Color(0.85f, 0.18f, 0.18f, 1f);
+        private static readonly Color RojoFallo = new Color32(0x6B, 0x15, 0x10, 0xFF);
+        private static readonly Color VerdePista = new Color32(0x16, 0x4A, 0x1E, 0xFF);
 
         [Serializable]
         public sealed class TarjetaRespuestaVista
@@ -159,14 +160,14 @@ namespace GuardianesAmazonicos.Views
         {
             if (_construidaDinamica || (_ref.tarjetas != null && _ref.tarjetas.Length > 0 && _ref.tarjetas[0] != null && _ref.tarjetas[0].boton != null))
             {
-                if (configuracion != null && ((configuracion.Nivel == 1 && (configuracion.NumeroEscena == 5 || configuracion.NumeroEscena == 9)) || configuracion.Nivel == 2))
-                {
-                    AjustarTarjetasSinTexto();
-                }
+                AjustarTarjetasSinTexto();
+                UnificarTipografiaYEstilo(configuracion != null ? configuracion.Fuente : null);
                 return;
             }
 
             ConstruirInterfazDinamica(configuracion);
+            AjustarTarjetasSinTexto();
+            UnificarTipografiaYEstilo(configuracion != null ? configuracion.Fuente : null);
             _construidaDinamica = true;
             if (isActiveAndEnabled)
             {
@@ -177,22 +178,120 @@ namespace GuardianesAmazonicos.Views
         private void AjustarTarjetasSinTexto()
         {
             if (_ref.tarjetas == null) return;
-            foreach (TarjetaRespuestaVista tarjeta in _ref.tarjetas)
+            bool cuatroTarjetas = _ref.tarjetas.Length == 4;
+            float[] columnasTres = { 921f, 1193f, 1465f };
+            for (int i = 0; i < _ref.tarjetas.Length; i++)
             {
+                TarjetaRespuestaVista tarjeta = _ref.tarjetas[i];
                 if (tarjeta == null) continue;
                 if (tarjeta.nombre != null && tarjeta.nombre.gameObject.activeSelf)
                 {
                     tarjeta.nombre.gameObject.SetActive(false);
                 }
+
+                if (!cuatroTarjetas && tarjeta.boton != null && tarjeta.boton.transform is RectTransform rectTarjeta && i < columnasTres.Length)
+                {
+                    rectTarjeta.anchorMin = new Vector2(0f, 1f);
+                    rectTarjeta.anchorMax = new Vector2(0f, 1f);
+                    rectTarjeta.pivot = new Vector2(0f, 1f);
+                    rectTarjeta.anchoredPosition = new Vector2(columnasTres[i], -663f);
+                    rectTarjeta.sizeDelta = new Vector2(256f, 307f);
+                }
+
                 if (tarjeta.ilustracion != null)
                 {
                     RectTransform rect = tarjeta.ilustracion.rectTransform;
+                    if (rect.parent != null && rect.parent.name == "RecorteIlustracionRedondeado") continue;
                     rect.anchorMin = new Vector2(0f, 1f);
                     rect.anchorMax = new Vector2(0f, 1f);
                     rect.pivot = new Vector2(0f, 1f);
                     rect.anchoredPosition = new Vector2(20f, -28f);
                     rect.sizeDelta = new Vector2(216f, 250f);
                     tarjeta.ilustracion.preserveAspect = true;
+                }
+            }
+        }
+
+        private void UnificarTipografiaYEstilo(TMP_FontAsset fuentePreferida)
+        {
+            TMP_FontAsset fuente = fuentePreferida != null
+                ? fuentePreferida
+                : (_ref.textoProgreso != null ? _ref.textoProgreso.font : null);
+
+            if (_ref.botonRegresar != null && !_ref.botonRegresar.gameObject.activeSelf)
+            {
+                _ref.botonRegresar.gameObject.SetActive(true);
+            }
+
+            Canvas rootCanvas = GetComponentInChildren<Canvas>(true);
+            if (rootCanvas == null && _ref.capaBase != null)
+            {
+                rootCanvas = _ref.capaBase.GetComponentInParent<Canvas>();
+            }
+            if (rootCanvas == null) return;
+
+            TMP_Text[] textos = rootCanvas.GetComponentsInChildren<TMP_Text>(true);
+            foreach (TMP_Text t in textos)
+            {
+                if (t == null) continue;
+                if (fuente != null) t.font = fuente;
+                string n = t.gameObject.name;
+                if (n == "TextoTituloNivel" || n == "TextoTitulo")
+                {
+                    t.fontSize = 28f;
+                    t.fontSizeMin = 18f;
+                    t.fontSizeMax = 28f;
+                    t.enableAutoSizing = true;
+                    t.fontStyle = FontStyles.Bold;
+                    t.color = Tinta;
+                    if (!string.IsNullOrEmpty(t.text))
+                    {
+                        t.text = t.text.Replace("·", "•").Replace(". Conozco la Selva", " • Conozco la selva");
+                    }
+                }
+                else if (n == "TextoProgreso")
+                {
+                    t.fontSize = 36f;
+                    t.fontSizeMin = 21.6f;
+                    t.fontSizeMax = 36f;
+                    t.enableAutoSizing = true;
+                    t.fontStyle = FontStyles.Bold;
+                }
+                else if (n == "TextoPregunta")
+                {
+                    t.fontSize = 40f;
+                    t.fontSizeMin = 24f;
+                    t.fontSizeMax = 40f;
+                    t.enableAutoSizing = true;
+                    t.fontStyle = FontStyles.Bold;
+                    t.color = Tinta;
+                }
+                else if (n == "TextoCorreccion")
+                {
+                    t.fontSize = 36f;
+                    t.fontSizeMin = 21.6f;
+                    t.fontSizeMax = 36f;
+                    t.enableAutoSizing = true;
+                    t.fontStyle = FontStyles.Bold;
+                    t.color = RojoFallo;
+                }
+                else if (n == "TextoFelicitacion")
+                {
+                    t.fontSize = 52f;
+                    t.fontSizeMin = 31.2f;
+                    t.fontSizeMax = 52f;
+                    t.enableAutoSizing = true;
+                    t.fontStyle = FontStyles.Bold;
+                    t.color = TintaBlanca;
+                }
+                else if (n == "TextoPista")
+                {
+                    t.fontSize = 40f;
+                    t.fontSizeMin = 24f;
+                    t.fontSizeMax = 40f;
+                    t.enableAutoSizing = true;
+                    t.fontStyle = FontStyles.Bold;
+                    t.color = VerdePista;
                 }
             }
         }
@@ -270,6 +369,8 @@ namespace GuardianesAmazonicos.Views
 
         private void Start()
         {
+            AjustarTarjetasSinTexto();
+            UnificarTipografiaYEstilo(null);
             // Las preferencias de accesibilidad son globales: se aplican al entrar
             // a cualquier actividad, aunque se hayan cambiado en otra escena.
             PanelConfiguracionAccesibilidad.AplicarPreferencias(_ref.fuenteAudio);
@@ -868,25 +969,27 @@ namespace GuardianesAmazonicos.Views
 
             // Cabecera
             _ref.botonLectura = CrearBotonTopLeft("BotonLectura", capaBase, CargarSprite("BotonLectura"), new Vector2(30f, -16f), new Vector2(132f, 114f));
-            _ref.botonSenas = CrearBotonTopLeft("BotonSenas", capaBase, CargarSprite("BotonSenas"), new Vector2(178f, -16f), new Vector2(132f, 114f));
-            _ref.botonAyuda = CrearBotonTopLeft("BotonAyuda", capaBase, CargarSprite("BotonAyuda"), new Vector2(326f, -16f), new Vector2(132f, 114f));
+            _ref.botonSenas = CrearBotonTopLeft("BotonSenas", capaBase, CargarSprite("BotonSenas"), new Vector2(170f, -16f), new Vector2(132f, 114f));
+            _ref.botonAyuda = CrearBotonTopLeft("BotonAyuda", capaBase, CargarSprite("BotonAyuda"), new Vector2(310f, -16f), new Vector2(132f, 114f));
 
-            RectTransform placaTitulo = CrearImagenTopLeft("PlacaTitulo", capaBase, CargarSprite("PlacaTituloNivel"), Color.white, new Vector2(592f, -12f), new Vector2(484f, 108f)).rectTransform;
+            RectTransform placaTitulo = CrearImagenTopLeft("TituloNivel", capaBase, CargarSprite("PlacaTituloNivel"), Color.white, new Vector2(592f, -12f), new Vector2(484f, 108f)).rectTransform;
             string tituloMostrado = NormalizarTituloNivel(c.TituloNivel);
-            CrearTextoRelativo("TextoTitulo", placaTitulo, tituloMostrado, new Vector2(65f, -24f), new Vector2(354f, 60f), 22f, Tinta, TextAlignmentOptions.Center, true, c.Fuente);
+            CrearTextoRelativo("TextoTituloNivel", placaTitulo, tituloMostrado, new Vector2(66f, -22f), new Vector2(352f, 64f), 28f, Tinta, TextAlignmentOptions.Center, true, c.Fuente);
 
-            RectTransform placaProgreso = CrearImagenTopLeft("PlacaProgreso", capaBase, CargarSprite("PlacaProgreso"), Color.white, new Vector2(1092f, -16f), new Vector2(236f, 94f)).rectTransform;
-            string progresoTexto = !string.IsNullOrWhiteSpace(c.textoProgreso) ? c.textoProgreso : (c.NumeroEscena + " de 2");
-            _ref.textoProgreso = CrearTextoRelativo("TextoProgreso", placaProgreso, progresoTexto, new Vector2(65f, -20f), new Vector2(150f, 54f), 24f, TintaBlanca, TextAlignmentOptions.Center, true, c.Fuente);
+            RectTransform placaProgreso = CrearImagenTopLeft("Progreso", capaBase, CargarSprite("PlacaProgreso"), Color.white, new Vector2(1092f, -16f), new Vector2(236f, 94f)).rectTransform;
+            string progresoTexto = FormatearProgreso(c.NumeroEscena, c.TotalEscenas);
+            _ref.textoProgreso = CrearTextoRelativo("TextoProgreso", placaProgreso, progresoTexto, new Vector2(70f, -14f), new Vector2(148f, 64f), 36f, TintaBlanca, TextAlignmentOptions.Center, true, c.Fuente);
 
             _ref.botonRegresar = CrearBotonTopLeft("BotonRegresar", capaBase, CargarSprite("BotonRegresar"), new Vector2(1506f, -12f), new Vector2(84f, 84f));
-            _ref.botonAvanzar = CrearBotonTopLeft("BotonAvanzar", capaBase, CargarSprite("BotonAvanzar"), new Vector2(1602f, -12f), new Vector2(84f, 84f));
-            _ref.botonInicio = CrearBotonTopLeft("BotonInicio", capaBase, CargarSprite("BotonInicio"), new Vector2(1698f, -12f), new Vector2(84f, 84f));
-            _ref.botonConfiguracion = CrearBotonTopLeft("BotonConfiguracion", capaBase, CargarSprite("BotonConfiguracion"), new Vector2(1794f, -12f), new Vector2(84f, 84f));
+            _ref.botonAvanzar = CrearBotonTopLeft("BotonAvanzar", capaBase, CargarSprite("BotonAvanzar"), new Vector2(1606f, -12f), new Vector2(84f, 84f));
+            _ref.botonInicio = CrearBotonTopLeft("BotonInicio", capaBase, CargarSprite("BotonInicio"), new Vector2(1706f, -12f), new Vector2(84f, 84f));
+            _ref.botonConfiguracion = CrearBotonTopLeft("BotonConfiguracion", capaBase, CargarSprite("BotonConfiguracion"), new Vector2(1806f, -12f), new Vector2(84f, 84f));
 
             // Personaje Guía a nivel del suelo
-            Sprite spritePersonaje = c.Personaje != null ? c.Personaje : CargarSprite("Explorador");
-            Image guia = CrearImagenTopLeft("PersonajeGuia", capaActividad, spritePersonaje, Color.white, new Vector2(147f, -495f), new Vector2(390f, 562f));
+            Sprite spritePersonaje = (c.FotogramasCelebracion != null && c.FotogramasCelebracion.Length > 0)
+                ? c.FotogramasCelebracion[0]
+                : (c.Personaje != null ? c.Personaje : CargarSprite("Explorador"));
+            Image guia = CrearImagenTopLeft("Personaje", capaActividad, spritePersonaje, Color.white, new Vector2(147f, -428f), new Vector2(390f, 562f));
             guia.preserveAspect = true;
             guia.raycastTarget = false;
             _ref.personajeGuia = guia.gameObject;
@@ -898,12 +1001,12 @@ namespace GuardianesAmazonicos.Views
             // Globo de pregunta
             RectTransform globo = CrearImagenTopLeft("GloboPregunta", capaActividad, CargarSprite("GloboPregunta"), Color.white, new Vector2(158f, -174f), new Vector2(684f, 240f)).rectTransform;
             string preguntaTexto = FormatearPreguntaConSignos(c.Pregunta);
-            CrearTextoRelativo("TextoPregunta", globo, preguntaTexto, new Vector2(43f, -34f), new Vector2(598f, 150f), 26f, Tinta, TextAlignmentOptions.Center, true, c.Fuente);
+            CrearTextoRelativo("TextoPregunta", globo, preguntaTexto, new Vector2(43f, -34f), new Vector2(598f, 150f), 40f, Tinta, TextAlignmentOptions.Center, true, c.Fuente);
             _ref.globoPregunta = globo.gameObject;
 
             // Globo de corrección
             RectTransform globoCorrec = CrearImagenTopLeft("GloboCorreccion", capaActividad, CargarSprite("GloboCorreccion"), Color.white, new Vector2(158f, -174f), new Vector2(684f, 240f)).rectTransform;
-            _ref.textoCorreccion = CrearTextoRelativo("TextoCorreccion", globoCorrec, string.Empty, new Vector2(43f, -34f), new Vector2(598f, 150f), 26f, RojoFallo, TextAlignmentOptions.Center, true, c.Fuente);
+            _ref.textoCorreccion = CrearTextoRelativo("TextoCorreccion", globoCorrec, string.Empty, new Vector2(43f, -34f), new Vector2(598f, 150f), 36f, RojoFallo, TextAlignmentOptions.Center, true, c.Fuente);
             _ref.globoCorreccion = globoCorrec.gameObject;
             _ref.globoCorreccion.SetActive(false);
 
@@ -923,55 +1026,49 @@ namespace GuardianesAmazonicos.Views
             // Tarjetas de respuesta
             int cantidad = Mathf.Min(4, c.Opciones != null ? c.Opciones.Length : 0);
             float[] posX = cantidad == 4
-                ? new[] { 745f, 990f, 1235f, 1480f }
-                : new[] { 942f, 1204f, 1466f };
+                ? new[] { 1020f, 1340f, 1020f, 1340f }
+                : new[] { 921f, 1193f, 1465f };
             float anchoTarjeta = cantidad == 4 ? 240f : 256f;
-            float posicionTarjetasY = cantidad == 4 ? -535f : -663f;
             _ref.tarjetas = new TarjetaRespuestaVista[cantidad];
 
             for (int i = 0; i < cantidad; i++)
             {
+                float posicionTarjetasY = cantidad == 4 ? (i < 2 ? -235f : -560f) : -663f;
+                float escalaDecoracion = anchoTarjeta / 256f;
                 _ref.tarjetas[i] = new TarjetaRespuestaVista();
                 RectTransform rectTarjeta = CrearImagenTopLeft("Respuesta" + (i + 1), capaActividad, CargarSprite("TarjetaRespuesta"), Color.white, new Vector2(posX[i], posicionTarjetasY), new Vector2(anchoTarjeta, 307f)).rectTransform;
                 _ref.tarjetas[i].boton = rectTarjeta.gameObject.AddComponent<Button>();
 
-                // Brillo
-                Image brillo = CrearImagenRelativa("Brillo", rectTarjeta, CargarSprite("BrilloSeleccion"), Color.white, Vector2.zero, new Vector2(anchoTarjeta, 307f));
-                brillo.gameObject.SetActive(false);
-                _ref.tarjetas[i].brilloSeleccion = brillo.gameObject;
-
-                // Bordes
-                Image bordeInc = CrearImagenRelativa("BordeIncorrecto", rectTarjeta, CargarSprite("BordeRespuestaIncorrecta"), Color.white, Vector2.zero, new Vector2(anchoTarjeta, 307f));
-                bordeInc.gameObject.SetActive(false);
-                _ref.tarjetas[i].bordeIncorrecto = bordeInc.gameObject;
-
-                Image bordeCor = CrearImagenRelativa("BordeCorrecto", rectTarjeta, CargarSprite("BordeRespuestaCorrecta"), Color.white, Vector2.zero, new Vector2(anchoTarjeta, 307f));
-                bordeCor.gameObject.SetActive(false);
-                _ref.tarjetas[i].bordeCorrecto = bordeCor.gameObject;
-
-                // Ilustración de la opción centrada horizontal y verticalmente
+                // Ilustración de la opción centrada
                 Sprite sp = (c.ImagenesOpciones != null && i < c.ImagenesOpciones.Length && c.ImagenesOpciones[i] != null)
                     ? c.ImagenesOpciones[i]
                     : ((c.imagenes != null && i < c.imagenes.Length && c.imagenes[i] != null)
                         ? c.imagenes[i]
                         : (c.Opciones != null && i < c.Opciones.Length ? CargarSprite(c.Opciones[i]) : null));
-                GameObject goIlustracion = new GameObject("Ilustracion", typeof(RectTransform), typeof(Image));
-                goIlustracion.transform.SetParent(rectTarjeta, false);
-                RectTransform rectIlustracion = goIlustracion.transform as RectTransform;
-                rectIlustracion.anchorMin = new Vector2(0.5f, 1f);
-                rectIlustracion.anchorMax = new Vector2(0.5f, 1f);
-                rectIlustracion.pivot = new Vector2(0.5f, 0.5f);
-                rectIlustracion.anchoredPosition = new Vector2(0f, -112f);
-                rectIlustracion.sizeDelta = new Vector2(anchoTarjeta - 48f, 180f);
-                Image imgOp = goIlustracion.GetComponent<Image>();
-                imgOp.sprite = sp;
-                imgOp.color = Color.white;
+                Image imgOp = CrearImagenRelativa("Ilustracion", rectTarjeta, sp, Color.white, new Vector2(20f, -28f), new Vector2(216f, 250f));
                 imgOp.preserveAspect = true;
                 imgOp.raycastTarget = false;
                 _ref.tarjetas[i].ilustracion = imgOp;
 
-                // Nombre
-                _ref.tarjetas[i].nombre = CrearTextoRelativo("Nombre", rectTarjeta, c.Opciones[i], new Vector2(15f, -216f), new Vector2(anchoTarjeta - 30f, 76f), 24f, Tinta, TextAlignmentOptions.Center, true, c.Fuente);
+                // Nombre (oculto por estilo unificado de tarjetas solo con imagen)
+                _ref.tarjetas[i].nombre = CrearTextoRelativo("Nombre", rectTarjeta, c.Opciones[i], new Vector2(15f, -216f), new Vector2(anchoTarjeta - 30f, 76f), 28f, Tinta, TextAlignmentOptions.Center, true, c.Fuente);
+                _ref.tarjetas[i].nombre.gameObject.SetActive(false);
+
+                // Brillo y Bordes alineados con la plantilla
+                Image brillo = CrearImagenRelativa("BrilloSeleccion", rectTarjeta, CargarSprite("BrilloSeleccion"), Color.white, new Vector2(-40.6f * escalaDecoracion, 56.4f * escalaDecoracion), new Vector2(351f * escalaDecoracion, 390.4f * escalaDecoracion));
+                brillo.raycastTarget = false;
+                brillo.gameObject.SetActive(false);
+                _ref.tarjetas[i].brilloSeleccion = brillo.gameObject;
+
+                Image bordeInc = CrearImagenRelativa("BordeIncorrecto", rectTarjeta, CargarSprite("BordeRespuestaIncorrecta"), Color.white, new Vector2(-15.5f * escalaDecoracion, 32.8f * escalaDecoracion), new Vector2(288.2f * escalaDecoracion, 374.1f * escalaDecoracion));
+                bordeInc.raycastTarget = false;
+                bordeInc.gameObject.SetActive(false);
+                _ref.tarjetas[i].bordeIncorrecto = bordeInc.gameObject;
+
+                Image bordeCor = CrearImagenRelativa("BordeCorrecto", rectTarjeta, CargarSprite("BordeRespuestaCorrecta"), Color.white, new Vector2(-15.5f * escalaDecoracion, 32.8f * escalaDecoracion), new Vector2(288.2f * escalaDecoracion, 374.1f * escalaDecoracion));
+                bordeCor.raycastTarget = false;
+                bordeCor.gameObject.SetActive(false);
+                _ref.tarjetas[i].bordeCorrecto = bordeCor.gameObject;
             }
 
             // Botones de confirmación
@@ -990,11 +1087,14 @@ namespace GuardianesAmazonicos.Views
             rectCorrecto.offsetMax = Vector2.zero;
             _ref.estadoCorrecto = estadoCorrectoGo;
 
-            RectTransform bloqueadorCorrecto = CrearImagenFull("FondoResplandor", rectCorrecto, CargarSprite("PlantillaVerdeIluminada")).rectTransform;
+            RectTransform bloqueadorCorrecto = CrearImagenFull("ResplandorVerde", rectCorrecto, CargarSprite("PlantillaVerdeIluminada")).rectTransform;
+            Image personajeCeleb = CrearImagenTopLeft("PersonajeCelebracion", rectCorrecto, spritePersonaje, Color.white, new Vector2(300f, -290f), new Vector2(470f, 705f));
+            personajeCeleb.preserveAspect = true;
+            personajeCeleb.raycastTarget = false;
             _ref.contenidoCelebracion = bloqueadorCorrecto;
-            CrearImagenTopLeft("LetreroMuyBien", bloqueadorCorrecto, CargarSprite("LetreroMuyBien"), Color.white, new Vector2(560f, -280f), new Vector2(800f, 260f));
-            _ref.textoFelicitacion = CrearTextoRelativo("TextoFelicitacion", bloqueadorCorrecto, c.Felicitacion, new Vector2(460f, -560f), new Vector2(1000f, 100f), 32f, TintaBlanca, TextAlignmentOptions.Center, true, c.Fuente);
-            _ref.botonSiguiente = CrearBotonTopLeft("BotonSiguiente", bloqueadorCorrecto, CargarSprite("BotonSiguiente"), new Vector2(760f, -700f), new Vector2(400f, 84f));
+            CrearImagenTopLeft("LetreroMuyBien", bloqueadorCorrecto, CargarSprite("LetreroMuyBien"), Color.white, new Vector2(840f, -290f), new Vector2(840f, 242f));
+            _ref.textoFelicitacion = CrearTextoRelativo("TextoFelicitacion", bloqueadorCorrecto, c.Felicitacion, new Vector2(840f, -550f), new Vector2(840f, 80f), 52f, TintaBlanca, TextAlignmentOptions.Center, true, c.Fuente);
+            _ref.botonSiguiente = CrearBotonTopLeft("BotonSiguiente", bloqueadorCorrecto, CargarSprite("BotonSiguiente"), new Vector2(1020f, -650f), new Vector2(480f, 136f));
             _ref.estadoCorrecto.SetActive(false);
 
             // Panel de Pista
@@ -1009,9 +1109,12 @@ namespace GuardianesAmazonicos.Views
 
             RectTransform fondoLuz = CrearImagenFull("FondoLuz", rectPista, CargarSprite("FondoAmarilloPista")).rectTransform;
             fondoLuz.GetComponent<Image>().color = new Color(1f, 1f, 1f, 0.55f);
-            RectTransform tarjetaPista = CrearImagenTopLeft("TarjetaPista", rectPista, CargarSprite("PanelPista"), Color.white, new Vector2(560f, -240f), new Vector2(800f, 600f)).rectTransform;
-            CrearTextoRelativo("TextoPista", tarjetaPista, c.Pista, new Vector2(60f, -140f), new Vector2(680f, 320f), 28f, Tinta, TextAlignmentOptions.Center, true, c.Fuente);
-            _ref.botonVoyIntentarlo = CrearBotonTopLeft("BotonVoyIntentarlo", tarjetaPista, CargarSprite("BotonVoyIntentarlo"), new Vector2(250f, -480f), new Vector2(300f, 80f));
+            Image personajePista = CrearImagenTopLeft("PersonajePista", rectPista, spritePersonaje, Color.white, new Vector2(147f, -428f), new Vector2(390f, 562f));
+            personajePista.preserveAspect = true;
+            personajePista.raycastTarget = false;
+            RectTransform tarjetaPista = CrearImagenTopLeft("TarjetaPista", rectPista, CargarSprite("PanelPista"), Color.white, new Vector2(560f, -245f), new Vector2(880f, 550f)).rectTransform;
+            CrearTextoRelativo("TextoPista", rectPista, c.Pista, new Vector2(640f, -440f), new Vector2(720f, 150f), 40f, VerdePista, TextAlignmentOptions.Center, true, c.Fuente);
+            _ref.botonVoyIntentarlo = CrearBotonTopLeft("BotonVoyIntentarlo", rectPista, CargarSprite("BotonVoyIntentarlo"), new Vector2(750f, -610f), new Vector2(500f, 125f));
             _ref.panelPista.SetActive(false);
 
             // Panel de Señas
@@ -1131,28 +1234,16 @@ namespace GuardianesAmazonicos.Views
 
         private static string NormalizarTituloNivel(string titulo)
         {
-            if (string.IsNullOrWhiteSpace(titulo)) return "Nivel 1. Conozco la Selva";
+            if (string.IsNullOrWhiteSpace(titulo)) return "Nivel 1 • Conozco la selva";
             string res = titulo.Trim();
-            res = res.Replace("·", ".").Replace(" - ", ". ").Replace(" \xB7 ", ". ");
-            if (res.Contains("selva")) res = res.Replace("selva", "Selva");
+            res = res.Replace("·", "•").Replace(" - ", " • ").Replace(" \xB7 ", " • ");
             return res;
         }
 
         private static string FormatearPreguntaConSignos(string pregunta)
         {
             if (string.IsNullOrWhiteSpace(pregunta)) return pregunta;
-            string res = pregunta.Trim();
-            if (!res.StartsWith("¿")) res = "¿" + res;
-            if (!res.EndsWith("?"))
-            {
-                if (res.EndsWith(".")) res = res.Substring(0, res.Length - 1) + "?";
-                else res += "?";
-            }
-            if (res.StartsWith("¿") && res.Length > 1 && res[1] != ' ' && !res.StartsWith("¿<space="))
-            {
-                res = "¿<space=0.18em>" + res.Substring(1);
-            }
-            return res;
+            return pregunta.Trim();
         }
     }
 }

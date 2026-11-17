@@ -28,9 +28,9 @@ MonoBehaviour:
   - {fileID: 21300000, guid: e493ac98972562042a3c14cecdc9d764, type: 3}
   _indiceCorrecto: 1
   _explicacionesIncorrectas:
-  - "La basura ensucia el bosque y puede lastimar a los animales. Busca la acci\xF3n que cuida su hogar."
+  - "\xA1Buen intento! La basura ensucia el bosque y puede lastimar a los animales. Busca la acci\xF3n que cuida su hogar."
   - 
-  - "Si cortamos los \xE1rboles, el mono pierde su casa. Busca la acci\xF3n que cuida el bosque."
+  - "\xA1Buen intento! Si cortamos los \xE1rboles, el mono pierde su casa. Busca la acci\xF3n que cuida el bosque."
   _pista: "Piensa en lo que necesita el mono para vivir: \xE1rboles sanos y un bosque limpio."
   _felicitacion: "\xA1Lo lograste! Cuidar el bosque protege su hogar."
   _imagenEscena: {fileID: 21300000, guid: 2999d199e58f48348869005c2e815d0e, type: 3}
