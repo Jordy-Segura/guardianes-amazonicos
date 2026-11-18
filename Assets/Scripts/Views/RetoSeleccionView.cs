@@ -160,13 +160,13 @@ namespace GuardianesAmazonicos.Views
         {
             if (_construidaDinamica || (_ref.tarjetas != null && _ref.tarjetas.Length > 0 && _ref.tarjetas[0] != null && _ref.tarjetas[0].boton != null))
             {
-                AjustarTarjetasSinTexto();
+                AjustarTarjetasSinTexto(configuracion);
                 UnificarTipografiaYEstilo(configuracion != null ? configuracion.Fuente : null);
                 return;
             }
 
             ConstruirInterfazDinamica(configuracion);
-            AjustarTarjetasSinTexto();
+            AjustarTarjetasSinTexto(configuracion);
             UnificarTipografiaYEstilo(configuracion != null ? configuracion.Fuente : null);
             _construidaDinamica = true;
             if (isActiveAndEnabled)
@@ -175,7 +175,7 @@ namespace GuardianesAmazonicos.Views
             }
         }
 
-        private void AjustarTarjetasSinTexto()
+        private void AjustarTarjetasSinTexto(Models.RetoSeleccionConfiguracion configuracion = null)
         {
             if (_ref.tarjetas == null) return;
             bool cuatroTarjetas = _ref.tarjetas.Length == 4;
@@ -200,6 +200,13 @@ namespace GuardianesAmazonicos.Views
 
                 if (tarjeta.ilustracion != null)
                 {
+                    if (tarjeta.ilustracion.sprite == null && configuracion != null &&
+                        configuracion.ImagenesOpciones != null && i < configuracion.ImagenesOpciones.Length &&
+                        configuracion.ImagenesOpciones[i] != null)
+                    {
+                        tarjeta.ilustracion.sprite = configuracion.ImagenesOpciones[i];
+                    }
+
                     RectTransform rect = tarjeta.ilustracion.rectTransform;
                     if (rect.parent != null && rect.parent.name == "RecorteIlustracionRedondeado") continue;
                     rect.anchorMin = new Vector2(0f, 1f);
@@ -235,6 +242,7 @@ namespace GuardianesAmazonicos.Views
             {
                 if (t == null) continue;
                 if (fuente != null) t.font = fuente;
+                if (t.overflowMode == TextOverflowModes.Ellipsis) t.overflowMode = TextOverflowModes.Truncate;
                 string n = t.gameObject.name;
                 if (n == "TextoTituloNivel" || n == "TextoTitulo")
                 {

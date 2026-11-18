@@ -37,6 +37,7 @@ namespace GuardianesAmazonicos.Presenters
                 enabled = false;
                 return;
             }
+            _vista.Construir(_configuracion);
             _modelo = new RetoSeleccionModel(_configuracion.IndiceCorrecto, _configuracion.Opciones.Length);
             _repositorio = new JsonProgresoRepository();
         }

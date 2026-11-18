@@ -266,7 +266,7 @@ namespace GuardianesAmazonicos.Editor
             texto.color = color;
             texto.alignment = alineacion;
             texto.textWrappingMode = TextWrappingModes.Normal;
-            texto.overflowMode = TextOverflowModes.Ellipsis;
+            texto.overflowMode = TextOverflowModes.Truncate;
             texto.richText = true;
             texto.raycastTarget = false;
             return texto;

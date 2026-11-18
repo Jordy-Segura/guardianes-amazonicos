@@ -36,17 +36,15 @@ namespace GuardianesAmazonicos.Presenters
         {
             if (_vista == null) _vista = GetComponent<RetoSeleccionView>();
             if (_vista == null || _configuracion == null || _configuracion.Opciones == null ||
-                _configuracion.Opciones.Length != RetoSeleccionConfiguracion.CANTIDAD_OPCIONES ||
-                _configuracion.ImagenesOpciones == null ||
-                _configuracion.ImagenesOpciones.Length != RetoSeleccionConfiguracion.CANTIDAD_OPCIONES ||
-                Array.Exists(_configuracion.ImagenesOpciones, imagen => imagen == null) ||
-                _configuracion.IndiceCorrecto < 0 || _configuracion.IndiceCorrecto >= RetoSeleccionConfiguracion.CANTIDAD_OPCIONES)
+                _configuracion.Opciones.Length == 0 ||
+                _configuracion.IndiceCorrecto < 0 || _configuracion.IndiceCorrecto >= _configuracion.Opciones.Length)
             {
-                Debug.LogError("GuacamayoPresenter: faltan la vista, configuración o ilustraciones de HU-03.", this);
+                Debug.LogError("GuacamayoPresenter: faltan la vista o configuración de la actividad.", this);
                 enabled = false;
                 return;
             }
 
+            _vista.Construir(_configuracion);
             _modelo = new RetoSeleccionModel(_configuracion.IndiceCorrecto, _configuracion.Opciones.Length);
             _repositorio = new JsonProgresoRepository();
         }
@@ -223,7 +221,10 @@ namespace GuardianesAmazonicos.Presenters
 
         private void Avanzar()
         {
-            if (YaCompletado()) Continuar();
+            if ((_modelo != null && _modelo.Resuelto) || YaCompletado())
+            {
+                NavegacionNiveles.CargarSiguiente(_configuracion.SiguienteEscena);
+            }
         }
 
         private void IrAInicio() => NavegacionNiveles.CargarInicio();
@@ -236,7 +237,15 @@ namespace GuardianesAmazonicos.Presenters
 
         private bool YaCompletado()
         {
-            try { return _repositorio.Cargar().retoGuacamayoCompletado; }
+            try
+            {
+                ProgresoEstudianteData progreso = _repositorio.Cargar();
+                if (_configuracion != null && _configuracion.NumeroEscena != 3)
+                {
+                    return progreso.puntoProgresoActual >= _configuracion.NumeroEscena;
+                }
+                return progreso.retoGuacamayoCompletado || (_configuracion != null && progreso.puntoProgresoActual >= _configuracion.NumeroEscena);
+            }
             catch (Exception excepcion) when (excepcion is IOException || excepcion is UnauthorizedAccessException || excepcion is ArgumentException)
             {
                 Debug.LogWarning("GuacamayoPresenter: no se pudo leer el progreso guardado. " + excepcion.Message, this);
@@ -250,7 +259,10 @@ namespace GuardianesAmazonicos.Presenters
             try
             {
                 ProgresoEstudianteData progreso = _repositorio.Cargar();
-                progreso.retoGuacamayoCompletado = true;
+                if (_configuracion == null || _configuracion.NumeroEscena == 3)
+                {
+                    progreso.retoGuacamayoCompletado = true;
+                }
                 progreso.aventuraIniciada = true;
                 progreso.puntoProgresoActual = Math.Max(progreso.puntoProgresoActual, _configuracion.NumeroEscena);
                 progreso.totalPuntosProgreso = Math.Max(progreso.totalPuntosProgreso, _configuracion.TotalEscenas);

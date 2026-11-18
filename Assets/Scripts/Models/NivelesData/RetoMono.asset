@@ -92,7 +92,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 932e71ff9e76037699bf062103a260c7, type: 3}
   - {fileID: 8300000, guid: 90ea0fbbefc28673ebe0acabadf45191, type: 3}
   _audioFelicitacion: {fileID: 8300000, guid: 5b3883f448f4b4f81bdf3cba7376ff7b, type: 3}
-  _videoSenas: ''
+  _videoSenas: senas_nivel_01_pregunta_02.mp4
   _mostrarBienvenida: 0
   _bienvenidaEtiquetaNivel: ''
   _bienvenidaNombreNivel: ''
