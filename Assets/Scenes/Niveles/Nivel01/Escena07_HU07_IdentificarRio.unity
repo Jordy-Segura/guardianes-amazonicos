@@ -386,8 +386,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "El video en lengua de se\xF1as est\xE1 pendiente de grabaci\xF3n."
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 767ffc8669e62e144951bc56a822d1e6, type: 2}
-  m_sharedMaterial: {fileID: -4203256325650379, guid: 767ffc8669e62e144951bc56a822d1e6, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1820,8 +1820,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 767ffc8669e62e144951bc56a822d1e6, type: 2}
-  m_sharedMaterial: {fileID: -4203256325650379, guid: 767ffc8669e62e144951bc56a822d1e6, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -2494,8 +2494,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Mar
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 767ffc8669e62e144951bc56a822d1e6, type: 2}
-  m_sharedMaterial: {fileID: -4203256325650379, guid: 767ffc8669e62e144951bc56a822d1e6, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -3203,8 +3203,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "Nivel 1 \u2022 Conozco la selva"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 767ffc8669e62e144951bc56a822d1e6, type: 2}
-  m_sharedMaterial: {fileID: -4203256325650379, guid: 767ffc8669e62e144951bc56a822d1e6, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -3773,8 +3773,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "El r\xEDo recorre la selva y lleva agua dulce entre sus orillas.\n\xBFCu\xE1l de estas im\xE1genes muestra un r\xEDo?"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 767ffc8669e62e144951bc56a822d1e6, type: 2}
-  m_sharedMaterial: {fileID: -4203256325650379, guid: 767ffc8669e62e144951bc56a822d1e6, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -3918,8 +3918,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "R\xEDo"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 767ffc8669e62e144951bc56a822d1e6, type: 2}
-  m_sharedMaterial: {fileID: -4203256325650379, guid: 767ffc8669e62e144951bc56a822d1e6, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -4028,8 +4028,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\xA1Muy bien! Encontraste el r\xEDo."
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 767ffc8669e62e144951bc56a822d1e6, type: 2}
-  m_sharedMaterial: {fileID: 2100000, guid: 387955db38dc3984b9a41b5bcf2bde65, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: 79459efec17a4d00a321bdcc27bbc385, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -4206,8 +4206,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Charco
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 767ffc8669e62e144951bc56a822d1e6, type: 2}
-  m_sharedMaterial: {fileID: -4203256325650379, guid: 767ffc8669e62e144951bc56a822d1e6, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -5095,8 +5095,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Vaso de agua
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 767ffc8669e62e144951bc56a822d1e6, type: 2}
-  m_sharedMaterial: {fileID: -4203256325650379, guid: 767ffc8669e62e144951bc56a822d1e6, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -7089,8 +7089,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: <color=#FFD43B>7</color> de 12
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 767ffc8669e62e144951bc56a822d1e6, type: 2}
-  m_sharedMaterial: {fileID: -4203256325650379, guid: 767ffc8669e62e144951bc56a822d1e6, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -7489,8 +7489,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Busca el agua dulce que fluye entre dos orillas y atraviesa la selva.
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 767ffc8669e62e144951bc56a822d1e6, type: 2}
-  m_sharedMaterial: {fileID: -4203256325650379, guid: 767ffc8669e62e144951bc56a822d1e6, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

@@ -16,7 +16,7 @@ MonoBehaviour:
   _numeroEscena: 9
   _totalEscenas: 12
   _tituloNivel: "Nivel 1 \u2022 Conozco la selva"
-  _siguienteEscena: Escena11_HU11_ReconocerArbol
+  _siguienteEscena: Escena10_HU10_Loro
   _pregunta: "Observa la selva. \xBFCu\xE1l de estos frutos es el pl\xE1tano?"
   _opciones:
   - Heliconia
@@ -102,7 +102,7 @@ MonoBehaviour:
   _bienvenidaImagen: {fileID: 0}
   _bienvenidaAudio: {fileID: 0}
   _bienvenidaVideoSenas: 
-  _fuente: {fileID: 11400000, guid: 767ffc8669e62e144951bc56a822d1e6, type: 2}
+  _fuente: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   numeroEscena: 9
   titulo: "Nivel 1 \u2022 Conozco la selva"
   textoProgreso: 9 de 12
@@ -121,9 +121,9 @@ MonoBehaviour:
   pistaIncorrecta: "Busca una fruta larga y curva que se vuelve amarilla cuando est\xE1 madura."
   mensajeCorrecto: "\xA1Lo lograste! Identificaste el pl\xE1tano."
   pronunciaciones: []
-  siguienteEscena: Escena11_HU11_ReconocerArbol
+  siguienteEscena: Escena10_HU10_Loro
   textoContinuar: SIGUIENTE RETO
   fondo: {fileID: 21300000, guid: b6a590ffb5b48f412f32db0b1482e1b9, type: 3}
   imagenEscena: {fileID: 21300000, guid: 23883159679184a439ba5a259b1b4614, type: 3}
   explorador: {fileID: 21300000, guid: 2c32b3bf6bcfade558e5cfe00634d3b2, type: 3}
-  fuente: {fileID: 11400000, guid: 767ffc8669e62e144951bc56a822d1e6, type: 2}
+  fuente: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}

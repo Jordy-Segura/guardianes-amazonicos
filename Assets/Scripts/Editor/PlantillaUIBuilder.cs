@@ -56,9 +56,8 @@ namespace GuardianesAmazonicos.Editor
         public const string SPRITE_BORDE_CORRECTO = UI + "BordeRespuestaCorrecta.png";
         public const string SPRITE_INTENTARLO = UI + "BotonIntentarloDeNuevo.png";
 
-        // RNF-01: la guía exige OpenDyslexic SDF como tipografía accesible del juego.
-        public const string FUENTE = "Assets/Fonts/OpenDyslexic3-Regular SDF.asset";
-        public const string CONTORNO_ACCESIBLE = "Assets/Fonts/OpenDyslexic3-Regular SDF - Outline.mat";
+        public const string FUENTE = "Assets/Fonts/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF.asset";
+        public const string CONTORNO_ACCESIBLE = "Assets/Fonts/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF - Outline.mat";
         public const string RENDER_TEXTURE_LSEC = "Assets/Art/LSEC_RenderTexture.renderTexture";
         public const string AUDIO_AMBIENTE_SELVA = "Assets/Audio/SFX/ambiente_selva_suave.wav";
 

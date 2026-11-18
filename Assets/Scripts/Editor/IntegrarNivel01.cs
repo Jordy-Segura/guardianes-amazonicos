@@ -18,7 +18,7 @@ namespace GuardianesAmazonicos.Editor
     /// </summary>
     public static class IntegrarNivel01
     {
-        public const string FuenteAccesible = "Assets/Fonts/OpenDyslexic3-Regular SDF.asset";
+        public const string FuenteAccesible = "Assets/Fonts/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF.asset";
 
         /// <summary>Orden real de la aventura: Nivel 1 completo y luego Nivel 2.</summary>
         public static readonly string[] OrdenEscenas =
@@ -32,6 +32,7 @@ namespace GuardianesAmazonicos.Editor
             "Assets/Scenes/Niveles/Nivel01/Escena07_HU07_IdentificarRio.unity",
             "Assets/Scenes/Niveles/Nivel01/Escena08_HU08_Mariposa.unity",
             "Assets/Scenes/Niveles/Nivel01/Escena09_IdentificarPlatano.unity",
+            "Assets/Scenes/Niveles/Nivel01/Escena10_HU10_Loro.unity",
             "Assets/Scenes/Niveles/Nivel01/Escena11_HU11_ReconocerArbol.unity",
             "Assets/Scenes/Niveles/Nivel01/Escena12_Recompensa_final.unity",
             "Assets/Scenes/Niveles/Nivel02/Escena01_ProtegerHabitatMono.unity"
@@ -46,6 +47,7 @@ namespace GuardianesAmazonicos.Editor
         public const string EscenaRio = "Escena07_HU07_IdentificarRio";
         public const string EscenaMariposa = "Escena08_HU08_Mariposa";
         public const string EscenaPlatano = "Escena09_IdentificarPlatano";
+        public const string EscenaLoro = "Escena10_HU10_Loro";
         public const string EscenaArbol = "Escena11_HU11_ReconocerArbol";
         public const string EscenaRecompensa = "Escena12_Recompensa_final";
 
@@ -54,6 +56,7 @@ namespace GuardianesAmazonicos.Editor
         private const string ConfigJaguar = "Assets/Scripts/Models/NivelesData/RetoJaguar.asset";
         private const string ConfigTortuga = "Assets/Scripts/Models/NivelesData/RetoTortuga.asset";
         private const string ConfigPlatano = "Assets/Scripts/Models/NivelesData/RetoPlatano.asset";
+        private const string ConfigLoro = "Assets/Scripts/Models/NivelesData/RetoLoro.asset";
         private const string ConfigNivel2 = "Assets/Scripts/Models/NivelesData/ProtegerHabitatMono.asset";
 
         [MenuItem("Guardianes/Sahid/Integrar Nivel 1 (orden, enlaces y tipografía)")]
@@ -128,7 +131,8 @@ namespace GuardianesAmazonicos.Editor
             Configurar(ConfigGuacamayo, 1, 3, EscenaPlantas);
             Configurar(ConfigJaguar, 1, 5, EscenaTortuga);
             Configurar(ConfigTortuga, 1, 6, EscenaRio);
-            Configurar(ConfigPlatano, 1, 9, EscenaArbol);
+            Configurar(ConfigPlatano, 1, 9, EscenaLoro);
+            Configurar(ConfigLoro, 1, 10, EscenaArbol);
             Configurar(ConfigNivel2, 2, 1, string.Empty);
         }
 

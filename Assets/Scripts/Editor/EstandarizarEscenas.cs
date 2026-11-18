@@ -110,7 +110,7 @@ namespace GuardianesAmazonicos.Editor
                 Nivel = 1,
                 NumeroEscena = 10,
                 Felicitacion = "¡Muy bien! Ese es el loro.",
-                Tarjetas = 4,
+                Tarjetas = 3,
                 RutaAudioLectura = "Assets/Audio/Voice/HU10/lectura_01_10.wav",
                 RutaAudioPista = "Assets/Audio/Voice/HU10/pista_01_10.wav",
                 RutaAudioFelicitacion = "Assets/Audio/Voice/HU10/acierto_01_10.wav",
@@ -118,8 +118,7 @@ namespace GuardianesAmazonicos.Editor
                 {
                     null,
                     "Assets/Audio/Voice/HU10/correccion_guacamayo_01_10.wav",
-                    "Assets/Audio/Voice/HU10/correccion_mono_01_10.wav",
-                    "Assets/Audio/Voice/HU10/correccion_tortuga_01_10.wav"
+                    "Assets/Audio/Voice/HU10/correccion_jaguar_01_10.wav"
                 },
                 Reconstruir = true
             },

@@ -43,26 +43,24 @@ namespace GuardianesAmazonicos.Editor
             configuracion.NumeroEscena = 10;
             configuracion.TotalEscenas = 12;
             configuracion.TituloNivel = "Nivel 1 • Conozco la selva";
-            configuracion.Pregunta = "Observa los animales de la selva. ¿Cuál de estos animales es el loro?";
-            configuracion.Opciones = new[] { "Loro", "Guacamayo", "Jaguar", "Rana" };
+            configuracion.Pregunta = "Observa la selva. ¿Cuál de estos animales es el loro?";
+            configuracion.Opciones = new[] { "Loro", "Guacamayo", "Jaguar" };
             configuracion.ImagenesOpciones = new[]
             {
                 PlantillaUIBuilder.S(Loro),
                 PlantillaUIBuilder.S(Guacamayo),
-                PlantillaUIBuilder.S(Jaguar),
-                PlantillaUIBuilder.S(Rana)
+                PlantillaUIBuilder.S(Jaguar)
             };
             configuracion.IndiceCorrecto = 0;
             configuracion.ExplicacionesIncorrectas = new[]
             {
                 string.Empty,
-                "Ese es el guacamayo, de plumas rojas y azules. Busca el ave de plumas verdes.",
-                "Ese es el jaguar, el gran felino con manchas de la selva. Busca el ave de plumas verdes.",
-                "Esa es la rana, que salta cerca del agua. Busca el ave de plumas verdes."
+                "¡Buen intento! Ese es el guacamayo, de plumas rojas y azules. Busca el ave de plumas verdes.",
+                "¡Buen intento! Ese es el jaguar, el gran felino con manchas de la selva. Busca el ave de plumas verdes."
             };
             configuracion.Pista = "Busca el ave de plumas verdes y pico curvo que repite palabras.";
             configuracion.Felicitacion = "¡Muy bien! Ese es el loro.";
-            configuracion.ImagenEscena = null;
+            configuracion.ImagenEscena = PlantillaUIBuilder.S("Assets/Art/Escenas/pregunta_01_10_escena.png");
             configuracion.ElementoEscena = null;
             configuracion.RectElementoEscena = Rect.zero;
             configuracion.Fondo = PlantillaUIBuilder.S(FondoNivel1);
@@ -76,8 +74,7 @@ namespace GuardianesAmazonicos.Editor
             {
                 null,
                 PlantillaUIBuilder.Cargar<AudioClip>(Audios + "correccion_guacamayo_01_10.wav"),
-                PlantillaUIBuilder.Cargar<AudioClip>(Audios + "correccion_jaguar_01_10.wav"),
-                PlantillaUIBuilder.Cargar<AudioClip>(Audios + "correccion_rana_01_10.wav")
+                PlantillaUIBuilder.Cargar<AudioClip>(Audios + "correccion_jaguar_01_10.wav")
             };
             configuracion.VideoSenas = "senas_nivel_01_pregunta_10.mp4";
             configuracion.MostrarBienvenida = false;

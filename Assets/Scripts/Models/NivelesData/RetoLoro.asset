@@ -17,26 +17,23 @@ MonoBehaviour:
   _totalEscenas: 12
   _tituloNivel: "Nivel 1 \u2022 Conozco la selva"
   _siguienteEscena: Escena11_HU11_ReconocerArbol
-  _pregunta: "Observa los animales de la selva. \xBFCu\xE1l de estos animales es el loro?"
+  _pregunta: "Observa la selva. \xBFCu\xE1l de estos animales es el loro?"
   _opciones:
   - Loro
   - Guacamayo
   - Jaguar
-  - Rana
   _imagenesOpciones:
   - {fileID: 21300000, guid: c60229d64a054f5a9cca5a2ced088d08, type: 3}
   - {fileID: 21300000, guid: 7569f8d56b7c7c8ad11e7960c854d1e1, type: 3}
   - {fileID: 21300000, guid: 0718976d469672745aeec3eb306a6dc7, type: 3}
-  - {fileID: 21300000, guid: 60b6a9be90a32b7479b173c25a65be9b, type: 3}
   _indiceCorrecto: 0
   _explicacionesIncorrectas:
   - 
-  - Ese es el guacamayo, de plumas rojas y azules. Busca el ave de plumas verdes.
-  - Ese es el jaguar, el gran felino con manchas de la selva. Busca el ave de plumas verdes.
-  - Esa es la rana, que salta cerca del agua. Busca el ave de plumas verdes.
+  - "\xA1Buen intento! Ese es el guacamayo, de plumas rojas y azules. Busca el ave de plumas verdes."
+  - "\xA1Buen intento! Ese es el jaguar, el gran felino con manchas de la selva. Busca el ave de plumas verdes."
   _pista: Busca el ave de plumas verdes y pico curvo que repite palabras.
   _felicitacion: "\xA1Muy bien! Ese es el loro."
-  _imagenEscena: {fileID: 0}
+  _imagenEscena: {fileID: 21300000, guid: 810a29d3ef5986148b3f371a2c2a5210, type: 3}
   _mostrarImagenEscena: 1
   _elementoEscena: {fileID: 0}
   _rectElementoEscena:
@@ -95,7 +92,6 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 8300000, guid: ac10744958ae42f09f446cba44802c85, type: 3}
   - {fileID: 8300000, guid: 1e6e96b50e5749899981df464f61f217, type: 3}
-  - {fileID: 8300000, guid: 317123bf52c049ad825e85f79dc75437, type: 3}
   _audioFelicitacion: {fileID: 8300000, guid: 7fc4c5d7b49e4800876e53a6766483b6, type: 3}
   _videoSenas: senas_nivel_01_pregunta_10.mp4
   _mostrarBienvenida: 0
@@ -106,22 +102,20 @@ MonoBehaviour:
   _bienvenidaImagen: {fileID: 0}
   _bienvenidaAudio: {fileID: 0}
   _bienvenidaVideoSenas: 
-  _fuente: {fileID: 11400000, guid: 767ffc8669e62e144951bc56a822d1e6, type: 2}
+  _fuente: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   numeroEscena: 10
   titulo: "Nivel 1 \u2022 Conozco la selva"
   textoProgreso: 10 de 12
-  pregunta: "Observa los animales de la selva. \xBFCu\xE1l de estos animales es el loro?"
+  pregunta: "Observa la selva. \xBFCu\xE1l de estos animales es el loro?"
   instruccion: 
   opciones:
   - Loro
   - Guacamayo
-  - Mono
-  - Tortuga
+  - Jaguar
   imagenes:
   - {fileID: 21300000, guid: c60229d64a054f5a9cca5a2ced088d08, type: 3}
   - {fileID: 21300000, guid: 7569f8d56b7c7c8ad11e7960c854d1e1, type: 3}
-  - {fileID: 21300000, guid: 26845133233d7cadb1c648837aea4191, type: 3}
-  - {fileID: 21300000, guid: acd2eed8bcafe3be1dc73f15d82d1936, type: 3}
+  - {fileID: 21300000, guid: 0718976d469672745aeec3eb306a6dc7, type: 3}
   atlasDosPorDos: {fileID: 0}
   indiceCorrecto: 0
   pistaIncorrecta: Busca el ave de plumas verdes y pico curvo que repite palabras.
@@ -130,6 +124,6 @@ MonoBehaviour:
   siguienteEscena: Escena11_HU11_ReconocerArbol
   textoContinuar: SIGUIENTE RETO
   fondo: {fileID: 21300000, guid: b6a590ffb5b48f412f32db0b1482e1b9, type: 3}
-  imagenEscena: {fileID: 0}
+  imagenEscena: {fileID: 21300000, guid: 810a29d3ef5986148b3f371a2c2a5210, type: 3}
   explorador: {fileID: 21300000, guid: 2c32b3bf6bcfade558e5cfe00634d3b2, type: 3}
-  fuente: {fileID: 11400000, guid: 767ffc8669e62e144951bc56a822d1e6, type: 2}
+  fuente: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}

@@ -178,8 +178,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\xA1Has completado todos\nlos retos del"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 767ffc8669e62e144951bc56a822d1e6, type: 2}
-  m_sharedMaterial: {fileID: -4203256325650379, guid: 767ffc8669e62e144951bc56a822d1e6, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1440,8 +1440,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: <color=#FFD43B>12</color> de 12
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 767ffc8669e62e144951bc56a822d1e6, type: 2}
-  m_sharedMaterial: {fileID: -4203256325650379, guid: 767ffc8669e62e144951bc56a822d1e6, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1569,8 +1569,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\xA1Felicidades, Guardi\xE1n!"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 767ffc8669e62e144951bc56a822d1e6, type: 2}
-  m_sharedMaterial: {fileID: 2100000, guid: 387955db38dc3984b9a41b5bcf2bde65, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: 79459efec17a4d00a321bdcc27bbc385, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1714,8 +1714,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "El video en lengua de se\xF1as est\xE1 pendiente de grabaci\xF3n."
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 767ffc8669e62e144951bc56a822d1e6, type: 2}
-  m_sharedMaterial: {fileID: -4203256325650379, guid: 767ffc8669e62e144951bc56a822d1e6, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -2574,8 +2574,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "Nivel 1 \u2022 Conozco la selva"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 767ffc8669e62e144951bc56a822d1e6, type: 2}
-  m_sharedMaterial: {fileID: -4203256325650379, guid: 767ffc8669e62e144951bc56a822d1e6, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -3682,8 +3682,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\xA1Nivel 1!"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 767ffc8669e62e144951bc56a822d1e6, type: 2}
-  m_sharedMaterial: {fileID: -4203256325650379, guid: 767ffc8669e62e144951bc56a822d1e6, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
